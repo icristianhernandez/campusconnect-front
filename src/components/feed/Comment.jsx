@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './Comment.css';
-import { handleLike } from '../../utils/likeUtils';
 
 function Comment({ comment, post, setPosts, posts }) {
     const [liked, setLiked] = useState(false);

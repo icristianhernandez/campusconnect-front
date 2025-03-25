@@ -5,8 +5,12 @@ import NewPostForm from './NewPostForm';
 import { MyContext } from '../../context/context';
 
 function Feed() {
-    const { appState } = useContext(MyContext);
+    const { appState, dispatch } = useContext(MyContext);
     const { posts } = appState;
+
+    const setPosts = (updatedPosts) => {
+        dispatch({ type: 'SET_POSTS', payload: updatedPosts });
+    };
 
     return (
         <div className="Feed">
@@ -17,8 +21,8 @@ function Feed() {
                 <div className="middle-column">
                     <NewPostForm />
                     <div className="posts-container">
-                        {posts.map(post => (
-                            <Post key={post.id} post={post} />
+                        {posts && posts.map(post => (
+                            <Post key={post.id} post={post} posts={posts} setPosts={setPosts} />
                         ))}
                     </div>
                 </div>

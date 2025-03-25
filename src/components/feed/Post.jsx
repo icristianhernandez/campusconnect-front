@@ -110,7 +110,7 @@ function Post({ post, setPosts, posts }) {
                 </div>
             </div>
             <div className="post-comments">
-                {post.comments.map((comment, index) => (
+                {post.comments && post.comments.map((comment, index) => (
                     <Comment key={index} comment={comment} post={post} setPosts={setPosts} posts={posts} />
                 ))}
                 <form onSubmit={handleCommentSubmit} className="new-comment-form">
