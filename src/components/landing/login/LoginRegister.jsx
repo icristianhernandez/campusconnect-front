@@ -8,6 +8,8 @@ function LoginRegister() {
     const [error, setError] = useState(null);
     const [passwordError, setPasswordError] = useState(null);
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State to toggle confirm password visibility
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
@@ -88,9 +90,9 @@ function LoginRegister() {
                     required
                 />
             </div>
-            <div>
+            <div className="password-container">
                 <input 
-                    type="password" 
+                    type={showPassword ? "text" : "password"} 
                     name="regPassWord" 
                     id="regPassWord" 
                     placeholder="Ingrese su contraseña" 
@@ -101,10 +103,16 @@ function LoginRegister() {
                     onChange={validatePasswords}
                     required
                 />
+                <span 
+                    className="toggle-password" 
+                    onClick={() => setShowPassword(!showPassword)}
+                >
+                    {showPassword ? "🙈" : "👁️"}
+                </span>
             </div>
-            <div>
+            <div className="password-container">
                 <input 
-                    type="password" 
+                    type={showConfirmPassword ? "text" : "password"} 
                     name="regRepPassWord" 
                     id="regRepPassWord" 
                     placeholder="Repita su contraseña" 
@@ -115,6 +123,12 @@ function LoginRegister() {
                     onChange={validatePasswords}
                     required
                 />
+                <span 
+                    className="toggle-password" 
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                    {showConfirmPassword ? "🙈" : "👁️"}
+                </span>
             </div>
             {passwordError && (
                 <div className="login-form-validation">

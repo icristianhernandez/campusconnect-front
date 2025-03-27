@@ -9,6 +9,7 @@ function LoginForm() {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 
     const handleSubmitLogin = async (e) => {
         e.preventDefault();
@@ -53,9 +54,9 @@ function LoginForm() {
                     required
                 />
             </div>
-            <div>
+            <div className="password-container">
                 <input 
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id='password'
                     className='login-form-input'
                     ref={passwordRef}
@@ -64,6 +65,12 @@ function LoginForm() {
                     disabled={loading}
                     required
                 />
+                <span 
+                    className="toggle-password" 
+                    onClick={() => setShowPassword(!showPassword)}
+                >
+                    {showPassword ? "🙈" : "👁️"}
+                </span>
             </div>
 
             <div className='login-form-status'>

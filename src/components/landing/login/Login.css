@@ -1,136 +1,155 @@
 .Login {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 500px;
-    min-height: 450px;
-    background-color: #ffffffc4;
-    margin-top: 0.89%;
-    margin-left: auto;
-    margin-right: 1.3%;
-    justify-self: end;
-    border-radius: 20px;
-    overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  min-height: 450px;
+  background-color: #ffffffc4;
+  margin-top: 0.89%;
+  margin-left: auto;
+  margin-right: 1.3%;
+  justify-self: end;
+  border-radius: 20px;
+  overflow: hidden;
 }
 
 .logos {
-    width: 100%;
-    height: 100px;
-    align-items: center; /* Centrado vertical */
-    justify-content: center; /* Centrado horizontal */
-    display: flex;
-    flex-direction: row;
+  width: 100%;
+  height: 100px;
+  align-items: center; /* Centrado vertical */
+  justify-content: center; /* Centrado horizontal */
+  display: flex;
+  flex-direction: row;
 }
 
 .logos img {
-    width: 100px;
-    margin: 0 10px; /* Opcional: añade un pequeño margen entre los logos */
+  width: 100px;
+  margin: 0 10px; /* Opcional: añade un pequeño margen entre los logos */
 }
 
 .login-form,
 .LoginRegister,
 .loginForget {
-    width: 100%;
-    height: auto;
-    padding-top: 20px;
+  width: 100%;
+  height: auto;
+  padding-top: 20px;
 }
 
 .login-form > div,
 .LoginRegister > div,
 .LoginForget > div {
-    width: 100%;
-    height: auto;
-    padding-bottom: 20px;
-    display: flex;
-    justify-content: center;
+  width: 100%;
+  height: auto;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .login-form-input {
-    width: 90%;
-    height: 30px;
-    border-radius: 20px;
-    border-color: #c5c5c5;
-    font-size: 14px;
-    box-sizing: border-box;
-    padding-left: 20px;
-    transition: border-color 0.3s ease;
+  width: 90%;
+  height: 30px;
+  border-radius: 20px;
+  border-color: #c5c5c5;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding-left: 20px;
+  transition: border-color 0.3s ease;
 }
 
 .login-form-input:focus {
-    outline: none;
-    border-color: #464646;
+  outline: none;
+  border-color: #464646;
 }
 
 /*Temporal hasta que se cree subcomponente*/
 
 .login-form-status {
-    font-style: italic;
+  font-style: italic;
 }
 /**/
 
 .login-form-submit {
-    width: 80%;
-    height: 30px;
-    border: none;
-    border-radius: 15px;
-    background-color: #27a34d;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s ease;
-    font-weight: bold;
+  width: 80%;
+  height: 30px;
+  border: none;
+  border-radius: 15px;
+  background-color: #27a34d;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-weight: bold;
 }
 
 .login-form-submit:hover {
-    background-color: #1b68c5;
+  background-color: #1b68c5;
 }
 
 .login-footer {
-    margin-top: auto;
-    width: 100%;
-    height: 60px;
-    background-color: #27a34d;
-    color: #c5c5c5;
-    align-content: center;
-    text-align: center;
+  margin-top: auto;
+  width: 100%;
+  height: 60px;
+  background-color: #27a34d;
+  color: #c5c5c5;
+  align-content: center;
+  text-align: center;
 }
 
 .login-footer p {
-    margin-bottom: 2px;
+  margin-bottom: 2px;
 }
 
 .login-footer p a {
-    text-decoration: none;
-    color: white;
-    transition: 0.3s ease;
+  text-decoration: none;
+  color: white;
+  transition: 0.3s ease;
 }
 
 .login-footer p a:hover {
-    color: #81d4fa; /* Azul claro celeste */
+  color: #81d4fa; /* Azul claro celeste */
 }
 
 /*Registro de usuarios*/
 
 .login-form-documentTipo {
-    width: 8%;
-    height: 30px;
-    border-radius: 15px 0 0 15px;
-    border-color: #c5c5c5;
+  width: 8%;
+  height: 30px;
+  border-radius: 15px 0 0 15px;
+  border-color: #c5c5c5;
 }
 
 .login-form-documentNumber {
-    width: 82%;
-    height: 30px;
-    border-radius: 0 15px 15px 0;
-    border-color: #c5c5c5;
-    font-size: 14px;
-    box-sizing: border-box;
-    padding-left: 20px;
-    transition: border-color 0.3s ease;
+  width: 82%;
+  height: 30px;
+  border-radius: 0 15px 15px 0;
+  border-color: #c5c5c5;
+  font-size: 14px;
+  box-sizing: border-box;
+  padding-left: 20px;
+  transition: border-color 0.3s ease;
 }
 
 @media (max-width: 768px) {
-    .Login {
-        width: 90%;
-        margin: 20px auto;
-    }
+  .Login {
+    width: 90%;
+    margin: 20px auto;
+  }
+}
+
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 30px;
+  cursor: pointer;
+  font-size: 18px;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+  color: #464646;
 }
