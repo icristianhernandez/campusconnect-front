@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Post.css';
 import Comment from './Comment';
 import { supabase } from '../../utils/supabase';
@@ -10,6 +10,17 @@ function Post({ post, setPosts, posts }) {
     const [editing, setEditing] = useState(false); // indica si se esta en el modo edicion
     const [editedContent, setEditedContent] = useState(post.content); // contenido editado
     const [showOptions, setShowOptions] = useState(false); // visibilidad de las opciones de edicion y eliminacion
+    const [userId, setUserId] = useState(null); // almacenar el ID del usuario autenticado
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (!error && user) {
+                setUserId(user.id); // se almacena el ID del usuario autenticado
+            }
+        };
+        fetchUser();
+    }, []);
 
     const handleCommentChange = (value) => {
         setNewCommentContent(value);
@@ -181,12 +192,16 @@ function Post({ post, setPosts, posts }) {
                     )}
                 </div>
                 <div className="post-options">
-                    <button className="options-button" onClick={() => setShowOptions(!showOptions)}>⋮</button>
-                    {showOptions && (
-                        <div className="options-menu">
-                            <button onClick={handleEditPost}>Editar</button>
-                            <button onClick={handleDeletePost}>Eliminar</button>
-                        </div>
+                    {userId === post.user_id && ( // Verifica si el usuario autenticado es el propietario
+                        <>
+                            <button className="options-button" onClick={() => setShowOptions(!showOptions)}>⋮</button>
+                            {showOptions && (
+                                <div className="options-menu">
+                                    <button onClick={handleEditPost}>Editar</button>
+                                    <button onClick={handleDeletePost}>Eliminar</button>
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </div>

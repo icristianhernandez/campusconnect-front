@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Comment.css';
 import { supabase } from '../../utils/supabase';
 
@@ -7,6 +7,17 @@ function Comment({ comment, post, setPosts, posts }) {
     const [editing, setEditing] = useState(false); // pa controlar si se está editando el comentario
     const [editedContent, setEditedContent] = useState(comment.comment_text); // pa guardar el contenido editado
     const [showOptions, setShowOptions] = useState(false); // pa mostrar las opciones de comentario
+    const [userId, setUserId] = useState(null); // un nuevo estado pa almacenar el ID del usuario autenticado
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (!error && user) {
+                setUserId(user.id); // se almacena el ID del usuario autenticado
+            }
+        };
+        fetchUser();
+    }, []);
 
     const handleMediaClick = () => {
         setExpanded(!expanded);
@@ -114,12 +125,16 @@ function Comment({ comment, post, setPosts, posts }) {
                 )}
             </div>
             <div className="comment-options">
-                <button className="options-button" onClick={() => setShowOptions(!showOptions)}>⋮</button>
-                {showOptions && (
-                    <div className="options-menu">
-                        <button onClick={handleEditComment}>Editar</button>
-                        <button onClick={handleDeleteComment}>Eliminar</button>
-                    </div>
+                {userId === comment.user_id && ( // Verifica si el usuario autenticado es el propietario
+                    <>
+                        <button className="options-button" onClick={() => setShowOptions(!showOptions)}>⋮</button>
+                        {showOptions && (
+                            <div className="options-menu">
+                                <button onClick={handleEditComment}>Editar</button>
+                                <button onClick={handleDeleteComment}>Eliminar</button>
+                            </div>
+                        )}
+                    </>
                 )}
             </div>
             {expanded && <div className="overlay" onClick={handleMediaClick}></div>}
