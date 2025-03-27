@@ -9,6 +9,7 @@ function Feed() {
     const { appState, dispatch } = useContext(MyContext); // Obtiene el estado global y la funcion para actualizarlo (el dispatch)
     const { posts } = appState; //publicaciones almacenadas en estado global
     const [errorMessage, setErrorMessage] = useState(null); // para mostrar errores
+    const [showNewPostForm, setShowNewPostForm] = useState(false); // Estado para controlar la visibilidad del formulario
 
     const setPosts = (updatedPosts) => {
         dispatch({ type: 'SET_POSTS', payload: updatedPosts }); //actualiza la lista de posts
@@ -73,7 +74,16 @@ function Feed() {
                     {/* Contenido adicional para la columna izquierda */}
                 </div>
                 <div className="middle-column">
-                    <NewPostForm />
+                    <button 
+                        className="create-post-button" 
+                        onClick={() => {
+                            setShowNewPostForm(!showNewPostForm);
+                            window.scrollTo({ top: 0, behavior: 'smooth' }); // Desplaza al principio de la página
+                        }}
+                    >
+                        Crear
+                    </button>
+                    {showNewPostForm && <NewPostForm />} {/* Mostrar formulario solo si está habilitado */}
                     {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Muestra errores */}
                     <div className="posts-container">
                         {posts && posts.map(post => (

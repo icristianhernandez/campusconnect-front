@@ -1,211 +1,235 @@
 .Feed {
-    background-color: #f2f4f7;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+  background-color: #f2f4f7;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin-top: 150px; /* Añade margen superior para compensar el header y el botón "Crear" */
 }
 
 .feed-container {
-    display: flex;
-    width: 100%;
-    height: 100%;
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 
-.left-column, .right-column {
-    flex: 1;
-    padding: 20px;
+.left-column,
+.right-column {
+  flex: 1;
+  padding: 20px;
 }
 
 .middle-column {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-left: -55px; /* Mueve el contenedor más a la izquierda */
 }
 
 .new-post-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .new-post-input {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    resize: none;
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  resize: none;
 }
 
 .new-post-media-input {
-    display: none;
+  display: none;
 }
 
 .new-post-media-label {
-    display: inline-block;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #27a34d;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s ease;
-    margin-right: 10px;
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #27a34d;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-right: 10px;
 }
 
 .new-post-media-label:hover {
-    background-color: #27a34d;
+  background-color: #27a34d;
 }
 
 .media-preview {
-    max-width: 100%;
-    margin-top: 10px;
+  max-width: 100%;
+  margin-top: 10px;
 }
 
 .new-post-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .new-post-submit {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #27a34d;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #27a34d;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
 
 .new-post-submit:hover {
-    background-color: #27a34d;
+  background-color: #27a34d;
 }
 
 .new-post-submit.disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .posts-container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .post {
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #fff;
-    overflow: hidden;
+  display: flex;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #fff;
+  overflow: hidden;
 }
 
 .post-content {
-    flex: 1;
-    padding: 20px;
-    border-right: 1px solid #ccc;
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid #ccc;
 }
 
 .post-media {
-    max-width: 100%;
-    margin-top: 10px;
+  max-width: 100%;
+  margin-top: 10px;
 }
 
 .post-comments {
-    flex: 1;
-    padding: 20px;
+  flex: 1;
+  padding: 20px;
 }
 
 .comment {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
 }
 
 .new-comment-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 .new-comment-input {
-    flex: 1;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 .new-comment-media-input {
-    display: none;
+  display: none;
 }
 
 .new-comment-media-label {
-    display: inline-block;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #5385c4;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s ease;
-    margin-right: 10px;
+  display: inline-block;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #5385c4;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-right: 10px;
 }
 
 .new-comment-media-label:hover {
-    background-color: #1b68c5;
+  background-color: #1b68c5;
 }
 
 .media-preview {
-    max-width: 100%;
-    margin-top: 10px;
+  max-width: 100%;
+  margin-top: 10px;
 }
 
 .new-comment-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .new-comment-submit {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    background-color: #5385c4;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #5385c4;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
 }
 
 .new-comment-submit:hover {
-    background-color: #1b68c5;
+  background-color: #1b68c5;
 }
 
 .new-comment-submit.disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .like-button {
-    background: none;
-    border: none;
-    color: #ccc;
-    cursor: pointer;
-    font-size: 16px;
-    transition: color 0.3s ease;
+  background: none;
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 16px;
+  transition: color 0.3s ease;
 }
 
 .like-button:hover,
 .like-button.liked {
-    color: #27a34d;
+  color: #27a34d;
+}
+
+.create-post-button {
+  position: fixed; /* Fija el botón en la parte superior */
+  top: 122px; /* Ajustar para que quede visible debajo del header */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #27a34d;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  z-index: 999; /* Asegura que el botón esté por encima del contenido */
+}
+
+.create-post-button:hover {
+  background-color: #1b68c5;
 }

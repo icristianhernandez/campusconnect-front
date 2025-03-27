@@ -1,0 +1,43 @@
+.Header {
+  position: fixed; /* Fija el header en la parte superior */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Asegura que el header esté por encima de otros elementos */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center all content horizontally */
+  padding: 10px 20px;
+  background-color: #f2f4f7;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #ccc; /* Add bottom border */
+}
+
+.header-search {
+  position: absolute;
+  left: 20px; /* Move search bar to the left */
+}
+
+.header-logo {
+  position: relative;
+  left: -24px;
+}
+
+.header-logo img {
+  height: 100px;
+}
+
+.header-search input {
+  width: 300px;
+  padding: 8px 12px;
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: #f2f4f7; /* Set background color */
+}
+
+.header-search input:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
