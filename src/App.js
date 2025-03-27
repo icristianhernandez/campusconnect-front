@@ -11,10 +11,9 @@ function App() {
     <MyProvider>
         <Router>
             <div className="App">
-                <Header /> {/* Add the Header component */}
                 <Routes>
                     <Route path="/" element={<Landing />} />
-                    <Route path="/feed" element={<Feed />} />
+                    <Route path="/feed" element={<><Header /><Feed /></>} /> {}
                     <Route path="*" element={<ErrorPage />} />
                 </Routes>
             </div>
