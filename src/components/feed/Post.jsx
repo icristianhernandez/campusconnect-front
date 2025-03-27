@@ -1,73 +1,160 @@
 import React, { useState } from 'react';
 import './Post.css';
 import Comment from './Comment';
-import { handleLike } from '../../utils/likeUtils';
+import { supabase } from '../../utils/supabase';
 
 function Post({ post, setPosts, posts }) {
-    const [newCommentContent, setNewCommentContent] = useState("");
-    const [newCommentMedia, setNewCommentMedia] = useState(null);
-    const [newCommentMediaPreview, setNewCommentMediaPreview] = useState(null);
-    const [liked, setLiked] = useState(false);
-    const [editing, setEditing] = useState(false);
-    const [editedContent, setEditedContent] = useState(post.content);
-    const [showOptions, setShowOptions] = useState(false);
+    const [newCommentContent, setNewCommentContent] = useState(""); // almacena el texto de un nuevo comentario
+    const [newCommentMedia, setNewCommentMedia] = useState(null); //archivo junto al comentario
+    const [newCommentMediaPreview, setNewCommentMediaPreview] = useState(null); // para la vista previa del mulmedia
+    const [editing, setEditing] = useState(false); // indica si se esta en el modo edicion
+    const [editedContent, setEditedContent] = useState(post.content); // contenido editado
+    const [showOptions, setShowOptions] = useState(false); // visibilidad de las opciones de edicion y eliminacion
 
     const handleCommentChange = (value) => {
         setNewCommentContent(value);
-    };
+    }; // actualiza el estado de newCommentContent
 
     const handleCommentMediaChange = (e) => {
         const file = e.target.files[0];
         setNewCommentMedia(file);
         setNewCommentMediaPreview(URL.createObjectURL(file));
-    };
+    }; // actualiza el estado de newCommentMedia y newCommentMediaPreview
 
-    const handleCommentSubmit = (e) => {
+    const handleCommentSubmit = async (e) => {
         e.preventDefault();
-        const updatedPosts = posts.map(p => {
-            if (p.id === post.id) {
-                return {
-                    ...p,
-                    comments: [...p.comments, { content: newCommentContent, media: newCommentMedia, mediaType: newCommentMedia ? newCommentMedia.type : null, likes: 0 }]
-                };
-            }
-            return p;
-        });
-        setPosts(updatedPosts);
-        setNewCommentContent("");
-        setNewCommentMedia(null);
-        setNewCommentMediaPreview(null);
-    };
 
-    const handleLikePost = () => {
-        handleLike(posts, setPosts, post.id, liked);
-        setLiked(!liked);
+        try {
+            // se obtiene el usuario autenticado desde la db de supabase
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+            if (userError || !user) {
+                throw new Error('Usuario no autenticado. Por favor, inicia sesión.');
+            }
+
+            // se inserta el comentario en la tabla "comments"
+            const { data: newComment, error: commentError } = await supabase
+                .from('comments')
+                .insert({
+                    comment_text: newCommentContent,
+                    parent_post_id: post.post_id,
+                    user_id: user.id, // ID del usuario autenticado
+                })
+                .select()
+                .single();
+
+            if (commentError) throw commentError;
+
+            let multimedia = [];
+            // si hay multimedia, se sube y asocia al comentario
+            if (newCommentMedia) {
+                const fileName = `${newComment.comment_id}-${newCommentMedia.name}`;
+                const { error: storageError } = await supabase
+                    .storage
+                    .from('nose') // FALTA EL BUCKET ACA
+                    .upload(fileName, newCommentMedia);
+
+                if (storageError) throw storageError;
+
+                const { data: { publicUrl }, error: urlError } = supabase
+                    .storage
+                    .from('nose') // FALTA EL BUCKET ACA TAMBIEN
+                    .getPublicUrl(fileName);
+
+                if (urlError) throw urlError;
+
+                const { error: multimediaError } = await supabase
+                    .from('comments_multimedia')
+                    .insert({
+                        comment_id: newComment.comment_id,
+                        media_type: newCommentMedia.type.startsWith('video/') ? 'video' : 'image',
+                        multimedia_url: publicUrl,
+                    });
+
+                if (multimediaError) throw multimediaError;
+
+                multimedia = [{
+                    media_type: newCommentMedia.type.startsWith('video/') ? 'video' : 'image',
+                    multimedia_url: publicUrl,
+                }];
+            }
+
+            // se actualiza el estado local con el nuevo comentario
+            const updatedPosts = posts.map(p => {
+                if (p.post_id === post.post_id) {
+                    return {
+                        ...p,
+                        comments: [...(p.comments || []), { 
+                            ...newComment, 
+                            comment_text: newCommentContent, 
+                            multimedia 
+                        }],
+                    };
+                }
+                return p;
+            });
+            setPosts(updatedPosts);
+
+            // se limpia el formulario
+            setNewCommentContent("");
+            setNewCommentMedia(null);
+            setNewCommentMediaPreview(null);
+        } catch (error) {
+            console.error("Error al crear el comentario:", error.message);
+            alert(error.message); // manejor de errores
+        }
     };
 
     const handleEditPost = () => {
+        setEditedContent(post.post_text); // aca inicializo el contenido editado con el texto actual del post
         setEditing(true);
         setShowOptions(false);
     };
 
-    const handleSaveEdit = () => {
-        const updatedPosts = posts.map(p => {
-            if (p.id === post.id) {
-                return {
-                    ...p,
-                    content: editedContent
-                };
-            }
-            return p;
-        });
-        setPosts(updatedPosts);
-        setEditing(false);
+    const handleSaveEdit = async () => {
+        try {
+            // actualiza el post en la base de datos
+            const { error } = await supabase
+                .from('posts')
+                .update({ post_text: editedContent })
+                .eq('post_id', post.post_id);
+
+            if (error) throw error;
+
+            // actualiza el estado local con el post editado
+            const updatedPosts = posts.map(p => {
+                if (p.post_id === post.post_id) {
+                    return { ...p, post_text: editedContent };
+                }
+                return p;
+            });
+            setPosts(updatedPosts);
+            setEditing(false);
+        } catch (err) {
+            console.error('Error al actualizar el post:', err.message);
+            alert('Hubo un error al actualizar el post. Intente nuevamente.');
+        }
     };
 
-    const handleDeletePost = () => {
-        const updatedPosts = posts.filter(p => p.id !== post.id);
-        setPosts(updatedPosts);
+    const handleDeletePost = async () => {
+        try {
+            // elimina el post de la base de datos
+            const { error } = await supabase
+                .from('posts')
+                .delete()
+                .eq('post_id', post.post_id);
+
+            if (error) throw error;
+
+            // se actualiza el estado local eliminando el post
+            const updatedPosts = posts.filter(p => p.post_id !== post.post_id);
+            setPosts(updatedPosts);
+        } catch (err) {
+            console.error('Error al eliminar el post:', err.message);
+            alert('Hubo un error al eliminar el post. Intente nuevamente.');
+        }
     };
 
+    // a partir de aca se renderiza el componente y vainadesa
     return (
         <div className="post">
             <div className="post-content">
@@ -78,21 +165,15 @@ function Post({ post, setPosts, posts }) {
                         className="edit-post-input"
                     />
                 ) : (
-                    post.content
+                    post.post_text
                 )}
-                {post.media && (
-                    post.mediaType.startsWith('video/') ? (
-                        <video controls className="post-media">
-                            <source src={URL.createObjectURL(post.media)} type={post.mediaType} />
-                        </video>
-                    ) : (
-                        <img src={URL.createObjectURL(post.media)} alt="Post media" className="post-media" />
-                    )
-                )}
+                {post.multimedia && post.multimedia.map(media => (
+                    <div key={media.multimedia_id}>
+                        {media.media_type === 'image' && <img src={media.multimedia_url} alt="Post multimedia" />}
+                        {media.media_type === 'video' && <video controls src={media.multimedia_url}></video>}
+                    </div>
+                ))}
                 <div className="post-actions">
-                    <button className={`like-button ${liked ? 'liked' : ''}`} onClick={handleLikePost}>
-                        ❤️ {post.likes}
-                    </button>
                     {editing && (
                         <button className="save-edit-button" onClick={handleSaveEdit}>
                             Guardar
@@ -110,8 +191,14 @@ function Post({ post, setPosts, posts }) {
                 </div>
             </div>
             <div className="post-comments">
-                {post.comments && post.comments.map((comment, index) => (
-                    <Comment key={index} comment={comment} post={post} setPosts={setPosts} posts={posts} />
+                {post.comments && post.comments.map((comment) => (
+                    <Comment 
+                        key={comment.comment_id} 
+                        comment={comment} 
+                        post={post} 
+                        setPosts={setPosts} 
+                        posts={posts} 
+                    />
                 ))}
                 <form onSubmit={handleCommentSubmit} className="new-comment-form">
                     <input

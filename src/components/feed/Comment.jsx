@@ -1,79 +1,81 @@
 import React, { useState } from 'react';
 import './Comment.css';
+import { supabase } from '../../utils/supabase';
 
 function Comment({ comment, post, setPosts, posts }) {
-    const [liked, setLiked] = useState(false);
-    const [expanded, setExpanded] = useState(false);
-    const [editing, setEditing] = useState(false);
-    const [editedContent, setEditedContent] = useState(comment.content);
-    const [showOptions, setShowOptions] = useState(false);
-
-    const handleLikeComment = () => {
-        const updatedPosts = posts.map(p => {
-            if (p.id === post.id) {
-                return {
-                    ...p,
-                    comments: p.comments.map((c, index) => {
-                        if (c === comment) {
-                            return {
-                                ...c,
-                                likes: liked ? (c.likes || 0) - 1 : (c.likes || 0) + 1
-                            };
-                        }
-                        return c;
-                    })
-                };
-            }
-            return p;
-        });
-        setPosts(updatedPosts);
-        setLiked(!liked);
-    };
+    const [expanded, setExpanded] = useState(false); // pa controlar si se expande el media
+    const [editing, setEditing] = useState(false); // pa controlar si se está editando el comentario
+    const [editedContent, setEditedContent] = useState(comment.comment_text); // pa guardar el contenido editado
+    const [showOptions, setShowOptions] = useState(false); // pa mostrar las opciones de comentario
 
     const handleMediaClick = () => {
         setExpanded(!expanded);
-    };
+    }; // esto simplemente alterna el estado de expanded del media
 
-    const handleEditComment = () => {
+    const handleEditComment = () => { //para activar el modo de edición
         setEditing(true);
         setShowOptions(false);
     };
 
-    const handleSaveEdit = () => {
-        const updatedPosts = posts.map(p => {
-            if (p.id === post.id) {
-                return {
-                    ...p,
-                    comments: p.comments.map((c, index) => {
-                        if (c === comment) {
-                            return {
-                                ...c,
-                                content: editedContent
-                            };
-                        }
-                        return c;
-                    })
-                };
-            }
-            return p;
-        });
-        setPosts(updatedPosts);
-        setEditing(false);
+    const handleSaveEdit = async () => {
+        try {
+            // cctualiza el comentario en la base de datos
+            const { error } = await supabase
+                .from('comments')
+                .update({ comment_text: editedContent }) // cambia el texto del comentario
+                .eq('comment_id', comment.comment_id);
+
+            if (error) throw error;
+
+            // actualiza el estado local con el comentario editado
+            const updatedPosts = posts.map(p => {
+                if (p.post_id === post.post_id) {
+                    return {
+                        ...p,
+                        comments: p.comments.map(c => 
+                            c.comment_id === comment.comment_id 
+                                ? { ...c, comment_text: editedContent } 
+                                : c
+                        ),
+                    };
+                }
+                return p;
+            });
+            setPosts(updatedPosts);
+            setEditing(false); // desactiva el modo de edición
+        } catch (err) {
+            console.error('Error al actualizar el comentario:', err.message);
+            alert('Hubo un error al actualizar el comentario. Intente nuevamente.');
+        }
     };
 
-    const handleDeleteComment = () => {
-        const updatedPosts = posts.map(p => {
-            if (p.id === post.id) {
-                return {
-                    ...p,
-                    comments: p.comments.filter(c => c !== comment)
-                };
-            }
-            return p;
-        });
-        setPosts(updatedPosts);
-    };
+    const handleDeleteComment = async () => {
+        try {
+            // elimina el comentario de la base de datos
+            const { error } = await supabase
+                .from('comments')
+                .delete()
+                .eq('comment_id', comment.comment_id);
 
+            if (error) throw error;
+
+            // actualiza el estado local eliminando el comentario
+            const updatedPosts = posts.map(p => {
+                if (p.post_id === post.post_id) {
+                    return {
+                        ...p,
+                        comments: p.comments.filter(c => c.comment_id !== comment.comment_id),
+                    };
+                }
+                return p;
+            });
+            setPosts(updatedPosts);
+        } catch (err) {
+            console.error('Error al eliminar el comentario:', err.message);
+            alert('Hubo un error al eliminar el comentario. Intente nuevamente.');
+        }
+    };
+    // a partir de aquí se renderiza el comentario y vaina desa
     return (
         <div className={`comment ${expanded ? 'expanded' : ''}`}>
             {editing ? (
@@ -83,30 +85,28 @@ function Comment({ comment, post, setPosts, posts }) {
                     className="edit-comment-input"
                 />
             ) : (
-                comment.content
+                <p>{comment.comment_text}</p> // Renderiza el texto del comentario
             )}
-            {comment.media && (
-                comment.mediaType.startsWith('video/') ? (
+            {comment.multimedia && comment.multimedia.map((media, index) => (
+                media.media_type === 'video' ? (
                     <video 
+                        key={index}
                         controls 
                         className={`comment-media ${expanded ? 'expanded' : 'minimized'}`} 
                         onClick={handleMediaClick}
-                    >
-                        <source src={URL.createObjectURL(comment.media)} type={comment.mediaType} />
-                    </video>
+                        src={media.multimedia_url}
+                    />
                 ) : (
                     <img 
-                        src={URL.createObjectURL(comment.media)} 
+                        key={index}
+                        src={media.multimedia_url} 
                         alt="Comment media" 
                         className={`comment-media ${expanded ? 'expanded' : 'minimized'}`} 
                         onClick={handleMediaClick}
                     />
                 )
-            )}
+            ))}
             <div className="comment-actions">
-                <button className={`like-button ${liked ? 'liked' : ''}`} onClick={handleLikeComment}>
-                    ❤️ {comment.likes || 0}
-                </button>
                 {editing && (
                     <button className="save-edit-button" onClick={handleSaveEdit}>
                         Guardar
