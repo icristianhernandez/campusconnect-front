@@ -15,8 +15,17 @@
 }
 
 .header-search {
+  position: absolute; /* Restore original positioning */
+  left: 20px; /* Restore original left alignment */
+}
+
+.header-search img.search-icon {
   position: absolute;
-  left: 20px; /* Move search bar to the left */
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
 }
 
 .header-logo {
@@ -30,7 +39,7 @@
 
 .header-search input {
   width: 300px;
-  padding: 8px 12px;
+  padding: 8px 12px 8px 40px; /* Add padding to make space for the icon */
   border: 1px solid #ccc; /* Add border */
   border-radius: 20px;
   font-size: 14px;
@@ -39,5 +48,5 @@
 
 .header-search input:focus {
   outline: none;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 5px rgba(38, 163, 76, 0.5); /* Updated green color */
 }

@@ -71,6 +71,10 @@ function Feed() {
         <div className="Feed">
             <div className="feed-container">
                 <div className="left-column">
+                    <button className="settings-button">
+                        <img src="Configuración.svg" alt="Configuración" />
+                        <span>Configuración</span>
+                    </button>
                     {/* Contenido adicional para la columna izquierda */}
                 </div>
                 <div className="middle-column">

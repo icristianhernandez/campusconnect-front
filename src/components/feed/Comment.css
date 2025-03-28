@@ -83,7 +83,7 @@
   border: none;
   cursor: pointer;
   text-align: left;
-  color: #27a34d;
+  color: #26a34c; /* Updated green color */
 }
 
 .options-menu button:hover {
@@ -103,12 +103,12 @@
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  background-color: #27a34d;
+  background-color: #26a34c; /* Updated green color */
   color: white;
   cursor: pointer;
   transition: 0.3s ease;
 }
 
 .save-edit-button:hover {
-  background-color: #27a34d;
+  background-color: #26a34c; /* Updated green color */
 }

@@ -206,23 +206,35 @@ function Post({ post, setPosts, posts }) {
                 </div>
             </div>
             <div className="post-comments">
-                {post.comments && post.comments.map((comment) => (
-                    <Comment 
-                        key={comment.comment_id} 
-                        comment={comment} 
-                        post={post} 
-                        setPosts={setPosts} 
-                        posts={posts} 
-                    />
-                ))}
+                <div className="comment-list">
+                    {post.comments && post.comments.map((comment) => (
+                        <Comment 
+                            key={comment.comment_id} 
+                            comment={comment} 
+                            post={post} 
+                            setPosts={setPosts} 
+                            posts={posts} 
+                        />
+                    ))}
+                </div>
+                <hr className="comment-divider" /> {/* Add horizontal line */}
                 <form onSubmit={handleCommentSubmit} className="new-comment-form">
-                    <input
-                        type="text"
-                        value={newCommentContent}
-                        onChange={(e) => handleCommentChange(e.target.value)}
-                        placeholder="Escribe un comentario..."
-                        className="new-comment-input"
-                    />
+                    <div className="comment-input-container">
+                        <input
+                            type="text"
+                            value={newCommentContent}
+                            onChange={(e) => handleCommentChange(e.target.value)}
+                            placeholder="Escribe un comentario..."
+                            className="new-comment-input"
+                        />
+                        <button 
+                            type="submit" 
+                            className="new-comment-submit-icon"
+                            disabled={!newCommentContent && !newCommentMedia}
+                        >
+                            <img src="Enviar.svg" alt="Enviar" />
+                        </button>
+                    </div>
                     {newCommentMediaPreview && (
                         newCommentMedia.type.startsWith('video/') ? (
                             <video controls className="media-preview">
@@ -242,13 +254,6 @@ function Post({ post, setPosts, posts }) {
                                 className="new-comment-media-input"
                             />
                         </label>
-                        <button 
-                            type="submit" 
-                            className={`new-comment-submit ${newCommentContent || newCommentMedia ? '' : 'disabled'}`}
-                            disabled={!newCommentContent && !newCommentMedia}
-                        >
-                            Comentar
-                        </button>
                     </div>
                 </form>
             </div>
