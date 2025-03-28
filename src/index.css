@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap");
+
 /* Reset CSS */
 html,
 body,
@@ -109,6 +111,7 @@ body {
   height: 100%;
   overflow-x: hidden; /* Evita scroll horizontal */
   overflow-y: auto; /* Permite scroll vertical */
+  font-family: "Montserrat", sans-serif; /* Apply Montserrat font globally */
 }
 
 body {
