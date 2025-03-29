@@ -3,17 +3,17 @@ import './Comment.css';
 import { supabase } from '../../utils/supabase';
 
 function Comment({ comment, post, setPosts, posts }) {
-    const [expanded, setExpanded] = useState(false); // pa controlar si se expande el media
-    const [editing, setEditing] = useState(false); // pa controlar si se está editando el comentario
-    const [editedContent, setEditedContent] = useState(comment.comment_text); // pa guardar el contenido editado
-    const [showOptions, setShowOptions] = useState(false); // pa mostrar las opciones de comentario
-    const [userId, setUserId] = useState(null); // un nuevo estado pa almacenar el ID del usuario autenticado
+    const [expanded, setExpanded] = useState(false);
+    const [editing, setEditing] = useState(false);
+    const [editedContent, setEditedContent] = useState(comment.comment_text);
+    const [showCommentOptions, setShowCommentOptions] = useState(false); // Renamed state variable
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const fetchUser = async () => {
             const { data: { user }, error } = await supabase.auth.getUser();
             if (!error && user) {
-                setUserId(user.id); // se almacena el ID del usuario autenticado
+                setUserId(user.id);
             }
         };
         fetchUser();
@@ -21,24 +21,22 @@ function Comment({ comment, post, setPosts, posts }) {
 
     const handleMediaClick = () => {
         setExpanded(!expanded);
-    }; // esto simplemente alterna el estado de expanded del media
+    };
 
-    const handleEditComment = () => { //para activar el modo de edición
+    const handleEditComment = () => {
         setEditing(true);
-        setShowOptions(false);
+        setShowCommentOptions(false); // Using the renamed state
     };
 
     const handleSaveEdit = async () => {
         try {
-            // cctualiza el comentario en la base de datos
             const { error } = await supabase
                 .from('comments')
-                .update({ comment_text: editedContent }) // cambia el texto del comentario
+                .update({ comment_text: editedContent })
                 .eq('comment_id', comment.comment_id);
 
             if (error) throw error;
 
-            // actualiza el estado local con el comentario editado
             const updatedPosts = posts.map(p => {
                 if (p.post_id === post.post_id) {
                     return {
@@ -53,7 +51,7 @@ function Comment({ comment, post, setPosts, posts }) {
                 return p;
             });
             setPosts(updatedPosts);
-            setEditing(false); // desactiva el modo de edición
+            setEditing(false);
         } catch (err) {
             console.error('Error al actualizar el comentario:', err.message);
             alert('Hubo un error al actualizar el comentario. Intente nuevamente.');
@@ -62,7 +60,6 @@ function Comment({ comment, post, setPosts, posts }) {
 
     const handleDeleteComment = async () => {
         try {
-            // elimina el comentario de la base de datos
             const { error } = await supabase
                 .from('comments')
                 .delete()
@@ -70,7 +67,6 @@ function Comment({ comment, post, setPosts, posts }) {
 
             if (error) throw error;
 
-            // actualiza el estado local eliminando el comentario
             const updatedPosts = posts.map(p => {
                 if (p.post_id === post.post_id) {
                     return {
@@ -86,7 +82,27 @@ function Comment({ comment, post, setPosts, posts }) {
             alert('Hubo un error al eliminar el comentario. Intente nuevamente.');
         }
     };
-    // a partir de aquí se renderiza el comentario y vaina desa
+
+    // Close options menu when clicking outside
+    useEffect(() => {
+        if (showCommentOptions) {
+            const handleClickOutside = () => {
+                setShowCommentOptions(false);
+            };
+            
+            document.addEventListener('click', handleClickOutside);
+            return () => {
+                document.removeEventListener('click', handleClickOutside);
+            };
+        }
+    }, [showCommentOptions]);
+
+    // Handle options toggle with stopPropagation to prevent the document click handler
+    const toggleOptions = (e) => {
+        e.stopPropagation();
+        setShowCommentOptions(!showCommentOptions);
+    };
+
     return (
         <div className={`comment ${expanded ? 'expanded' : ''}`}>
             {editing ? (
@@ -96,8 +112,9 @@ function Comment({ comment, post, setPosts, posts }) {
                     className="edit-comment-input"
                 />
             ) : (
-                <p>{comment.comment_text}</p> // Renderiza el texto del comentario
+                <p className="comment-text">{comment.comment_text}</p>
             )}
+            
             {comment.multimedia && comment.multimedia.map((media, index) => (
                 media.media_type === 'video' ? (
                     <video 
@@ -117,6 +134,7 @@ function Comment({ comment, post, setPosts, posts }) {
                     />
                 )
             ))}
+            
             <div className="comment-actions">
                 {editing && (
                     <button className="save-edit-button" onClick={handleSaveEdit}>
@@ -124,19 +142,45 @@ function Comment({ comment, post, setPosts, posts }) {
                     </button>
                 )}
             </div>
-            <div className="comment-options">
-                {userId === comment.user_id && ( // Verifica si el usuario autenticado es el propietario
-                    <>
-                        <button className="options-button" onClick={() => setShowOptions(!showOptions)}>⋮</button>
-                        {showOptions && (
-                            <div className="options-menu">
-                                <button onClick={handleEditComment}>Editar</button>
-                                <button onClick={handleDeleteComment}>Eliminar</button>
-                            </div>
-                        )}
-                    </>
-                )}
-            </div>
+            
+            {/* New comment options UI that's independent from posts */}
+            {userId === comment.user_id && (
+                <div className="comment-options-container">
+                    <button 
+                        className="comment-options-button" 
+                        onClick={toggleOptions}
+                        aria-label="Opciones de comentario"
+                    >
+                        •••
+                    </button>
+                    
+                    {showCommentOptions && (
+                        <div className="comment-options-dropdown">
+                            <button 
+                                className="comment-option-item" 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEditComment();
+                                }}
+                            >
+                                <span className="comment-option-icon">✏️</span>
+                                <span>Editar</span>
+                            </button>
+                            <button 
+                                className="comment-option-item" 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteComment();
+                                }}
+                            >
+                                <span className="comment-option-icon">🗑️</span>
+                                <span>Eliminar</span>
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
+            
             {expanded && <div className="overlay" onClick={handleMediaClick}></div>}
         </div>
     );

@@ -165,97 +165,180 @@ function Post({ post, setPosts, posts }) {
         }
     };
 
-    // a partir de aca se renderiza el componente y vainadesa
+    const togglePostOptions = (e) => {
+        e.stopPropagation();
+        setShowOptions(!showOptions);
+    };
+
+    useEffect(() => {
+        if (showOptions) {
+            const handleClickOutside = () => {
+                setShowOptions(false);
+            };
+            
+            document.addEventListener('click', handleClickOutside);
+            return () => {
+                document.removeEventListener('click', handleClickOutside);
+            };
+        }
+    }, [showOptions]);
+
+    // a partir de aca se renderiza el componente con la nueva estructura de 4 secciones
     return (
         <div className="post">
-            <div className="post-content">
-                {editing ? (
-                    <textarea 
-                        value={editedContent} 
-                        onChange={(e) => setEditedContent(e.target.value)} 
-                        className="edit-post-input"
-                    />
-                ) : (
-                    post.post_text
-                )}
-                {post.multimedia && post.multimedia.map(media => (
-                    <div key={media.multimedia_id}>
-                        {media.media_type === 'image' && <img src={media.multimedia_url} alt="Post multimedia" />}
-                        {media.media_type === 'video' && <video controls src={media.multimedia_url}></video>}
-                    </div>
-                ))}
-                <div className="post-actions">
-                    {editing && (
-                        <button className="save-edit-button" onClick={handleSaveEdit}>
-                            Guardar
-                        </button>
+            <div className="post-top-section">
+                {/* Sección superior izquierda - contenido del post */}
+                <div className="post-content">
+                    {editing ? (
+                        <textarea 
+                            value={editedContent} 
+                            onChange={(e) => setEditedContent(e.target.value)} 
+                            className="edit-post-input"
+                        />
+                    ) : (
+                        <p className="post-text">{post.post_text}</p> // Wrap post text in a paragraph with a class
                     )}
-                </div>
-                <div className="post-options">
-                    {userId === post.user_id && ( // Verifica si el usuario autenticado es el propietario
-                        <>
-                            <button className="options-button" onClick={() => setShowOptions(!showOptions)}>⋮</button>
+                    {post.multimedia && post.multimedia.map(media => (
+                        <div key={media.multimedia_id}>
+                            {media.media_type === 'image' && <img src={media.multimedia_url} alt="Post multimedia" />}
+                            {media.media_type === 'video' && <video controls src={media.multimedia_url}></video>}
+                        </div>
+                    ))}
+                    <div className="post-actions">
+                        {editing && (
+                            <button className="save-edit-button" onClick={handleSaveEdit}>
+                                Guardar
+                            </button>
+                        )}
+                    </div>
+                    
+                    {/* New post options UI that matches the comment options style */}
+                    {userId === post.user_id && (
+                        <div className="post-options-container">
+                            <button 
+                                className="post-options-button" 
+                                onClick={togglePostOptions}
+                                aria-label="Opciones de publicación"
+                            >
+                                •••
+                            </button>
+                            
                             {showOptions && (
-                                <div className="options-menu">
-                                    <button onClick={handleEditPost}>Editar</button>
-                                    <button onClick={handleDeletePost}>Eliminar</button>
+                                <div className="post-options-dropdown">
+                                    <button 
+                                        className="post-option-item" 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleEditPost();
+                                        }}
+                                    >
+                                        <span className="post-option-icon">✏️</span>
+                                        <span>Editar</span>
+                                    </button>
+                                    <button 
+                                        className="post-option-item" 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleDeletePost();
+                                        }}
+                                    >
+                                        <span className="post-option-icon">🗑️</span>
+                                        <span>Eliminar</span>
+                                    </button>
                                 </div>
                             )}
-                        </>
+                        </div>
                     )}
+                </div>
+                
+                {/* Sección superior derecha - lista de comentarios */}
+                <div className="post-comments-list">
+                    <div className="comments-header">
+                        <h3>Comentarios</h3>
+                    </div>
+                    <div className="comments-container">
+                        {post.comments && post.comments.length > 0 ? (
+                            post.comments.map((comment, index) => (
+                                <React.Fragment key={comment.comment_id}>
+                                    <Comment 
+                                        comment={comment} 
+                                        post={post} 
+                                        setPosts={setPosts} 
+                                        posts={posts} 
+                                    />
+                                    {/* Add divider after each comment except the last one */}
+                                    {index < post.comments.length - 1 && <hr className="comment-divider" />}
+                                </React.Fragment>
+                            ))
+                        ) : (
+                            <div className="no-comments-message">
+                                No hay comentarios. Sé el primero en comentar.
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
-            <div className="post-comments">
-                <div className="comment-list">
-                    {post.comments && post.comments.map((comment) => (
-                        <Comment 
-                            key={comment.comment_id} 
-                            comment={comment} 
-                            post={post} 
-                            setPosts={setPosts} 
-                            posts={posts} 
-                        />
-                    ))}
+            
+            <div className="post-bottom-section">
+                {/* Sección inferior izquierda - para funciones futuras */}
+                <div className="post-functions">
+                    <div className="function-placeholder">
+                        <p>Funciones adicionales se implementarán aquí</p>
+                    </div>
                 </div>
-                <hr className="comment-divider" /> {/* Add horizontal line */}
-                <form onSubmit={handleCommentSubmit} className="new-comment-form">
-                    <div className="comment-input-container">
-                        <input
-                            type="text"
-                            value={newCommentContent}
-                            onChange={(e) => handleCommentChange(e.target.value)}
-                            placeholder="Escribe un comentario..."
-                            className="new-comment-input"
-                        />
-                        <button 
-                            type="submit" 
-                            className="new-comment-submit-icon"
-                            disabled={!newCommentContent && !newCommentMedia}
-                        >
-                            <img src="Enviar.svg" alt="Enviar" />
-                        </button>
-                    </div>
-                    {newCommentMediaPreview && (
-                        newCommentMedia.type.startsWith('video/') ? (
-                            <video controls className="media-preview">
-                                <source src={newCommentMediaPreview} type={newCommentMedia.type} />
-                            </video>
-                        ) : (
-                            <img src={newCommentMediaPreview} alt="Preview" className="media-preview" />
-                        )
-                    )}
-                    <div className="new-comment-actions">
-                        <label className="new-comment-media-label">
-                            Adjuntar archivo
-                            <input 
-                                type="file" 
-                                accept="image/*,video/*" 
-                                onChange={handleCommentMediaChange} 
-                                className="new-comment-media-input"
-                            />
-                        </label>
-                    </div>
-                </form>
+                
+                {/* Sección inferior derecha - formulario de comentarios */}
+                <div className="post-comment-form">
+                    <form onSubmit={handleCommentSubmit} className="new-comment-form">
+                        <div className="comment-input-container">
+                            <textarea
+                                value={newCommentContent}
+                                onChange={(e) => handleCommentChange(e.target.value)}
+                                placeholder="Escribe un comentario..."
+                                className="new-comment-input"
+                                rows="1" /* Force single line display */
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                        e.preventDefault();
+                                        if (newCommentContent.trim() || newCommentMedia) {
+                                            handleCommentSubmit(e);
+                                        }
+                                    }
+                                }}
+                            ></textarea>
+                            <div className="comment-actions-group">
+                                <label className="new-comment-media-label">
+                                    📎
+                                    <input 
+                                        type="file" 
+                                        accept="image/*,video/*" 
+                                        onChange={handleCommentMediaChange} 
+                                        className="new-comment-media-input"
+                                    />
+                                </label>
+                                <button 
+                                    type="submit" 
+                                    className="new-comment-submit-icon"
+                                    disabled={!newCommentContent && !newCommentMedia}
+                                >
+                                    <img src="Enviar.svg" alt="Enviar" />
+                                </button>
+                            </div>
+                        </div>
+                        {newCommentMediaPreview && (
+                            newCommentMedia.type.startsWith('video/') ? (
+                                <video controls className="media-preview">
+                                    <source src={newCommentMediaPreview} type={newCommentMedia.type} />
+                                </video>
+                            ) : (
+                                <img src={newCommentMediaPreview} alt="Preview" className="media-preview" />
+                            )
+                        )}
+                        <div className="new-comment-actions">
+                            {/* Removed the attachment button from here as it's now next to the send button */}
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     );

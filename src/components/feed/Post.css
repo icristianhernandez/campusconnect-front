@@ -1,69 +1,262 @@
 .post {
   display: flex;
-  border: 1px solid #ccc;
+  flex-direction: column;
+  border: 2px solid #ccc; /* Increased border thickness from 1px to 2px */
   border-radius: 10px;
-  background-color: #f2f4f7; /* Set background color for posts */
+  background-color: #f2f4f7;
+  overflow: hidden;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Top section containing post content and comments list */
+.post-top-section {
+  display: flex;
+  min-height: 200px;
+  border-bottom: 2px solid #ddd; /* Increased border thickness from 1px to 2px */
+}
+
+/* Bottom section containing future functions and comment form */
+.post-bottom-section {
+  display: flex;
+  min-height: 100px;
+  flex-wrap: nowrap; /* Prevent wrapping of child elements */
+}
+
+/* Post content - top left */
+.post-content {
+  width: 50%;
+  flex: 1 0 50%;
+  padding: 20px;
+  border-right: 2px solid #ccc; /* Increased border thickness from 1px to 2px */
+  position: relative;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word; /* Added property to ensure text breaks properly */
+  white-space: pre-wrap; /* Preserve line breaks but wrap text */
+  min-width: 0; /* Allow content to shrink below minimum content size */
+  box-sizing: border-box;
+  overflow: hidden; /* Prevent overflow */
+}
+
+/* Ensure post text itself wraps properly */
+.post-content p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
   overflow: hidden;
 }
 
-.post-content {
-  flex: 1;
-  padding: 20px;
-  border-right: 1px solid #ccc;
-  position: relative;
+/* Comments list - top right */
+.post-comments-list {
+  width: 50%;
+  flex: 1 0 50%;
+  padding: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0; /* Allow content to shrink below minimum content size */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
 }
 
+.comments-header {
+  padding: 0 5px 10px 5px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 10px;
+}
+
+.comments-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.comments-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.no-comments-message {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 20px 0;
+}
+
+/* Future functions - bottom left */
+.post-functions {
+  width: 50%;
+  flex: 1 0 50%;
+  padding: 15px;
+  border-right: 2px solid #ccc; /* Increased border thickness from 1px to 2px */
+  background-color: #f2f4f7; /* Changed from #f9f9f9 to #f2f4f7 */
+  min-width: 0; /* Allow content to shrink below minimum content size */
+  box-sizing: border-box;
+}
+
+.function-placeholder {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  color: #888;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Comment form - bottom right */
+.post-comment-form {
+  width: 50%;
+  flex: 1 0 50%;
+  padding: 15px;
+  background-color: #f2f4f7; /* Changed from #f9f9f9 to #f2f4f7 */
+  min-width: 0; /* Allow content to shrink below minimum content size */
+  box-sizing: border-box;
+}
+
+/* Post media styles */
 .post-media {
   max-width: 100%;
   margin-top: 10px;
 }
 
-.post-comments {
-  padding: 20px;
+/* Remove old post options styles */
+.post-options {
+  display: none; /* Hide the old post options */
 }
 
-.comment-list {
-  max-height: 200px; /* Adjust the height as needed */
-  overflow-y: auto;
-  margin-bottom: 20px; /* Add spacing between the list and the options */
+/* New post options menu styling - mimicking comment options */
+.post-options-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
-.comment {
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #f2f4f7; /* Set background color for comments */
-  border-radius: 5px;
-}
-
-.comment-divider {
-  margin: 20px 0;
+.post-options-button {
+  background: none;
   border: none;
-  border-top: 1px solid #ccc;
+  font-size: 16px;
+  font-weight: bold;
+  color: #777;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+  letter-spacing: -1px;
 }
 
+.post-options-button:hover {
+  background-color: #eaeaea;
+  color: #555;
+}
+
+.post-options-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 130px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.post-option-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+.post-option-item:hover {
+  background-color: #f0f0f0;
+}
+
+.post-option-icon {
+  margin-right: 8px;
+  font-size: 14px;
+}
+
+/* Comment form styles */
 .new-comment-form {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
 }
 
 .comment-input-container {
   position: relative;
   display: flex;
   align-items: center;
+  margin: 0 5px; /* Add slight margin to the sides */
+  border-bottom: none; /* Remove any container border if exists */
+}
+
+.comment-actions-group {
+  position: absolute;
+  right: 10px;
+  top: 50%; /* Keep in middle of input field */
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Reduced gap between buttons */
 }
 
 .new-comment-input {
   flex: 1;
-  padding: 10px 40px 10px 10px; /* Add padding to make space for the icon */
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  padding: 5px 80px 5px 2px; /* Reduced padding, especially on left and top/bottom */
+  border: none; /* Remove border */
+  border-bottom: 1px solid #ccc; /* Add only bottom border for line appearance */
+  border-radius: 0; /* Remove border radius completely */
+  font-family: inherit;
+  font-size: inherit;
+  height: 38px; /* Increased height from 30px to 38px */
+  line-height: 20px;
+  background-color: transparent; /* Make background transparent */
+  transition: border-color 0.3s;
+  resize: none;
+  overflow-y: auto; /* Changed to auto to allow scrolling */
+  min-height: 38px; /* Increased min-height to match height */
+  max-height: 38px; /* Increased max-height to match height */
+  white-space: normal; /* Allow text to wrap if needed */
+  overflow-x: auto; /* Enable horizontal scrolling */
+  scrollbar-width: thin; /* Make scrollbars thin */
+}
+
+.new-comment-input::-webkit-scrollbar {
+  height: 4px; /* Height for horizontal scrollbar */
+  width: 4px; /* Width for vertical scrollbar */
+}
+
+.new-comment-input::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+.new-comment-input::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.new-comment-input:focus {
+  outline: none;
+  border-bottom: 2px solid #26a34c; /* Thicker bottom border on focus */
+  box-shadow: none; /* Remove the box shadow on focus */
 }
 
 .new-comment-submit-icon {
-  position: absolute;
-  right: 10px;
   background: none;
   border: none;
   cursor: pointer;
@@ -86,18 +279,18 @@
 
 .new-comment-media-label {
   display: inline-block;
-  padding: 10px 20px;
+  padding: 5px;
   border: none;
-  border-radius: 5px;
-  background-color: #26a34c; /* Updated green color */
-  color: white;
+  border-radius: 50%;
+  background: none; /* Removed background */
+  color: #333; /* Changed color to dark */
   cursor: pointer;
   transition: 0.3s ease;
-  margin-right: 10px;
+  font-size: 16px; /* Decreased font size */
 }
 
 .new-comment-media-label:hover {
-  background-color: #26a34c; /* Updated green color */
+  transform: scale(1.2);
 }
 
 .media-preview {
@@ -111,64 +304,105 @@
   align-items: center;
 }
 
-.post-options {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .post-top-section,
+  .post-bottom-section {
+    flex-direction: column;
+  }
+
+  .post-content,
+  .post-comments-list,
+  .post-functions,
+  .post-comment-form {
+    width: 100%;
+    flex: 1 0 100%;
+    border-right: none;
+  }
+
+  .post-content,
+  .post-functions {
+    border-bottom: 2px solid #ccc;
+  }
+
+  .post-comments-list {
+    max-height: none;
+    height: 300px; /* Fixed height on mobile */
+  }
+
+  .function-placeholder p {
+    font-size: 14px;
+  }
+
+  .new-comment-media-label {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .comment-input-container {
+    width: 100%;
+  }
 }
 
-.options-button {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
+/* Extra small devices */
+@media screen and (max-width: 480px) {
+  .post {
+    margin-bottom: 15px;
+  }
+
+  .post-content,
+  .post-comments-list,
+  .post-functions,
+  .post-comment-form {
+    padding: 10px;
+  }
+
+  .post-top-section {
+    min-height: 150px;
+  }
+
+  .post-bottom-section {
+    min-height: 80px;
+  }
+
+  .post-comments-list {
+    height: 250px;
+  }
+
+  .edit-post-input {
+    height: 80px;
+  }
+
+  .new-comment-actions {
+    justify-content: center;
+  }
 }
 
-.options-menu {
-  position: absolute;
-  top: 30px;
-  right: 0;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+/* Medium size devices - add a new breakpoint for better transition */
+@media screen and (max-width: 992px) and (min-width: 769px) {
+  .post-content,
+  .post-comments-list,
+  .post-functions,
+  .post-comment-form {
+    padding: 15px 10px; /* Reduce padding to save space */
+  }
+
+  .function-placeholder p {
+    font-size: 14px;
+  }
+
+  .new-comment-actions {
+    flex-wrap: wrap;
+  }
+
+  .new-comment-media-label {
+    margin-bottom: 10px;
+  }
 }
 
-.options-menu button {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  color: #26a34c; /* Updated green color */
-}
-
-.options-menu button:hover {
-  background: #f0f0f0;
-}
-
-.edit-post-input {
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  resize: none;
-}
-
-.save-edit-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #26a34c; /* Updated green color */
-  color: white;
-  cursor: pointer;
-  transition: 0.3s ease;
-}
-
-.save-edit-button:hover {
-  background-color: #26a34c; /* Updated green color */
+/* Ensure media inside posts scales correctly */
+.post img,
+.post video {
+  max-width: 100%;
+  height: auto;
 }

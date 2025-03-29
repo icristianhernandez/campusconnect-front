@@ -1,10 +1,45 @@
 .comment {
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
   position: relative;
+  padding: 12px 5px;
+  /* Remove background color and box styling */
+  background-color: transparent;
+  border-radius: 0;
+  margin-bottom: 0; /* Remove bottom margin as we'll use dividers instead */
   z-index: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+  max-width: 100%;
+  /* Add transition for hover effects */
+  transition: background-color 0.2s ease;
+}
+
+/* Add hover effect to highlight the current comment */
+.comment:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Comment text content */
+.comment p {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 100%;
+  overflow: hidden;
+  padding-right: 30px; /* Make space for the options button */
+  font-size: 14px; /* Slightly smaller font for comments */
+  line-height: 1.4;
+  color: #333;
+}
+
+/* Comment divider - horizontal line between comments */
+.comment-divider {
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 0;
+  border: none;
 }
 
 .comment.expanded {
@@ -51,10 +86,69 @@
   z-index: 999;
 }
 
+/* Remove old comment options */
 .comment-options {
+  display: none; /* Hide the old comment options */
+}
+
+/* New comment options menu styling */
+.comment-options-container {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 8px;
+  right: 5px;
+}
+
+.comment-options-button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: #777;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+  letter-spacing: -1px;
+}
+
+.comment-options-button:hover {
+  background-color: #eaeaea;
+  color: #555;
+}
+
+.comment-options-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  width: 130px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.comment-option-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+.comment-option-item:hover {
+  background-color: #f0f0f0;
+}
+
+.comment-option-icon {
+  margin-right: 8px;
+  font-size: 14px;
 }
 
 .options-button {
@@ -92,11 +186,12 @@
 
 .edit-comment-input {
   width: 100%;
-  height: 100px;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 8px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   resize: none;
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
 .save-edit-button {
