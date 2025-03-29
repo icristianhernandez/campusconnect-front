@@ -10,6 +10,7 @@ function Post({ post, setPosts, posts }) {
     const [editing, setEditing] = useState(false); // indica si se esta en el modo edicion
     const [editedContent, setEditedContent] = useState(post.content); // contenido editado
     const [showOptions, setShowOptions] = useState(false); // visibilidad de las opciones de edicion y eliminacion
+    const [likes, setLikes] = useState(post.likes || []); // Ensure likes is always an array
     const [userId, setUserId] = useState(null); // almacenar el ID del usuario autenticado
 
     useEffect(() => {
@@ -183,6 +184,38 @@ function Post({ post, setPosts, posts }) {
         }
     }, [showOptions]);
 
+    const handleLike = async () => {
+        try {
+            const existingLike = likes.find(like => like.user_id === userId);
+            if (existingLike) {
+                // Eliminar el like
+                const { error } = await supabase
+                    .from('post_likes')
+                    .delete()
+                    .eq('like_id', existingLike.like_id);
+
+                if (error) throw error;
+
+                // Actualizar el estado local
+                setLikes(likes.filter(like => like.like_id !== existingLike.like_id));
+            } else {
+                // Crear un nuevo like
+                const { data, error } = await supabase
+                    .from('post_likes')
+                    .insert({ user_id: userId, post_id: post.post_id })
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                // Actualizar el estado local
+                setLikes([...likes, data]);
+            }
+        } catch (error) {
+            console.error('Error al manejar el like:', error.message);
+        }
+    };
+
     // a partir de aca se renderiza el componente con la nueva estructura de 4 secciones
     return (
         <div className="post">
@@ -220,6 +253,12 @@ function Post({ post, setPosts, posts }) {
                                 Guardar
                             </button>
                         )}
+                        <button 
+                            className={`like-button ${Array.isArray(likes) && likes.some(like => like.user_id === userId) ? 'liked' : ''}`} 
+                            onClick={handleLike}
+                        >
+                            {Array.isArray(likes) && likes.some(like => like.user_id === userId) ? '❤️' : '🤍'} {likes.length}
+                        </button>
                     </div>
                     
                     {/* New post options UI that matches the comment options style */}

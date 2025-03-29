@@ -27,6 +27,10 @@ function Feed() {
                     post_multimedia (
                         media_type,
                         multimedia_url
+                    ),
+                    post_likes (
+                        like_id,
+                        user_id
                     )
                 `)
                 .order('created_at', { ascending: false });
@@ -48,6 +52,7 @@ function Feed() {
             const combinedPosts = postsData.map(post => ({
                 ...post,
                 multimedia: post.post_multimedia || [],
+                likes: post.post_likes || [],
                 comments: commentsData
                     .filter(comment => comment.parent_post_id === post.post_id)
                     .map(comment => ({
