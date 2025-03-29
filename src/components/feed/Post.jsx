@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import './Post.css';
 import Comment from './Comment';
 import { supabase } from '../../utils/supabase';
@@ -12,6 +13,10 @@ function Post({ post, setPosts, posts }) {
     const [showOptions, setShowOptions] = useState(false); // visibilidad de las opciones de edicion y eliminacion
     const [likes, setLikes] = useState(post.likes || []); // Ensure likes is always an array
     const [userId, setUserId] = useState(null); // almacenar el ID del usuario autenticado
+    const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+    const [deleteError, setDeleteError] = useState(null);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+    const modalRef = useRef(null);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -148,6 +153,9 @@ function Post({ post, setPosts, posts }) {
     };
 
     const handleDeletePost = async () => {
+        setDeleteLoading(true);
+        setDeleteError(null);
+        
         try {
             // elimina el post de la base de datos
             const { error } = await supabase
@@ -160,10 +168,57 @@ function Post({ post, setPosts, posts }) {
             // se actualiza el estado local eliminando el post
             const updatedPosts = posts.filter(p => p.post_id !== post.post_id);
             setPosts(updatedPosts);
+            setShowConfirmDelete(false);
         } catch (err) {
             console.error('Error al eliminar el post:', err.message);
-            alert('Hubo un error al eliminar el post. Intente nuevamente.');
+            setDeleteError('Hubo un error al eliminar el post. Intente nuevamente.');
+        } finally {
+            setDeleteLoading(false);
         }
+    };
+
+    // Create a portal for the delete confirmation modal
+    const DeleteConfirmationModal = () => {
+        if (!showConfirmDelete) return null;
+        
+        return createPortal(
+            <div 
+                className="modal-backdrop"
+                onClick={(e) => {
+                    e.preventDefault();
+                    setShowConfirmDelete(false);
+                }}
+            >
+                <div 
+                    className="modal-content"
+                    onClick={(e) => e.stopPropagation()}
+                    ref={modalRef}
+                >
+                    <h3>Eliminar publicación</h3>
+                    <p>¿Estás seguro de que deseas eliminar esta publicación? Esta acción no se puede deshacer.</p>
+                    
+                    {deleteError && <div className="delete-error">{deleteError}</div>}
+                    
+                    <div className="confirmation-buttons">
+                        <button 
+                            className="cancel-button" 
+                            onClick={() => setShowConfirmDelete(false)}
+                            disabled={deleteLoading}
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            className="confirm-button" 
+                            onClick={handleDeletePost}
+                            disabled={deleteLoading}
+                        >
+                            {deleteLoading ? 'Eliminando...' : 'Eliminar'}
+                        </button>
+                    </div>
+                </div>
+            </div>,
+            document.body
+        );
     };
 
     const togglePostOptions = (e) => {
@@ -283,7 +338,7 @@ function Post({ post, setPosts, posts }) {
                                         className="post-option-item" 
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            handleDeletePost();
+                                            setShowConfirmDelete(true);
                                         }}
                                     >
                                         <span className="post-option-icon">🗑️</span>
@@ -399,6 +454,9 @@ function Post({ post, setPosts, posts }) {
                     </form>
                 </div>
             </div>
+            
+            {/* Delete confirmation modal rendered through portal */}
+            <DeleteConfirmationModal />
         </div>
     );
 }

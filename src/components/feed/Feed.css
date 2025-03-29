@@ -80,6 +80,15 @@
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-top: 40px; /* Reduce the margin to bring the form closer */
+  width: 90%; /* Set specific width */
+  max-width: 600px; /* Add max-width for larger screens */
+  margin-left: auto; /* Center the form horizontally */
+  margin-right: auto;
+}
+
+/* Add specific class for the NewPostForm component */
+.NewPostForm {
+  align-self: center; /* Center in flex parent */
 }
 
 .new-post-input {
@@ -89,6 +98,7 @@
   border-radius: 10px;
   border: 1px solid #ccc;
   resize: none;
+  align-self: centers;
 }
 
 .new-post-media-input {

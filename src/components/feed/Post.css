@@ -431,6 +431,116 @@
   transform: scale(1.1);
 }
 
+/* Add or ensure these styles exist for the delete confirmation modal */
+.delete-error {
+  color: #d32f2f;
+  font-size: 12px;
+  margin-bottom: 16px;
+  background-color: #ffebee;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 3px solid #d32f2f;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000; /* Very high z-index */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 340px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  padding: 24px;
+  position: relative;
+  animation: modal-appear 0.2s ease;
+  z-index: 100001; /* Even higher than backdrop */
+}
+
+@keyframes modal-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #d32f2f;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-content p {
+  margin-bottom: 24px;
+  color: #555;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.cancel-button,
+.confirm-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.cancel-button {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+.cancel-button:hover {
+  background-color: #e0e0e0;
+}
+
+.confirm-button {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.confirm-button:hover {
+  background-color: #b71c1c;
+}
+
+.cancel-button:active,
+.confirm-button:active {
+  transform: scale(0.97);
+}
+
+.cancel-button:disabled,
+.confirm-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 /* Responsive styles */
 @media screen and (max-width: 768px) {
   .post-top-section,

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'; // Importa el hook useContext y useEffect
+import React, { useContext, useEffect, useState, useRef } from 'react'; // Importa el hook useContext y useEffect
 import './Feed.css'; // Importa estilos CSS del archivo feed.css
 import Post from './Post'; //componente para post individual
 import NewPostForm from './NewPostForm'; //componente para formulario de nuevo post
@@ -10,6 +10,9 @@ function Feed() {
     const { posts } = appState; //publicaciones almacenadas en estado global
     const [errorMessage, setErrorMessage] = useState(null); // para mostrar errores
     const [showNewPostForm, setShowNewPostForm] = useState(false); // Estado para controlar la visibilidad del formulario
+    
+    // Add ref to the top of the feed for scrolling
+    const feedTopRef = useRef(null);
 
     const setPosts = (updatedPosts) => {
         dispatch({ type: 'SET_POSTS', payload: updatedPosts }); //actualiza la lista de posts
@@ -71,6 +74,19 @@ function Feed() {
     useEffect(() => { //hook para cargar posts y comentarios desde la db
         fetchPostsWithComments();
     }, []);
+
+    const handleCreateButtonClick = () => {
+        setShowNewPostForm(true);
+        
+        // Scroll to the top where the form is located
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Alternative approach using ref if window.scrollTo doesn't work well
+        if (feedTopRef.current) {
+            feedTopRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     // y esta parte es del renderizado del componente
     return (
         <div className="Feed">
@@ -83,12 +99,12 @@ function Feed() {
                     {/* Contenido adicional para la columna izquierda */}
                 </div>
                 <div className="middle-column">
+                    {/* Add ref to the top */}
+                    <div ref={feedTopRef}></div>
+                    
                     <button 
                         className="create-post-button" 
-                        onClick={() => {
-                            setShowNewPostForm(!showNewPostForm);
-                            window.scrollTo({ top: 0, behavior: 'smooth' }); // Desplaza al principio de la página
-                        }}
+                        onClick={handleCreateButtonClick}
                     >
                         Crear
                     </button>
