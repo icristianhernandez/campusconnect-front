@@ -98,7 +98,7 @@
   border-radius: 10px;
   border: 1px solid #ccc;
   resize: none;
-  align-self: centers;
+  align-self: center;
 }
 
 .new-post-media-input {
