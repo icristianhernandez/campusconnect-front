@@ -56,24 +56,18 @@
   flex: 1 0 50%;
   padding: 15px;
   max-height: 300px;
-  min-height: 200px; /* Add minimum height to ensure space for comments */
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0; /* Allow content to shrink below minimum content size */
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  overflow: hidden; /* Important: container itself should not scroll */
-  min-width: 0;
-  position: relative; /* Create positioning context for children */
 }
 
 .comments-header {
   padding: 0 5px 10px 5px;
   border-bottom: 1px solid #ddd;
   margin-bottom: 10px;
-  flex-shrink: 0; /* Prevent header from shrinking */
-  position: sticky; /* Keep header always visible */
-  top: 0;
-  background-color: #f2f4f7;
-  z-index: 5; /* Ensure header stays on top */
 }
 
 .comments-header h3 {
@@ -84,40 +78,7 @@
 
 .comments-container {
   flex: 1;
-  overflow-y: auto !important; /* Force vertical scrolling */
-  overflow-x: hidden;
-  /* Remove max-height calculation that might be causing issues */
-  height: calc(100% - 40px); /* Use height instead of max-height */
-  padding-right: 5px;
-  scrollbar-width: thin;
-  scrollbar-color: #26a34c transparent;
-  display: flex; /* Make this a flex container */
-  flex-direction: column; /* Stack comments vertically */
-  gap: 5px; /* Add space between comments */
-}
-
-/* Ensure WebKit scrollbars look nice */
-.comments-container::-webkit-scrollbar {
-  width: 6px;
-}
-
-.comments-container::-webkit-scrollbar-thumb {
-  background-color: #26a34c;
-  border-radius: 10px;
-}
-
-.comments-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-/* Add this to ensure comment dividers display correctly */
-.comment-divider {
-  margin: 5px 0;
-  border: none;
-  height: 1px;
-  background-color: #eaeaea;
-  width: 100%;
-  flex-shrink: 0; /* Prevent divider from shrinking */
+  overflow-y: auto;
 }
 
 .no-comments-message {
