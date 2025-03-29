@@ -13,8 +13,6 @@
   max-width: 100%;
   /* Add transition for hover effects */
   transition: background-color 0.2s ease;
-  overflow: visible; /* Change from hidden to visible if it was hidden */
-  isolation: isolate; /* Create a stacking context for each comment */
 }
 
 /* Add hover effect to highlight the current comment */
@@ -98,8 +96,6 @@
   position: absolute;
   top: 8px;
   right: 5px;
-  overflow: visible; /* Ensure the container doesn't clip its children */
-  z-index: 10000; /* Increased z-index for the container as well */
 }
 
 .comment-options-button {
@@ -121,49 +117,18 @@
 }
 
 .comment-options-dropdown {
-  position: fixed; /* Changed from absolute to fixed to break out of any stacking contexts */
-  right: auto; /* Reset right positioning */
-  top: auto; /* Reset top positioning */
-  transform: translate(40px, -30px); /* Move 40px right and 30px up */
+  position: absolute;
+  right: 0;
+  top: 100%;
   width: 130px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
-  z-index: 99999; /* Extremely high z-index */
-  overflow: visible; /* Changed from hidden to visible to ensure no clipping */
-  transform-origin: top right; /* Change origin to top */
-  animation: slideInUpRight 0.2s ease-out; /* Change animation to slide down */
-  /* Ensure the menu is not clipped by any parent containers */
-  isolation: isolate; /* Creates a new stacking context */
-  pointer-events: auto; /* Ensures the dropdown can receive mouse events */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  overflow: hidden;
 }
 
-/* Update animation for dropdown coming from top */
-@keyframes slideInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px); /* Move from above */
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Updated animation for dropdown coming from bottom-left */
-@keyframes slideInUpRight {
-  from {
-    opacity: 0;
-    transform: translate(0px, 0px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(40px, -30px); /* Updated to match the new position */
-  }
-}
-
-/* Update the event handling specifically for option items */
 .comment-option-item {
   display: flex;
   align-items: center;
@@ -175,9 +140,6 @@
   cursor: pointer;
   transition: background-color 0.2s;
   font-size: 14px;
-  position: relative; /* Add position relative */
-  z-index: 99999; /* Match the dropdown's z-index */
-  pointer-events: auto !important; /* Force pointer events */
 }
 
 .comment-option-item:hover {
@@ -244,12 +206,4 @@
 
 .save-edit-button:hover {
   background-color: #26a34c; /* Updated green color */
-}
-
-/* Fix global stacking context issues */
-.comments-container,
-.post-comments-list {
-  overflow: visible !important; /* Force visibility outside the container */
-  z-index: auto; /* Let elements define their own stacking context */
-  position: relative; /* Create a stacking context */
 }
