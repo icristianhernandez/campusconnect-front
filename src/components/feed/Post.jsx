@@ -253,12 +253,7 @@ function Post({ post, setPosts, posts }) {
                                 Guardar
                             </button>
                         )}
-                        <button 
-                            className={`like-button ${Array.isArray(likes) && likes.some(like => like.user_id === userId) ? 'liked' : ''}`} 
-                            onClick={handleLike}
-                        >
-                            {Array.isArray(likes) && likes.some(like => like.user_id === userId) ? '❤️' : '🤍'} {likes.length}
-                        </button>
+                        {/* Like button moved to bottom section */}
                     </div>
                     
                     {/* New post options UI that matches the comment options style */}
@@ -331,8 +326,23 @@ function Post({ post, setPosts, posts }) {
             <div className="post-bottom-section">
                 {/* Sección inferior izquierda - para funciones futuras */}
                 <div className="post-functions">
-                    <div className="function-placeholder">
-                        <p>Funciones adicionales se implementarán aquí</p>
+                    <div className="function-content">
+                        {/* Move like button here */}
+                        <button 
+                            className={`like-button ${Array.isArray(likes) && likes.some(like => like.user_id === userId) ? 'liked' : ''}`} 
+                            onClick={handleLike}
+                        >
+                            <img 
+                                src={Array.isArray(likes) && likes.some(like => like.user_id === userId) 
+                                    ? "Corazón con relleno (1).svg" 
+                                    : "Corazón con contorno.svg"} 
+                                alt="Like Icon" 
+                                className="like-icon"
+                            />
+                            <span className="likes-count">{likes.length}</span>
+                        </button>
+                        
+                        {/* Removed the placeholder text for additional functionality */}
                     </div>
                 </div>
                 
