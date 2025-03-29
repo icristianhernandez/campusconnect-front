@@ -135,6 +135,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
+  overflow: visible; /* Ensure the container doesn't clip its children */
+  z-index: 10000; /* Increased z-index for consistency */
 }
 
 .post-options-button {
@@ -156,16 +158,33 @@
 }
 
 .post-options-dropdown {
-  position: absolute;
-  right: 0;
-  top: 100%;
+  position: fixed; /* Changed from absolute to fixed to break out of stacking contexts */
+  right: auto; /* Reset right positioning */
+  top: auto; /* Reset top positioning */
+  transform: translate(40px, -30px); /* Match the comment options positioning */
   width: 130px;
   background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow */
+  z-index: 99999; /* Extremely high z-index */
+  overflow: visible;
+  transform-origin: top right;
+  animation: slideInUpRight 0.2s ease-out; /* Match animation with comments */
+  isolation: isolate; /* Creates a stacking context */
+  pointer-events: auto;
+}
+
+/* Add animation keyframes if not already present */
+@keyframes slideInUpRight {
+  from {
+    opacity: 0;
+    transform: translate(0px, 0px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(40px, -30px);
+  }
 }
 
 .post-option-item {
@@ -179,15 +198,9 @@
   cursor: pointer;
   transition: background-color 0.2s;
   font-size: 14px;
-}
-
-.post-option-item:hover {
-  background-color: #f0f0f0;
-}
-
-.post-option-icon {
-  margin-right: 8px;
-  font-size: 14px;
+  position: relative; /* Match comment options styling */
+  z-index: 99999;
+  pointer-events: auto !important;
 }
 
 /* Comment form styles */
