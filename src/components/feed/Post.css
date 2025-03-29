@@ -1,3 +1,6 @@
+/* All the CSS rules below are being used in the Post component */
+
+/* Main post container - used for the wrapping div with className="post" */
 .post {
   display: flex;
   flex-direction: column;
@@ -10,21 +13,53 @@
   max-width: 100%;
 }
 
-/* Top section containing post content and comments list */
+/* User profile section - used in the newly added user profile placeholder */
+.post-user-profile {
+  display: flex;
+  align-items: center;
+  padding: 10px 0 20px 0;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 15px;
+}
+
+.post-user-avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin-right: 12px;
+}
+
+.post-user-info-placeholder {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-user-info-placeholder p {
+  font-weight: 600;
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+.post-user-info-placeholder span {
+  font-size: 12px;
+  color: #aaa;
+}
+
+/* Post sections layout - used for the main layout structure */
 .post-top-section {
   display: flex;
   min-height: 200px;
   border-bottom: 2px solid #ddd; /* Increased border thickness from 1px to 2px */
 }
 
-/* Bottom section containing future functions and comment form */
 .post-bottom-section {
   display: flex;
   min-height: 100px;
   flex-wrap: nowrap; /* Prevent wrapping of child elements */
 }
 
-/* Post content - top left */
 .post-content {
   width: 50%;
   flex: 1 0 50%;
@@ -40,7 +75,25 @@
   overflow: hidden; /* Prevent overflow */
 }
 
-/* Ensure post text itself wraps properly */
+/* Add styles for the edit textarea to prevent resizing */
+.edit-post-input {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: inherit;
+  background-color: #ffffff;
+  resize: none; /* Prevent user from resizing the textarea */
+  overflow-y: auto; /* Allow vertical scrolling if content is long */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+/* There's a small inconsistency here - the CSS targets p.post-text specifically with a class, 
+   but in the component you're using just p.post-text */
 .post-content p {
   white-space: pre-wrap;
   word-wrap: break-word;
@@ -50,7 +103,7 @@
   overflow: hidden;
 }
 
-/* Comments list - top right */
+/* Comments section - used in the comments part of the post */
 .post-comments-list {
   width: 50%;
   flex: 1 0 50%;
@@ -130,7 +183,7 @@
   display: none; /* Hide the old post options */
 }
 
-/* New post options menu styling - mimicking comment options */
+/* Post options menu - used for the edit/delete dropdown */
 .post-options-container {
   position: absolute;
   top: 10px;
@@ -190,7 +243,7 @@
   font-size: 14px;
 }
 
-/* Comment form styles */
+/* Comment form styles - used for adding new comments */
 .new-comment-form {
   display: flex;
   flex-direction: column;
@@ -342,6 +395,15 @@
   .comment-input-container {
     width: 100%;
   }
+
+  .post-user-profile {
+    padding: 8px 0 15px 0;
+  }
+
+  .post-user-avatar-placeholder {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 /* Extra small devices */
@@ -370,11 +432,16 @@
   }
 
   .edit-post-input {
-    height: 80px;
+    height: 80px; /* Keep this existing rule */
+    min-height: 80px; /* Add this to match the height constraint */
   }
 
   .new-comment-actions {
     justify-content: center;
+  }
+
+  .post-user-profile {
+    padding: 5px 0 10px 0;
   }
 }
 
