@@ -7,15 +7,17 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center; /* Center content horizontally */
+  gap: 20px; /* Add a small gap between the logo and the form */
   overflow: auto;
   font-family: "Roboto", sans-serif;
 }
 
 .logo-container {
-  width: 500px;
-  height: 500px;
-  margin-left: 6.5%;
+  width: 450px; /* Reduced size for better centering */
+  height: 450px;
+  margin-left: auto; /* Push the logo further to the right */
+  margin-right: -150px; /* Add some space from the right edge */
 }
 
 .landing-logo-completo {
