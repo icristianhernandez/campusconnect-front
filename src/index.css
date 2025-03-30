@@ -82,12 +82,12 @@ time,
 mark,
 audio,
 video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -102,62 +102,62 @@ hgroup,
 menu,
 nav,
 section {
-  display: block;
+	display: block;
 }
 
 html,
 body {
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden; /* Evita scroll horizontal */
-  overflow-y: auto; /* Permite scroll vertical */
-  font-family: "Montserrat", sans-serif; /* Apply Montserrat font globally */
+	width: 100%;
+	height: 100%;
+	overflow-x: hidden; /* Evita scroll horizontal */
+	overflow-y: auto; /* Permite scroll vertical */
+	font-family: "Montserrat", sans-serif; /* Apply Montserrat font globally */
 }
 
 body {
-  line-height: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #f2f4f7; /* Establece el fondo global */
+	line-height: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background-color: #f2f4f7; /* Establece el fondo global */
 }
 
 /* Prevent scrolling when modal is open */
 body.modal-open {
-  overflow: hidden;
-  position: relative;
-  height: 100%;
-  width: 100%;
-  padding-right: 15px; /* Prevent layout shift when scrollbar disappears */
+	overflow: hidden;
+	position: relative;
+	height: 100%;
+	width: 100%;
+	padding-right: 15px; /* Prevent layout shift when scrollbar disappears */
 }
 
 #root {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 ol,
 ul {
-  list-style: none;
+	list-style: none;
 }
 
 blockquote,
 q {
-  quotes: none;
+	quotes: none;
 }
 
 blockquote:before,
 blockquote:after,
 q:before,
 q:after {
-  content: "";
-  content: none;
+	content: "";
+	content: none;
 }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0;
+	border-collapse: collapse;
+	border-spacing: 0;
 }

@@ -1,695 +1,690 @@
 /* Base comment container */
 .comment {
-  position: relative;
-  padding: 12px 10px;
-  background-color: transparent;
-  border-radius: 0;
-  margin-bottom: 0;
-  z-index: 1;
-  transition: background-color 0.2s ease;
+	position: relative;
+	padding: 12px 10px;
+	background-color: transparent;
+	border-radius: 0;
+	margin-bottom: 0;
+	z-index: 1;
+	transition: background-color 0.2s ease;
 }
 
 /* User profile section styling */
 .comment-user-profile {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
 }
 
 .comment-user-avatar-placeholder {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background-color: #ddd;
-  margin-right: 10px;
-  flex-shrink: 0;
+	width: 32px;
+	height: 32px;
+	border-radius: 50%;
+	background-color: #ddd;
+	margin-right: 10px;
+	flex-shrink: 0;
 }
 
 .comment-user-info {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .comment-username {
-  font-weight: 600;
-  font-size: 13px;
-  color: #333;
-  margin: 0;
-  line-height: 1.2;
+	font-weight: 600;
+	font-size: 13px;
+	color: #333;
+	margin: 0;
+	line-height: 1.2;
 }
 
 .comment-timestamp {
-  font-size: 11px;
-  color: #666;
-  margin-top: 2px;
+	font-size: 11px;
+	color: #666;
+	margin-top: 2px;
 }
 
 /* Hover effect */
 .comment:hover {
-  background-color: rgba(0, 0, 0, 0.03);
+	background-color: rgba(0, 0, 0, 0.03);
 }
 
 /* Comment text styling */
 .comment-text {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  max-width: 100%;
-  padding-left: 42px; /* 32px (avatar width) + 10px (margin-right) */
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #333;
+	margin: 0;
+	padding: 0;
+	max-width: 100%;
+	padding-left: 42px; /* 32px (avatar width) + 10px (margin-right) */
 }
 
 /* Comment divider line */
 .comment-divider {
-  height: 1px;
-  background-color: #e0e0e0;
-  margin: 0;
-  border: none;
-  width: 100%;
+	height: 1px;
+	background-color: #e0e0e0;
+	margin: 0;
+	border: none;
+	width: 100%;
 }
 
 /* Media handling */
 .comment-media {
-  max-width: 100%;
-  margin-top: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
+	max-width: 100%;
+	margin-top: 10px;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
 }
 
 .comment-media.minimized {
-  max-height: 120px;
-  object-fit: cover;
+	max-height: 120px;
+	object-fit: cover;
 }
 
 .comment-media.expanded {
-  max-height: 80vh;
-  max-width: 90vw;
-  object-fit: contain;
+	max-height: 80vh;
+	max-width: 90vw;
+	object-fit: contain;
 }
 
 /* Action buttons that appear on hover - update position */
 .comment-action-buttons {
-  position: absolute;
-  top: 30px; /* Changed from 8px to 30px to move buttons down */
-  right: 8px;
-  display: flex;
-  gap: 6px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+	position: absolute;
+	top: 30px; /* Changed from 8px to 30px to move buttons down */
+	right: 8px;
+	display: flex;
+	gap: 6px;
+	opacity: 0;
+	transition: opacity 0.2s ease;
 }
 
 .comment:hover .comment-action-buttons {
-  opacity: 1;
+	opacity: 1;
 }
 
 .action-button {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  padding: 0;
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	background: none;
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+	padding: 0;
 }
 
 .action-button:hover {
-  background-color: rgba(0, 0, 0, 0.08);
+	background-color: rgba(0, 0, 0, 0.08);
 }
 
 .action-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(38, 163, 76, 0.4);
+	outline: none;
+	box-shadow: 0 0 0 2px rgba(38, 163, 76, 0.4);
 }
 
 .button-icon {
-  font-size: 14px;
+	font-size: 14px;
 }
 
 .edit-button:hover {
-  color: #2196f3;
+	color: #2196f3;
 }
 
 .delete-button:hover {
-  color: #f44336;
+	color: #f44336;
 }
 
 /* Comment edit form */
 .comment-edit-container {
-  width: 100%;
+	width: 100%;
 }
 
 .edit-comment-input {
-  width: 100%;
-  min-height: 60px;
-  padding: 8px 12px;
-  border: 1px solid #26a34c;
-  border-radius: 8px;
-  background-color: #f9fff9;
-  font-size: 14px;
-  font-family: inherit;
-  resize: vertical;
-  margin-bottom: 8px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  outline: none;
+	width: 100%;
+	min-height: 60px;
+	padding: 8px 12px;
+	border: 1px solid #26a34c;
+	border-radius: 8px;
+	background-color: #f9fff9;
+	font-size: 14px;
+	font-family: inherit;
+	resize: vertical;
+	margin-bottom: 8px;
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+	outline: none;
 }
 
 .edit-comment-input:focus {
-  border-color: #218c42;
-  box-shadow: 0 0 0 2px rgba(38, 163, 76, 0.2);
+	border-color: #218c42;
+	box-shadow: 0 0 0 2px rgba(38, 163, 76, 0.2);
 }
 
 .edit-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
 }
 
 .save-edit-button,
 .cancel-edit-button {
-  padding: 6px 14px;
-  border: none;
-  border-radius: 4px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+	padding: 6px 14px;
+	border: none;
+	border-radius: 4px;
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .save-edit-button {
-  background-color: #26a34c;
-  color: white;
+	background-color: #26a34c;
+	color: white;
 }
 
 .save-edit-button:hover {
-  background-color: #218c42;
+	background-color: #218c42;
 }
 
 .save-edit-button:disabled {
-  background-color: #a5d6b7;
-  cursor: not-allowed;
+	background-color: #a5d6b7;
+	cursor: not-allowed;
 }
 
 .cancel-edit-button {
-  background-color: #f5f5f5;
-  color: #333;
+	background-color: #f5f5f5;
+	color: #333;
 }
 
 .cancel-edit-button:hover {
-  background-color: #e0e0e0;
+	background-color: #e0e0e0;
 }
 
 .save-edit-button:active,
 .cancel-edit-button:active {
-  transform: scale(0.98);
+	transform: scale(0.98);
 }
 
 /* Error message */
 .comment-error {
-  color: #d32f2f;
-  font-size: 12px;
-  margin-bottom: 8px;
-  background-color: #ffebee;
-  padding: 6px 10px;
-  border-radius: 4px;
-  border-left: 3px solid #d32f2f;
+	color: #d32f2f;
+	font-size: 12px;
+	margin-bottom: 8px;
+	background-color: #ffebee;
+	padding: 6px 10px;
+	border-radius: 4px;
+	border-left: 3px solid #d32f2f;
 }
 
 /* Delete confirmation modal - updated with higher z-index */
 .delete-confirmation-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.6
-  ); /* Darker background for better visibility */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999; /* Significantly higher z-index to ensure it's on top */
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6); /* Darker background for better visibility */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999; /* Significantly higher z-index to ensure it's on top */
 }
 
 .delete-confirmation-modal {
-  position: relative; /* Add position relative */
-  width: 320px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); /* Stronger shadow for better visibility */
-  padding: 24px;
-  animation: modal-appear 0.2s ease;
-  z-index: 10000; /* Even higher z-index than the overlay */
+	position: relative; /* Add position relative */
+	width: 320px;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); /* Stronger shadow for better visibility */
+	padding: 24px;
+	animation: modal-appear 0.2s ease;
+	z-index: 10000; /* Even higher z-index than the overlay */
 }
 
 @keyframes modal-appear {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+	from {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
 
 .delete-confirmation-modal h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  color: #d32f2f;
-  font-size: 18px;
-  font-weight: 600;
+	margin-top: 0;
+	margin-bottom: 16px;
+	color: #d32f2f;
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .delete-confirmation-modal p {
-  margin-bottom: 24px;
-  color: #555;
-  font-size: 14px;
-  line-height: 1.5;
+	margin-bottom: 24px;
+	color: #555;
+	font-size: 14px;
+	line-height: 1.5;
 }
 
 .delete-error {
-  color: #d32f2f;
-  font-size: 12px;
-  margin-bottom: 16px;
-  background-color: #ffebee;
-  padding: 8px 12px;
-  border-radius: 4px;
-  border-left: 3px solid #d32f2f;
+	color: #d32f2f;
+	font-size: 12px;
+	margin-bottom: 16px;
+	background-color: #ffebee;
+	padding: 8px 12px;
+	border-radius: 4px;
+	border-left: 3px solid #d32f2f;
 }
 
 .confirmation-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
 }
 
 .cancel-button,
 .confirm-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .cancel-button {
-  background-color: #f5f5f5;
-  color: #333;
+	background-color: #f5f5f5;
+	color: #333;
 }
 
 .cancel-button:hover {
-  background-color: #e0e0e0;
+	background-color: #e0e0e0;
 }
 
 .confirm-button {
-  background-color: #d32f2f;
-  color: white;
+	background-color: #d32f2f;
+	color: white;
 }
 
 .confirm-button:hover {
-  background-color: #b71c1c;
+	background-color: #b71c1c;
 }
 
 .cancel-button:active,
 .confirm-button:active {
-  transform: scale(0.97);
+	transform: scale(0.97);
 }
 
 .cancel-button:disabled,
 .confirm-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+	opacity: 0.7;
+	cursor: not-allowed;
 }
 
 /* Media overlay - ensure lower z-index than the delete confirmation */
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 999; /* Lower than delete confirmation */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: zoom-out;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 999; /* Lower than delete confirmation */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: zoom-out;
 }
 
 /* Loading state */
 .comment.loading {
-  opacity: 0.7;
-  pointer-events: none;
+	opacity: 0.7;
+	pointer-events: none;
 }
 
 .comment-loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
 }
 
 .comment-loading-spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(38, 163, 76, 0.2);
-  border-radius: 50%;
-  border-top-color: #26a34c;
-  animation: spin 1s linear infinite;
+	width: 24px;
+	height: 24px;
+	border: 3px solid rgba(38, 163, 76, 0.2);
+	border-radius: 50%;
+	border-top-color: #26a34c;
+	animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 /* New expanded media view for better UX */
 .comment.expanded {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1000;
-  background-color: transparent;
-  padding: 0;
-  border-radius: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1000;
+	background-color: transparent;
+	padding: 0;
+	border-radius: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .comment.expanded .comment-text,
 .comment.expanded .comment-action-buttons {
-  display: none;
+	display: none;
 }
 
 /* Show/Hide replies button styles */
 .show-replies-button {
-  background: none;
-  border: none;
-  color: #26a34c;
-  font-size: 13px;
-  padding: 6px 12px;
-  margin-top: 8px;
-  cursor: pointer;
-  border-radius: 12px;
-  transition: background-color 0.2s ease;
+	background: none;
+	border: none;
+	color: #26a34c;
+	font-size: 13px;
+	padding: 6px 12px;
+	margin-top: 8px;
+	cursor: pointer;
+	border-radius: 12px;
+	transition: background-color 0.2s ease;
 }
 
 .show-replies-button:hover {
-  background-color: rgba(38, 163, 76, 0.1);
+	background-color: rgba(38, 163, 76, 0.1);
 }
 
 /* Reply section styling */
 .comment-replies {
-  margin-left: 20px;
-  padding-left: 12px;
-  border-left: 2px solid #e0e0e0;
-  margin-top: 8px;
+	margin-left: 20px;
+	padding-left: 12px;
+	border-left: 2px solid #e0e0e0;
+	margin-top: 8px;
 }
 
 /* Update reply button styles */
 .reply-button {
-  background: none;
-  border: none;
-  padding: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: transform 0.2s ease;
-  margin-top: 8px;
+	background: none;
+	border: none;
+	padding: 5px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	transition: transform 0.2s ease;
+	margin-top: 8px;
 }
 
 .reply-icon {
-  width: 20px;
-  height: 20px;
+	width: 20px;
+	height: 20px;
 }
 
 .reply-button:hover {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 /* Reply form styling */
 .reply-form {
-  display: flex;
-  flex-direction: column;
-  margin-top: 8px;
-  padding-left: 42px;
+	display: flex;
+	flex-direction: column;
+	margin-top: 8px;
+	padding-left: 42px;
 }
 
 .reply-form textarea {
-  width: 90%;
-  height: 40px;
-  padding: 8px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
-  resize: none;
-  margin-bottom: 8px;
+	width: 90%;
+	height: 40px;
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 14px;
+	font-family: inherit;
+	resize: none;
+	margin-bottom: 8px;
 }
 
 .reply-form textarea:focus {
-  outline: none;
-  border-color: #26a34c;
+	outline: none;
+	border-color: #26a34c;
 }
 
 .reply-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
 .reply-actions input[type="file"] {
-  display: none;
+	display: none;
 }
 
 .reply-actions label {
-  cursor: pointer;
-  font-size: 16px;
-  padding: 5px;
-  color: #666;
-  transition: transform 0.2s ease;
+	cursor: pointer;
+	font-size: 16px;
+	padding: 5px;
+	color: #666;
+	transition: transform 0.2s ease;
 }
 
 .reply-actions label:hover {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .reply-actions button {
-  background: none;
-  border: none;
-  color: #26a34c;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 5px 10px;
-  transition: transform 0.2s ease;
+	background: none;
+	border: none;
+	color: #26a34c;
+	font-weight: bold;
+	cursor: pointer;
+	padding: 5px 10px;
+	transition: transform 0.2s ease;
 }
 
 .reply-actions button:hover {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .reply-actions button:disabled {
-  color: #ccc;
-  cursor: not-allowed;
+	color: #ccc;
+	cursor: not-allowed;
 }
 
 /* Responsive adjustments */
 @media (max-width: 576px) {
-  .comment-action-buttons {
-    /* Always show buttons on mobile since there's no hover */
-    opacity: 1;
-  }
+	.comment-action-buttons {
+		/* Always show buttons on mobile since there's no hover */
+		opacity: 1;
+	}
 
-  .edit-comment-input {
-    min-height: 80px; /* Larger input area on mobile */
-  }
+	.edit-comment-input {
+		min-height: 80px; /* Larger input area on mobile */
+	}
 
-  .delete-confirmation-modal {
-    width: 90%;
-    max-width: 320px;
-    padding: 20px;
-  }
+	.delete-confirmation-modal {
+		width: 90%;
+		max-width: 320px;
+		padding: 20px;
+	}
 
-  .comment-user-avatar-placeholder {
-    width: 28px;
-    height: 28px;
-  }
+	.comment-user-avatar-placeholder {
+		width: 28px;
+		height: 28px;
+	}
 
-  .comment-text {
-    padding-left: 38px;
-  }
+	.comment-text {
+		padding-left: 38px;
+	}
 }
 
 /* Modal styles with portal-based implementation */
 .modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100000; /* Very high z-index */
-  padding: 20px;
-  box-sizing: border-box;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.7);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100000; /* Very high z-index */
+	padding: 20px;
+	box-sizing: border-box;
 }
 
 .modal-content {
-  width: 100%;
-  max-width: 340px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  padding: 24px;
-  position: relative;
-  animation: modal-appear 0.2s ease;
-  z-index: 100001; /* Even higher than backdrop */
+	width: 100%;
+	max-width: 340px;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+	padding: 24px;
+	position: relative;
+	animation: modal-appear 0.2s ease;
+	z-index: 100001; /* Even higher than backdrop */
 }
 
 @keyframes modal-appear {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+	from {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
 
 .modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  color: #d32f2f;
-  font-size: 18px;
-  font-weight: 600;
+	margin-top: 0;
+	margin-bottom: 16px;
+	color: #d32f2f;
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .modal-content p {
-  margin-bottom: 24px;
-  color: #555;
-  font-size: 14px;
-  line-height: 1.5;
+	margin-bottom: 24px;
+	color: #555;
+	font-size: 14px;
+	line-height: 1.5;
 }
 
 /* Hide the old modal implementation */
 .delete-confirmation-overlay,
 .delete-confirmation-modal {
-  display: none !important;
+	display: none !important;
 }
 
 /* Update show/hide replies button styles */
 .show-replies-button {
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px;
-  margin-top: 8px;
-  cursor: pointer;
-  transition: transform 0.2s ease;
+	background: none;
+	border: none;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 5px;
+	margin-top: 8px;
+	cursor: pointer;
+	transition: transform 0.2s ease;
 }
 
 .show-replies-icon {
-  width: 20px;
-  height: 20px;
+	width: 20px;
+	height: 20px;
 }
 
 .replies-count {
-  font-size: 13px;
-  color: #26a34c;
+	font-size: 13px;
+	color: #26a34c;
 }
 
 .show-replies-button:hover {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 /* Comment actions container for buttons */
 .comment-actions-container {
-  display: flex;
-  align-items: center;
-  gap: 52px; /* Reduced from 60px to 20px */
-  margin-top: 8px;
-  justify-content: flex-end; /* Align buttons to the right */
-  padding-right: 16px; /* Add padding to the right */
+	display: flex;
+	align-items: center;
+	gap: 52px; /* Reduced from 60px to 20px */
+	margin-top: 8px;
+	justify-content: flex-end; /* Align buttons to the right */
+	padding-right: 16px; /* Add padding to the right */
 }
 
 /* Reply and show replies buttons container */
 .reply-button,
 .show-replies-button {
-  background: none;
-  border: none;
-  padding: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: transform 0.2s ease;
+	background: none;
+	border: none;
+	padding: 5px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	transition: transform 0.2s ease;
 }
 
 .reply-icon,
 .show-replies-icon {
-  width: 20px;
-  height: 20px;
+	width: 20px;
+	height: 20px;
 }
 
 .replies-count {
-  font-size: 13px;
-  color: #26a34c;
-  margin-left: 4px;
+	font-size: 13px;
+	color: #26a34c;
+	margin-left: 4px;
 }
 
 .reply-button:hover,
 .show-replies-button:hover {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .comment-like-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  transition: transform 0.2s ease;
-  height: 32px;
-  margin-top: 8px; /* Increased to align with the reply button */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 5px;
+	transition: transform 0.2s ease;
+	height: 32px;
+	margin-top: 8px; /* Increased to align with the reply button */
 }
 
 .comment-like-icon {
-  width: 20px;
-  height: 20px;
+	width: 20px;
+	height: 20px;
 }
 
 .likes-count {
-  font-size: 13px;
-  color: #aaa; /* Lighter color for the likes count */
+	font-size: 13px;
+	color: #aaa; /* Lighter color for the likes count */
 }
