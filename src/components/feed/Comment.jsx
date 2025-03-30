@@ -20,6 +20,15 @@ function Comment({ comment, post, setPosts, posts }) {
     const commentRef = useRef(null);
     const modalRef = useRef(null);
     
+    // Add new state for reply functionality
+    const [showReplyForm, setShowReplyForm] = useState(false);
+    const [replyContent, setReplyContent] = useState('');
+    const [replyMedia, setReplyMedia] = useState(null);
+    const [replyLoading, setReplyLoading] = useState(false);
+
+    // Add new state for showing/hiding replies
+    const [showReplies, setShowReplies] = useState(false);
+
     // Fetch current user on component mount
     useEffect(() => {
         const fetchCurrentUser = async () => {
@@ -223,12 +232,125 @@ function Comment({ comment, post, setPosts, posts }) {
         );
     };
 
-    // Render component
+    const handleReplySubmit = async (e) => {
+        e.preventDefault();
+        if (!replyContent.trim() && !replyMedia) return;
+        
+        setReplyLoading(true);
+        setError(null);
+
+        try {
+            const { data: { user }, error: userError } = await supabase.auth.getUser();
+            if (userError) throw userError;
+
+            // Create the reply comment
+            const { data: newReply, error: replyError } = await supabase
+                .from('comments')
+                .insert({
+                    comment_text: replyContent,
+                    parent_post_id: post.post_id,
+                    parent_comment_id: comment.comment_id,
+                    user_id: user.id,
+                })
+                .select()
+                .single();
+
+            if (replyError) throw replyError;
+
+            let multimedia = [];
+            if (replyMedia) {
+                const fileName = `${newReply.comment_id}-${replyMedia.name}`;
+                const { error: storageError } = await supabase
+                    .storage
+                    .from('nose') // Your bucket name
+                    .upload(fileName, replyMedia);
+
+                if (storageError) throw storageError;
+
+                const { data: { publicUrl }, error: urlError } = supabase
+                    .storage
+                    .from('nose') // Your bucket name
+                    .getPublicUrl(fileName);
+
+                if (urlError) throw urlError;
+
+                const { error: multimediaError } = await supabase
+                    .from('comments_multimedia')
+                    .insert({
+                        comment_id: newReply.comment_id,
+                        media_type: replyMedia.type.startsWith('video/') ? 'video' : 'image',
+                        multimedia_url: publicUrl,
+                    });
+
+                if (multimediaError) throw multimediaError;
+
+                multimedia = [{
+                    media_type: replyMedia.type.startsWith('video/') ? 'video' : 'image',
+                    multimedia_url: publicUrl,
+                }];
+            }
+
+            // Update local state
+            const updatedPosts = posts.map(p => {
+                if (p.post_id === post.post_id) {
+                    return {
+                        ...p,
+                        comments: updateCommentsWithReply(p.comments, comment.comment_id, {
+                            ...newReply,
+                            multimedia,
+                            replies: []
+                        })
+                    };
+                }
+                return p;
+            });
+
+            setPosts(updatedPosts);
+            setReplyContent('');
+            setReplyMedia(null);
+            setShowReplyForm(false);
+        } catch (err) {
+            setError('Error al crear la respuesta: ' + err.message);
+        } finally {
+            setReplyLoading(false);
+        }
+    };
+
+    // Helper function to update comments tree with new reply
+    const updateCommentsWithReply = (comments, parentCommentId, newReply) => {
+        return comments.map(c => {
+            if (c.comment_id === parentCommentId) {
+                return {
+                    ...c,
+                    replies: [...(c.replies || []), newReply]
+                };
+            }
+            if (c.replies?.length > 0) {
+                return {
+                    ...c,
+                    replies: updateCommentsWithReply(c.replies, parentCommentId, newReply)
+                };
+            }
+            return c;
+        });
+    };
+
     return (
         <div 
             className={`comment ${expanded ? 'expanded' : ''} ${loading ? 'loading' : ''}`}
             ref={commentRef}
         >
+            {/* User profile section */}
+            <div className="comment-user-profile">
+                <div className="comment-user-avatar-placeholder"></div>
+                <div className="comment-user-info">
+                    <p className="comment-username">Username placeholder</p>
+                    <span className="comment-timestamp">
+                        {new Date(comment.created_at).toLocaleString()}
+                    </span>
+                </div>
+            </div>
+
             {/* Comment Content */}
             {isEditing ? (
                 <div className="comment-edit-container">
@@ -310,6 +432,73 @@ function Comment({ comment, post, setPosts, posts }) {
                 )
             ))}
             
+            {/* Add reply button only for main comments (no parent_comment_id) */}
+            {!comment.parent_comment_id && (
+                <button 
+                    className="reply-button"
+                    onClick={() => setShowReplyForm(!showReplyForm)}
+                >
+                    <img 
+                        src="ícono respuesta comentarios.svg" 
+                        alt="Responder" 
+                        className="reply-icon"
+                    />
+                </button>
+            )}
+
+            {/* Reply form */}
+            {showReplyForm && !comment.parent_comment_id && (
+                <form onSubmit={handleReplySubmit} className="reply-form">
+                    <textarea
+                        value={replyContent}
+                        onChange={(e) => setReplyContent(e.target.value)}
+                        placeholder="Escribe tu respuesta..."
+                        disabled={replyLoading}
+                    />
+                    <div className="reply-actions">
+                        <input
+                            type="file"
+                            accept="image/*,video/*"
+                            onChange={(e) => {
+                                const file = e.target.files[0];
+                                setReplyMedia(file);
+                            }}
+                        />
+                        <button 
+                            type="submit" 
+                            disabled={replyLoading || (!replyContent && !replyMedia)}
+                        >
+                            {replyLoading ? 'Enviando...' : 'Responder'}
+                        </button>
+                    </div>
+                </form>
+            )}
+
+            {/* Show replies button and count */}
+            {!comment.parent_comment_id && comment.replies?.length > 0 && (
+                <button 
+                    className="show-replies-button"
+                    onClick={() => setShowReplies(!showReplies)}
+                >
+                    {showReplies ? 'Ocultar' : 'Ver'} respuestas ({comment.replies.length})
+                </button>
+            )}
+
+            {/* Display replies only when showReplies is true */}
+            {showReplies && comment.replies?.length > 0 && (
+                <div className="comment-replies">
+                    {comment.replies.map(reply => (
+                        <Comment
+                            key={reply.comment_id}
+                            comment={reply}
+                            post={post}
+                            setPosts={setPosts}
+                            posts={posts}
+                        />
+                    ))}
+                </div>
+            )}
+
             {/* Delete confirmation modal rendered through portal */}
             <DeleteConfirmationModal />
             

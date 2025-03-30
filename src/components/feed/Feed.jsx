@@ -52,16 +52,24 @@ function Feed() {
 
             if (commentsError) throw commentsError;
 
+            // Organizar comentarios jerárquicamente
+            const organizeComments = (comments, parentId = null) => {
+                return comments
+                    .filter(comment => comment.parent_comment_id === parentId)
+                    .map(comment => ({
+                        ...comment,
+                        multimedia: comment.comments_multimedia || [],
+                        replies: organizeComments(comments, comment.comment_id)
+                    }));
+            };
+
             const combinedPosts = postsData.map(post => ({
                 ...post,
                 multimedia: post.post_multimedia || [],
                 likes: post.post_likes || [],
-                comments: commentsData
-                    .filter(comment => comment.parent_post_id === post.post_id)
-                    .map(comment => ({
-                        ...comment,
-                        multimedia: comment.comments_multimedia || []
-                    }))
+                comments: organizeComments(
+                    commentsData.filter(comment => comment.parent_post_id === post.post_id)
+                )
             }));
 
             setPosts(combinedPosts);

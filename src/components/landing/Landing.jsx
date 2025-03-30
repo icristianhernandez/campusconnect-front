@@ -15,7 +15,7 @@ function Landing(){
     return (
         <div style={backgroundStyle} className="Landing">
             <div className='logo-container'>
-                <img src={`Logo-completo-blanco.png`} alt="Logo" className='landing-logo-completo'/>
+                <img src={`Logo blanco arreglado.svg`} alt="Logo" className='landing-logo-completo'/>
             </div>
             <Login/>
         </div>

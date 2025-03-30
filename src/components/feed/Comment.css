@@ -9,6 +9,41 @@
   transition: background-color 0.2s ease;
 }
 
+/* User profile section styling */
+.comment-user-profile {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.comment-user-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.comment-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-username {
+  font-weight: 600;
+  font-size: 13px;
+  color: #333;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.comment-timestamp {
+  font-size: 11px;
+  color: #666;
+  margin-top: 2px;
+}
+
 /* Hover effect */
 .comment:hover {
   background-color: rgba(0, 0, 0, 0.03);
@@ -26,6 +61,7 @@
   margin: 0;
   padding: 0;
   max-width: 100%;
+  padding-left: 42px; /* 32px (avatar width) + 10px (margin-right) */
 }
 
 /* Comment divider line */
@@ -369,6 +405,70 @@
   display: none;
 }
 
+/* Show/Hide replies button styles */
+.show-replies-button {
+  background: none;
+  border: none;
+  color: #26a34c;
+  font-size: 13px;
+  padding: 6px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.show-replies-button:hover {
+  background-color: rgba(38, 163, 76, 0.1);
+}
+
+/* Reply section styling */
+.comment-replies {
+  margin-left: 20px;
+  padding-left: 12px;
+  border-left: 2px solid #e0e0e0;
+  margin-top: 8px;
+}
+
+/* Update reply button styles */
+.reply-button {
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+  margin-top: 8px;
+}
+
+.reply-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.reply-button:hover {
+  transform: scale(1.1);
+}
+
+/* Reply form styling */
+.reply-form textarea {
+  width: 90%;
+  height: 40px; /* Altura fija */
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none; /* Previene que el usuario redimensione */
+  margin-bottom: 8px;
+}
+
+.reply-form textarea:focus {
+  outline: none;
+  border-color: #26a34c;
+}
+
 /* Responsive adjustments */
 @media (max-width: 576px) {
   .comment-action-buttons {
@@ -384,6 +484,15 @@
     width: 90%;
     max-width: 320px;
     padding: 20px;
+  }
+
+  .comment-user-avatar-placeholder {
+    width: 28px;
+    height: 28px;
+  }
+
+  .comment-text {
+    padding-left: 38px;
   }
 }
 

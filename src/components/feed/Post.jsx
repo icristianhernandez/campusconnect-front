@@ -279,11 +279,10 @@ function Post({ post, setPosts, posts }) {
                 <div className="post-content">
                     {/* User profile section for future implementation */}
                     <div className="post-user-profile">
-                        {/* Here you can add user photo, name and timestamp in the future */}
                         <div className="post-user-avatar-placeholder"></div>
                         <div className="post-user-info-placeholder">
                             <p>Username placeholder</p>
-                            <span>Timestamp placeholder</span>
+                            <span>{new Date(post.created_at).toLocaleString()}</span>
                         </div>
                     </div>
 
