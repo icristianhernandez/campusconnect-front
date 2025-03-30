@@ -19,10 +19,8 @@ function Feed() {
     };
 
     const fetchPostsWithComments = async () => {
-        setErrorMessage(null); // limpia errores previos
+        setErrorMessage(null);
         try {
-            // aca se consultan y obtienen losd atos de los posts y comentarios (multimedia incluida)
-
             const { data: postsData, error: postsError } = await supabase
                 .from('posts')
                 .select(`
@@ -36,7 +34,7 @@ function Feed() {
                         user_id
                     )
                 `)
-                .order('created_at', { ascending: false });
+                .order('created_at', { ascending: false }); // Posts más nuevos primero
 
             if (postsError) throw postsError;
 
@@ -48,14 +46,16 @@ function Feed() {
                         media_type,
                         multimedia_url
                     )
-                `);
+                `)
+                .order('created_at', { ascending: false }); // Comentarios más nuevos primero
 
             if (commentsError) throw commentsError;
 
-            // Organizar comentarios jerárquicamente
+            // Organizar comentarios jerárquicamente y ordenados por fecha (más nuevos primero)
             const organizeComments = (comments, parentId = null) => {
                 return comments
                     .filter(comment => comment.parent_comment_id === parentId)
+                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Cambiado para ordenar descendente
                     .map(comment => ({
                         ...comment,
                         multimedia: comment.comments_multimedia || [],

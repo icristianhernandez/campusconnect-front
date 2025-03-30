@@ -432,19 +432,36 @@ function Comment({ comment, post, setPosts, posts }) {
                 )
             ))}
             
-            {/* Add reply button only for main comments (no parent_comment_id) */}
-            {!comment.parent_comment_id && (
-                <button 
-                    className="reply-button"
-                    onClick={() => setShowReplyForm(!showReplyForm)}
-                >
-                    <img 
-                        src="ícono respuesta comentarios.svg" 
-                        alt="Responder" 
-                        className="reply-icon"
-                    />
-                </button>
-            )}
+            <div className="comment-actions-container">
+                {/* Add reply button only for main comments */}
+                {!comment.parent_comment_id && (
+                    <button 
+                        className="reply-button"
+                        onClick={() => setShowReplyForm(!showReplyForm)}
+                    >
+                        <img 
+                            src="ícono respuesta comentarios.svg" 
+                            alt="Responder" 
+                            className="reply-icon"
+                        />
+                    </button>
+                )}
+
+                {/* Show replies button and count */}
+                {!comment.parent_comment_id && comment.replies?.length > 0 && (
+                    <button 
+                        className="show-replies-button"
+                        onClick={() => setShowReplies(!showReplies)}
+                    >
+                        <img 
+                            src="ícono comentarios de comentarios.svg" 
+                            alt="Ver respuestas" 
+                            className="show-replies-icon"
+                        />
+                        <span className="replies-count">({comment.replies.length})</span>
+                    </button>
+                )}
+            </div>
 
             {/* Reply form */}
             {showReplyForm && !comment.parent_comment_id && (
@@ -456,14 +473,17 @@ function Comment({ comment, post, setPosts, posts }) {
                         disabled={replyLoading}
                     />
                     <div className="reply-actions">
-                        <input
-                            type="file"
-                            accept="image/*,video/*"
-                            onChange={(e) => {
-                                const file = e.target.files[0];
-                                setReplyMedia(file);
-                            }}
-                        />
+                        <label title="Adjuntar archivo">
+                            📎
+                            <input
+                                type="file"
+                                accept="image/*,video/*"
+                                onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    setReplyMedia(file);
+                                }}
+                            />
+                        </label>
                         <button 
                             type="submit" 
                             disabled={replyLoading || (!replyContent && !replyMedia)}
@@ -474,17 +494,7 @@ function Comment({ comment, post, setPosts, posts }) {
                 </form>
             )}
 
-            {/* Show replies button and count */}
-            {!comment.parent_comment_id && comment.replies?.length > 0 && (
-                <button 
-                    className="show-replies-button"
-                    onClick={() => setShowReplies(!showReplies)}
-                >
-                    {showReplies ? 'Ocultar' : 'Ver'} respuestas ({comment.replies.length})
-                </button>
-            )}
-
-            {/* Display replies only when showReplies is true */}
+            {/* Solo se despliegan las respuestas si showRwplies es true*/}
             {showReplies && comment.replies?.length > 0 && (
                 <div className="comment-replies">
                     {comment.replies.map(reply => (

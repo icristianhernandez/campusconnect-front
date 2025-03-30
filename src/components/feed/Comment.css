@@ -93,10 +93,10 @@
   object-fit: contain;
 }
 
-/* Action buttons that appear on hover */
+/* Action buttons that appear on hover - update position */
 .comment-action-buttons {
   position: absolute;
-  top: 8px;
+  top: 30px; /* Changed from 8px to 30px to move buttons down */
   right: 8px;
   display: flex;
   gap: 6px;
@@ -452,21 +452,69 @@
 }
 
 /* Reply form styling */
+.reply-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+  padding-left: 42px;
+}
+
 .reply-form textarea {
   width: 90%;
-  height: 40px; /* Altura fija */
+  height: 40px;
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
   font-family: inherit;
-  resize: none; /* Previene que el usuario redimensione */
+  resize: none;
   margin-bottom: 8px;
 }
 
 .reply-form textarea:focus {
   outline: none;
   border-color: #26a34c;
+}
+
+.reply-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reply-actions input[type="file"] {
+  display: none;
+}
+
+.reply-actions label {
+  cursor: pointer;
+  font-size: 16px;
+  padding: 5px;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+.reply-actions label:hover {
+  transform: scale(1.1);
+}
+
+.reply-actions button {
+  background: none;
+  border: none;
+  color: #26a34c;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: transform 0.2s ease;
+}
+
+.reply-actions button:hover {
+  transform: scale(1.1);
+}
+
+.reply-actions button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
 }
 
 /* Responsive adjustments */
@@ -554,4 +602,70 @@
 .delete-confirmation-overlay,
 .delete-confirmation-modal {
   display: none !important;
+}
+
+/* Update show/hide replies button styles */
+.show-replies-button {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.show-replies-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.replies-count {
+  font-size: 13px;
+  color: #26a34c;
+}
+
+.show-replies-button:hover {
+  transform: scale(1.1);
+}
+
+/* Comment actions container for buttons */
+.comment-actions-container {
+  display: flex;
+  align-items: center;
+  gap: 60px; /* Increased from 8px to 20px to add more space between buttons */
+  margin-top: 8px;
+  justify-content: flex-end; /* Alinea los botones a la derecha */
+  padding-right: 16px; /* Añade un padding a la derecha */
+}
+
+/* Reply and show replies buttons container */
+.reply-button,
+.show-replies-button {
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.reply-icon,
+.show-replies-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.replies-count {
+  font-size: 13px;
+  color: #26a34c;
+  margin-left: 4px;
+}
+
+.reply-button:hover,
+.show-replies-button:hover {
+  transform: scale(1.1);
 }
