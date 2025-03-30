@@ -29,6 +29,9 @@ function Comment({ comment, post, setPosts, posts }) {
     // Add new state for showing/hiding replies
     const [showReplies, setShowReplies] = useState(false);
 
+    // Store likes for the comment
+    const [likes, setLikes] = useState(comment.likes || []);
+
     // Fetch current user on component mount
     useEffect(() => {
         const fetchCurrentUser = async () => {
@@ -335,6 +338,38 @@ function Comment({ comment, post, setPosts, posts }) {
         });
     };
 
+    const handleLike = async () => {
+        try {
+            const existingLike = likes.find(like => like.user_id === currentUserId);
+            if (existingLike) {
+                // Delete the like
+                const { error } = await supabase
+                    .from('comments_likes')
+                    .delete()
+                    .eq('like_id', existingLike.like_id);
+
+                if (error) throw error;
+
+                // Update local state
+                setLikes(likes.filter(like => like.like_id !== existingLike.like_id));
+            } else {
+                // Create a new like
+                const { data, error } = await supabase
+                    .from('comments_likes')
+                    .insert({ user_id: currentUserId, comment_id: comment.comment_id })
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                // Update local state
+                setLikes([...likes, data]);
+            }
+        } catch (error) {
+            console.error('Error al manejar el like:', error.message);
+        }
+    };
+
     return (
         <div 
             className={`comment ${expanded ? 'expanded' : ''} ${loading ? 'loading' : ''}`}
@@ -433,6 +468,21 @@ function Comment({ comment, post, setPosts, posts }) {
             ))}
             
             <div className="comment-actions-container">
+                {/* Like button */}
+                <button 
+                    className={`comment-like-button ${likes.some(like => like.user_id === currentUserId) ? 'liked' : ''}`} 
+                    onClick={handleLike}
+                >
+                    <img 
+                        src={likes.some(like => like.user_id === currentUserId) 
+                            ? "Corazón con relleno.svg" 
+                            : "ícono like comentarios.svg"} 
+                        alt="Like Icon" 
+                        className="comment-like-icon"
+                    />
+                    <span className="likes-count">{likes.length}</span>
+                </button>
+
                 {/* Add reply button only for main comments */}
                 {!comment.parent_comment_id && (
                     <button 

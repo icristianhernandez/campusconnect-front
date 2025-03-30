@@ -635,10 +635,10 @@
 .comment-actions-container {
   display: flex;
   align-items: center;
-  gap: 60px; /* Increased from 8px to 20px to add more space between buttons */
+  gap: 52px; /* Reduced from 60px to 20px */
   margin-top: 8px;
-  justify-content: flex-end; /* Alinea los botones a la derecha */
-  padding-right: 16px; /* Añade un padding a la derecha */
+  justify-content: flex-end; /* Align buttons to the right */
+  padding-right: 16px; /* Add padding to the right */
 }
 
 /* Reply and show replies buttons container */
@@ -668,4 +668,28 @@
 .reply-button:hover,
 .show-replies-button:hover {
   transform: scale(1.1);
+}
+
+.comment-like-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.2s ease;
+  height: 32px;
+  margin-top: 8px; /* Increased to align with the reply button */
+}
+
+.comment-like-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.likes-count {
+  font-size: 13px;
+  color: #aaa; /* Lighter color for the likes count */
 }

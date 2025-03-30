@@ -45,6 +45,10 @@ function Feed() {
                     comments_multimedia (
                         media_type,
                         multimedia_url
+                    ),
+                    comments_likes (
+                        like_id,
+                        user_id
                     )
                 `)
                 .order('created_at', { ascending: false }); // Comentarios más nuevos primero
@@ -59,6 +63,7 @@ function Feed() {
                     .map(comment => ({
                         ...comment,
                         multimedia: comment.comments_multimedia || [],
+                        likes: comment.comments_likes || [],
                         replies: organizeComments(comments, comment.comment_id)
                     }));
             };
