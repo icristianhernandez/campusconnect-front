@@ -2,662 +2,662 @@
 
 /* Main post container - used for the wrapping div with className="post" */
 .post {
-  display: flex;
-  flex-direction: column;
-  border: 2px solid #ccc; /* Increased border thickness from 1px to 2px */
-  border-radius: 10px;
-  background-color: #f2f4f7;
-  overflow: hidden;
-  margin-bottom: 20px;
-  width: 110%;
-  max-width: 110%;
+	display: flex;
+	flex-direction: column;
+	border: 2px solid #ccc; /* Increased border thickness from 1px to 2px */
+	border-radius: 10px;
+	background-color: #f2f4f7;
+	overflow: hidden;
+	margin-bottom: 20px;
+	width: 100%;
+	max-width: 100%;
 }
 
 /* User profile section - used in the newly added user profile placeholder */
 .post-user-profile {
-  display: flex;
-  align-items: center;
-  padding: 10px 0 20px 0;
-  border-bottom: 1px solid #eaeaea;
-  margin-bottom: 15px;
+	display: flex;
+	align-items: center;
+	padding: 10px 0 20px 0;
+	border-bottom: 1px solid #eaeaea;
+	margin-bottom: 15px;
 }
 
 .post-user-avatar-placeholder {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #ddd;
-  margin-right: 12px;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background-color: #ddd;
+	margin-right: 12px;
 }
 
 .post-user-info-placeholder {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .post-user-info-placeholder p {
-  font-weight: 600;
-  font-size: 14px;
-  color: #000000;
-  margin: 0;
+	font-weight: 600;
+	font-size: 14px;
+	color: #888;
+	margin: 0;
 }
 
 .post-user-info-placeholder span {
-  font-size: 12px;
-  color: #aaa;
+	font-size: 12px;
+	color: #aaa;
 }
 
 /* Post sections layout - used for the main layout structure */
 .post-top-section {
-  display: flex;
-  min-height: 200px;
-  border-bottom: 2px solid #ddd; /* Increased border thickness from 1px to 2px */
+	display: flex;
+	min-height: 200px;
+	border-bottom: 2px solid #ddd; /* Increased border thickness from 1px to 2px */
 }
 
 .post-bottom-section {
-  display: flex;
-  min-height: 50px; /* Reduced from 100px to 55px */
-  flex-wrap: nowrap; /* Prevent wrapping of child elements */
+	display: flex;
+	min-height: 50px; /* Reduced from 100px to 55px */
+	flex-wrap: nowrap; /* Prevent wrapping of child elements */
 }
 
 .post-content {
-  width: 50%;
-  flex: 1 0 50%;
-  padding: 20px;
-  border-right: 2px solid #ccc; /* Increased border thickness from 1px to 2px */
-  position: relative;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-word; /* Added property to ensure text breaks properly */
-  white-space: pre-wrap; /* Preserve line breaks but wrap text */
-  min-width: 0; /* Allow content to shrink below minimum content size */
-  box-sizing: border-box;
-  overflow: hidden; /* Prevent overflow */
+	width: 50%;
+	flex: 1 0 50%;
+	padding: 20px;
+	border-right: 2px solid #ccc; /* Increased border thickness from 1px to 2px */
+	position: relative;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	word-break: break-word; /* Added property to ensure text breaks properly */
+	white-space: pre-wrap; /* Preserve line breaks but wrap text */
+	min-width: 0; /* Allow content to shrink below minimum content size */
+	box-sizing: border-box;
+	overflow: hidden; /* Prevent overflow */
 }
 
 /* Add styles for the edit textarea to prevent resizing */
 .edit-post-input {
-  width: 100%;
-  min-height: 100px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-family: inherit;
-  font-size: inherit;
-  background-color: #ffffff;
-  resize: none; /* Prevent user from resizing the textarea */
-  overflow-y: auto; /* Allow vertical scrolling if content is long */
-  overflow-x: hidden; /* Hide horizontal scrollbar */
-  margin-bottom: 10px;
-  box-sizing: border-box;
+	width: 100%;
+	min-height: 100px;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-family: inherit;
+	font-size: inherit;
+	background-color: #ffffff;
+	resize: none; /* Prevent user from resizing the textarea */
+	overflow-y: auto; /* Allow vertical scrolling if content is long */
+	overflow-x: hidden; /* Hide horizontal scrollbar */
+	margin-bottom: 10px;
+	box-sizing: border-box;
 }
 
 /* There's a small inconsistency here - the CSS targets p.post-text specifically with a class, 
    but in the component you're using just p.post-text */
 .post-content p {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  word-break: break-word;
-  max-width: 100%;
-  overflow: hidden;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	max-width: 100%;
+	overflow: hidden;
 }
 
 /* Comments section - used in the comments part of the post */
 .post-comments-list {
-  width: 50%;
-  flex: 1 0 50%;
-  padding: 15px;
-  max-height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  min-width: 0; /* Allow content to shrink below minimum content size */
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+	width: 50%;
+	flex: 1 0 50%;
+	padding: 15px;
+	max-height: 300px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	min-width: 0; /* Allow content to shrink below minimum content size */
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
 }
 
 .comments-header {
-  padding: 0 5px 10px 5px;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 10px;
+	padding: 0 5px 10px 5px;
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 10px;
 }
 
 .comments-header h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
 }
 
 .comments-container {
-  flex: 1;
-  overflow-y: auto;
+	flex: 1;
+	overflow-y: auto;
 }
 
 .no-comments-message {
-  color: #888;
-  font-style: italic;
-  text-align: center;
-  padding: 20px 0;
+	color: #888;
+	font-style: italic;
+	text-align: center;
+	padding: 20px 0;
 }
 
 /* Future functions section styling updated */
 .post-functions {
-  width: 50%;
-  flex: 1 0 50%;
-  padding: 8px 15px 8px 0; /* Reduced top/bottom padding from 15px to 8px */
-  border-right: 2px solid #ccc;
-  background-color: #f2f4f7;
-  min-width: 0;
-  box-sizing: border-box;
-  display: flex; /* Add flex display */
-  align-items: center; /* Center items vertically */
-  justify-content: flex-start; /* Align to the left */
+	width: 50%;
+	flex: 1 0 50%;
+	padding: 8px 15px 8px 0; /* Reduced top/bottom padding from 15px to 8px */
+	border-right: 2px solid #ccc;
+	background-color: #f2f4f7;
+	min-width: 0;
+	box-sizing: border-box;
+	display: flex; /* Add flex display */
+	align-items: center; /* Center items vertically */
+	justify-content: flex-start; /* Align to the left */
 }
 
 /* New container for the functions content */
 .function-content {
-  display: flex;
-  flex-direction: column;
-  height: auto; /* Change to auto from 100% */
-  align-items: flex-start; /* Align items to the left */
-  justify-content: center; /* Center items vertically */
-  padding: 3px 5px 3px 0; /* Further reduced padding for more compact layout */
+	display: flex;
+	flex-direction: column;
+	height: auto; /* Change to auto from 100% */
+	align-items: flex-start; /* Align items to the left */
+	justify-content: center; /* Center items vertically */
+	padding: 3px 5px 3px 0; /* Further reduced padding for more compact layout */
 }
 
 /* Remove function-placeholder and add styling for the new classes */
 .function-placeholder {
-  display: none; /* Hide this as we're not using it anymore */
+	display: none; /* Hide this as we're not using it anymore */
 }
 
 .additional-functions {
-  display: none; /* Hide this element instead of showing it with placeholder text */
-  color: #888;
-  font-style: italic;
-  margin-top: 10px;
-  font-size: 14px;
+	display: none; /* Hide this element instead of showing it with placeholder text */
+	color: #888;
+	font-style: italic;
+	margin-top: 10px;
+	font-size: 14px;
 }
 
 /* Update like button styles for the new location */
 .like-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start; /* Align content to the left */
-  gap: 5px;
-  padding: 8px 15px 8px 15px; /* Maintain padding for touch targets */
-  border-radius: 20px;
-  transition: background-color 0.2s ease;
-  margin-left: 0; /* Ensure no left margin */
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start; /* Align content to the left */
+	gap: 5px;
+	padding: 8px 15px 8px 15px; /* Maintain padding for touch targets */
+	border-radius: 20px;
+	transition: background-color 0.2s ease;
+	margin-left: 0; /* Ensure no left margin */
 }
 
 .like-button:hover {
-  background-color: rgba(38, 163, 76, 0.1);
+	background-color: rgba(38, 163, 76, 0.1);
 }
 
 .like-button.liked {
-  color: #26a34c;
+	color: #26a34c;
 }
 
 .like-icon {
-  width: 28px; /* Increased from 24px */
-  height: 28px; /* Increased from 24px */
-  transition: transform 0.2s ease;
+	width: 28px; /* Increased from 24px */
+	height: 28px; /* Increased from 24px */
+	transition: transform 0.2s ease;
 }
 
 .likes-count {
-  font-size: 15px;
-  font-weight: 500;
+	font-size: 15px;
+	font-weight: 500;
 }
 
 .like-button:hover .like-icon {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 /* Comment form - bottom right */
 .post-comment-form {
-  width: 50%;
-  flex: 1 0 50%;
-  padding: 8px 15px; /* Reduced top/bottom padding from 15px to 8px */
-  background-color: #f2f4f7; /* Changed from #f9f9f9 to #f2f4f7 */
-  min-width: 0; /* Allow content to shrink below minimum content size */
-  box-sizing: border-box;
+	width: 50%;
+	flex: 1 0 50%;
+	padding: 8px 15px; /* Reduced top/bottom padding from 15px to 8px */
+	background-color: #f2f4f7; /* Changed from #f9f9f9 to #f2f4f7 */
+	min-width: 0; /* Allow content to shrink below minimum content size */
+	box-sizing: border-box;
 }
 
 /* Post media styles */
 .post-media {
-  max-width: 100%;
-  margin-top: 10px;
+	max-width: 100%;
+	margin-top: 10px;
 }
 
 /* Remove old post options styles */
 .post-options {
-  display: none; /* Hide the old post options */
+	display: none; /* Hide the old post options */
 }
 
 /* Post options menu - used for the edit/delete dropdown */
 .post-options-container {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
 }
 
 .post-options-button {
-  background: none;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  color: #777;
-  cursor: pointer;
-  padding: 3px 8px;
-  border-radius: 3px;
-  transition: background-color 0.2s;
-  letter-spacing: -1px;
+	background: none;
+	border: none;
+	font-size: 16px;
+	font-weight: bold;
+	color: #777;
+	cursor: pointer;
+	padding: 3px 8px;
+	border-radius: 3px;
+	transition: background-color 0.2s;
+	letter-spacing: -1px;
 }
 
 .post-options-button:hover {
-  background-color: #eaeaea;
-  color: #555;
+	background-color: #eaeaea;
+	color: #555;
 }
 
 .post-options-dropdown {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  width: 130px;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 100;
-  overflow: hidden;
+	position: absolute;
+	right: 0;
+	top: 100%;
+	width: 130px;
+	background: white;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	z-index: 100;
+	overflow: hidden;
 }
 
 .post-option-item {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  text-align: left;
-  padding: 8px 12px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  font-size: 14px;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	text-align: left;
+	padding: 8px 12px;
+	border: none;
+	background: none;
+	cursor: pointer;
+	transition: background-color 0.2s;
+	font-size: 14px;
 }
 
 .post-option-item:hover {
-  background-color: #f0f0f0;
+	background-color: #f0f0f0;
 }
 
 .post-option-icon {
-  margin-right: 8px;
-  font-size: 14px;
+	margin-right: 8px;
+	font-size: 14px;
 }
 
 /* Comment form styles - used for adding new comments */
 .new-comment-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 }
 
 .comment-input-container {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin: 0 5px; /* Add slight margin to the sides */
-  border-bottom: none; /* Remove any container border if exists */
+	position: relative;
+	display: flex;
+	align-items: center;
+	margin: 0 5px; /* Add slight margin to the sides */
+	border-bottom: none; /* Remove any container border if exists */
 }
 
 .comment-actions-group {
-  position: absolute;
-  right: 10px;
-  top: 50%; /* Keep in middle of input field */
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  gap: 8px; /* Reduced gap between buttons */
+	position: absolute;
+	right: 10px;
+	top: 50%; /* Keep in middle of input field */
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	gap: 8px; /* Reduced gap between buttons */
 }
 
 .new-comment-input {
-  flex: 1;
-  padding: 3px 80px 3px 2px; /* Reduced vertical padding from 5px to 3px */
-  border: none; /* Remove border */
-  border-bottom: 1px solid #ccc; /* Add only bottom border for line appearance */
-  border-radius: 0; /* Remove border radius completely */
-  font-family: inherit;
-  font-size: inherit;
-  height: 32px; /* Reduced height from 38px to 32px */
-  line-height: 20px;
-  background-color: transparent; /* Make background transparent */
-  transition: border-color 0.3s;
-  resize: none;
-  overflow-y: auto; /* Changed to auto to allow scrolling */
-  min-height: 32px; /* Reduced min-height to match new height */
-  max-height: 32px; /* Reduced max-height to match new height */
-  white-space: normal; /* Allow text to wrap if needed */
-  overflow-x: auto; /* Enable horizontal scrolling */
-  scrollbar-width: thin; /* Make scrollbars thin */
+	flex: 1;
+	padding: 3px 80px 3px 2px; /* Reduced vertical padding from 5px to 3px */
+	border: none; /* Remove border */
+	border-bottom: 1px solid #ccc; /* Add only bottom border for line appearance */
+	border-radius: 0; /* Remove border radius completely */
+	font-family: inherit;
+	font-size: inherit;
+	height: 32px; /* Reduced height from 38px to 32px */
+	line-height: 20px;
+	background-color: transparent; /* Make background transparent */
+	transition: border-color 0.3s;
+	resize: none;
+	overflow-y: auto; /* Changed to auto to allow scrolling */
+	min-height: 32px; /* Reduced min-height to match new height */
+	max-height: 32px; /* Reduced max-height to match new height */
+	white-space: normal; /* Allow text to wrap if needed */
+	overflow-x: auto; /* Enable horizontal scrolling */
+	scrollbar-width: thin; /* Make scrollbars thin */
 }
 
 .new-comment-input::-webkit-scrollbar {
-  height: 4px; /* Height for horizontal scrollbar */
-  width: 4px; /* Width for vertical scrollbar */
+	height: 4px; /* Height for horizontal scrollbar */
+	width: 4px; /* Width for vertical scrollbar */
 }
 
 .new-comment-input::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 10px;
+	background-color: #ccc;
+	border-radius: 10px;
 }
 
 .new-comment-input::-webkit-scrollbar-track {
-  background: transparent;
+	background: transparent;
 }
 
 .new-comment-input:focus {
-  outline: none;
-  border-bottom: 2px solid #26a34c; /* Thicker bottom border on focus */
-  box-shadow: none; /* Remove the box shadow on focus */
+	outline: none;
+	border-bottom: 2px solid #26a34c; /* Thicker bottom border on focus */
+	box-shadow: none; /* Remove the box shadow on focus */
 }
 
 .new-comment-submit-icon {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 0;
 }
 
 .new-comment-submit-icon img {
-  width: 24px;
-  height: 24px;
-  transition: transform 0.2s ease;
+	width: 24px;
+	height: 24px;
+	transition: transform 0.2s ease;
 }
 
 .new-comment-submit-icon:hover img {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 .new-comment-media-input {
-  display: none;
+	display: none;
 }
 
 .new-comment-media-label {
-  display: inline-block;
-  padding: 5px;
-  border: none;
-  border-radius: 50%;
-  background: none; /* Removed background */
-  color: #333; /* Changed color to dark */
-  cursor: pointer;
-  transition: 0.3s ease;
-  font-size: 16px; /* Decreased font size */
+	display: inline-block;
+	padding: 5px;
+	border: none;
+	border-radius: 50%;
+	background: none; /* Removed background */
+	color: #333; /* Changed color to dark */
+	cursor: pointer;
+	transition: 0.3s ease;
+	font-size: 16px; /* Decreased font size */
 }
 
 .new-comment-media-label:hover {
-  transform: scale(1.2);
+	transform: scale(1.2);
 }
 
 .media-preview {
-  max-width: 100%;
-  margin-top: 10px;
+	max-width: 100%;
+	margin-top: 10px;
 }
 
 .new-comment-actions {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
 }
 
 /* Like button styles */
 .like-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	gap: 5px;
 }
 
 .like-icon {
-  width: 28px; /* Increased from 24px */
-  height: 28px; /* Increased from 24px */
-  transition: transform 0.2s ease;
+	width: 28px; /* Increased from 24px */
+	height: 28px; /* Increased from 24px */
+	transition: transform 0.2s ease;
 }
 
 .like-button:hover .like-icon {
-  transform: scale(1.1);
+	transform: scale(1.1);
 }
 
 /* Add or ensure these styles exist for the delete confirmation modal */
 .delete-error {
-  color: #d32f2f;
-  font-size: 12px;
-  margin-bottom: 16px;
-  background-color: #ffebee;
-  padding: 8px 12px;
-  border-radius: 4px;
-  border-left: 3px solid #d32f2f;
+	color: #d32f2f;
+	font-size: 12px;
+	margin-bottom: 16px;
+	background-color: #ffebee;
+	padding: 8px 12px;
+	border-radius: 4px;
+	border-left: 3px solid #d32f2f;
 }
 
 .modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100000; /* Very high z-index */
-  padding: 20px;
-  box-sizing: border-box;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(0, 0, 0, 0.7);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 100000; /* Very high z-index */
+	padding: 20px;
+	box-sizing: border-box;
 }
 
 .modal-content {
-  width: 100%;
-  max-width: 340px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  padding: 24px;
-  position: relative;
-  animation: modal-appear 0.2s ease;
-  z-index: 100001; /* Even higher than backdrop */
+	width: 100%;
+	max-width: 340px;
+	background-color: white;
+	border-radius: 8px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+	padding: 24px;
+	position: relative;
+	animation: modal-appear 0.2s ease;
+	z-index: 100001; /* Even higher than backdrop */
 }
 
 @keyframes modal-appear {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+	from {
+		opacity: 0;
+		transform: scale(0.9);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
 
 .modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  color: #d32f2f;
-  font-size: 18px;
-  font-weight: 600;
+	margin-top: 0;
+	margin-bottom: 16px;
+	color: #d32f2f;
+	font-size: 18px;
+	font-weight: 600;
 }
 
 .modal-content p {
-  margin-bottom: 24px;
-  color: #555;
-  font-size: 14px;
-  line-height: 1.5;
+	margin-bottom: 24px;
+	color: #555;
+	font-size: 14px;
+	line-height: 1.5;
 }
 
 .confirmation-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
 }
 
 .cancel-button,
 .confirm-button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.1s ease;
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .cancel-button {
-  background-color: #f5f5f5;
-  color: #333;
+	background-color: #f5f5f5;
+	color: #333;
 }
 
 .cancel-button:hover {
-  background-color: #e0e0e0;
+	background-color: #e0e0e0;
 }
 
 .confirm-button {
-  background-color: #d32f2f;
-  color: white;
+	background-color: #d32f2f;
+	color: white;
 }
 
 .confirm-button:hover {
-  background-color: #b71c1c;
+	background-color: #b71c1c;
 }
 
 .cancel-button:active,
 .confirm-button:active {
-  transform: scale(0.97);
+	transform: scale(0.97);
 }
 
 .cancel-button:disabled,
 .confirm-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+	opacity: 0.7;
+	cursor: not-allowed;
 }
 
 /* Responsive styles */
 @media screen and (max-width: 768px) {
-  .post-top-section,
-  .post-bottom-section {
-    flex-direction: column;
-  }
+	.post-top-section,
+	.post-bottom-section {
+		flex-direction: column;
+	}
 
-  .post-content,
-  .post-comments-list,
-  .post-functions,
-  .post-comment-form {
-    width: 100%;
-    flex: 1 0 100%;
-    border-right: none;
-  }
+	.post-content,
+	.post-comments-list,
+	.post-functions,
+	.post-comment-form {
+		width: 100%;
+		flex: 1 0 100%;
+		border-right: none;
+	}
 
-  .post-content,
-  .post-functions {
-    border-bottom: 2px solid #ccc;
-  }
+	.post-content,
+	.post-functions {
+		border-bottom: 2px solid #ccc;
+	}
 
-  .post-comments-list {
-    max-height: none;
-    height: 300px; /* Fixed height on mobile */
-  }
+	.post-comments-list {
+		max-height: none;
+		height: 300px; /* Fixed height on mobile */
+	}
 
-  .function-placeholder p {
-    font-size: 14px;
-  }
+	.function-placeholder p {
+		font-size: 14px;
+	}
 
-  .new-comment-media-label {
-    padding: 8px 16px;
-    font-size: 14px;
-  }
+	.new-comment-media-label {
+		padding: 8px 16px;
+		font-size: 14px;
+	}
 
-  .comment-input-container {
-    width: 100%;
-  }
+	.comment-input-container {
+		width: 100%;
+	}
 
-  .post-user-profile {
-    padding: 8px 0 15px 0;
-  }
+	.post-user-profile {
+		padding: 8px 0 15px 0;
+	}
 
-  .post-user-avatar-placeholder {
-    width: 32px;
-    height: 32px;
-  }
+	.post-user-avatar-placeholder {
+		width: 32px;
+		height: 32px;
+	}
 
-  .post-bottom-section {
-    min-height: 45px; /* Reduced from 60px to 45px for mobile */
-  }
+	.post-bottom-section {
+		min-height: 45px; /* Reduced from 60px to 45px for mobile */
+	}
 }
 
 /* Extra small devices */
 @media screen and (max-width: 480px) {
-  .post {
-    margin-bottom: 15px;
-  }
+	.post {
+		margin-bottom: 15px;
+	}
 
-  .post-content,
-  .post-comments-list,
-  .post-functions,
-  .post-comment-form {
-    padding: 10px;
-  }
+	.post-content,
+	.post-comments-list,
+	.post-functions,
+	.post-comment-form {
+		padding: 10px;
+	}
 
-  .post-top-section {
-    min-height: 150px;
-  }
+	.post-top-section {
+		min-height: 150px;
+	}
 
-  .post-bottom-section {
-    min-height: 45px; /* Reduced from 60px to 45px for smaller devices */
-  }
+	.post-bottom-section {
+		min-height: 45px; /* Reduced from 60px to 45px for smaller devices */
+	}
 
-  .post-comments-list {
-    height: 250px;
-  }
+	.post-comments-list {
+		height: 250px;
+	}
 
-  .edit-post-input {
-    height: 80px; /* Keep this existing rule */
-    min-height: 80px; /* Add this to match the height constraint */
-  }
+	.edit-post-input {
+		height: 80px; /* Keep this existing rule */
+		min-height: 80px; /* Add this to match the height constraint */
+	}
 
-  .new-comment-actions {
-    justify-content: center;
-  }
+	.new-comment-actions {
+		justify-content: center;
+	}
 
-  .post-user-profile {
-    padding: 5px 0 10px 0;
-  }
+	.post-user-profile {
+		padding: 5px 0 10px 0;
+	}
 }
 
 /* Medium size devices - add a new breakpoint for better transition */
 @media screen and (max-width: 992px) and (min-width: 769px) {
-  .post-content,
-  .post-comments-list,
-  .post-functions,
-  .post-comment-form {
-    padding: 15px 10px; /* Reduce padding to save space */
-  }
+	.post-content,
+	.post-comments-list,
+	.post-functions,
+	.post-comment-form {
+		padding: 15px 10px; /* Reduce padding to save space */
+	}
 
-  .function-placeholder p {
-    font-size: 14px;
-  }
+	.function-placeholder p {
+		font-size: 14px;
+	}
 
-  .new-comment-actions {
-    flex-wrap: wrap;
-  }
+	.new-comment-actions {
+		flex-wrap: wrap;
+	}
 
-  .new-comment-media-label {
-    margin-bottom: 10px;
-  }
+	.new-comment-media-label {
+		margin-bottom: 10px;
+	}
 }
 
 /* Ensure media inside posts scales correctly */
 .post img,
 .post video {
-  max-width: 100%;
-  height: auto;
+	max-width: 100%;
+	height: auto;
 }

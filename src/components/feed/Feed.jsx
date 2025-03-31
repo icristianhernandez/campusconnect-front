@@ -11,6 +11,7 @@ function Feed() {
 	const [errorMessage, setErrorMessage] = useState(null); // para mostrar errores
 	const [showNewPostForm, setShowNewPostForm] = useState(false); // Estado para controlar la visibilidad del formulario
 
+	// Add ref to the top of the feed for scrolling
 	const feedTopRef = useRef(null);
 
 	const setPosts = (updatedPosts) => {
@@ -20,73 +21,55 @@ function Feed() {
 	const fetchPostsWithComments = async () => {
 		setErrorMessage(null);
 		try {
-			// Fetch posts with multimedia and likes
 			const { data: postsData, error: postsError } = await supabase
 				.from("posts")
 				.select(`
-					*,
-					post_multimedia (
-						media_type,
-						multimedia_url
-					),
-					post_likes (
-						like_id,
-						user_id
-					)
-				`)
-				.order("created_at", { ascending: false });
+                    *,
+                    post_multimedia (
+                        media_type,
+                        multimedia_url
+                    ),
+                    post_likes (
+                        like_id,
+                        user_id
+                    )
+                `)
+				.order("created_at", { ascending: false }); // Posts más nuevos primero
 
 			if (postsError) throw postsError;
 
-			// Fetch comments with multimedia and likes
 			const { data: commentsData, error: commentsError } = await supabase
 				.from("comments")
 				.select(`
-					*,
-					comments_multimedia (
-						media_type,
-						multimedia_url
-					),
-					comments_likes (
-						like_id,
-						user_id
-					)
-				`)
-				.order("created_at", { ascending: false });
+                    *,
+                    comments_multimedia (
+                        media_type,
+                        multimedia_url
+                    ),
+                    comments_likes (
+                        like_id,
+                        user_id
+                    )
+                `)
+				.order("created_at", { ascending: false }); // Comentarios más nuevos primero
 
 			if (commentsError) throw commentsError;
 
-			// Fetch user profiles
-			const { data: profilesData, error: profilesError } = await supabase
-				.from("profiles")
-				.select("id, first_name, last_name");
-
-			if (profilesError) throw profilesError;
-
-			
-			const profilesMap = profilesData.reduce((map, profile) => {
-				map[profile.id] = `${profile.first_name} ${profile.last_name}`;
-				return map;
-			}, {});
-
-			// Organize comments hierarchically
+			// Organizar comentarios jerárquicamente y ordenados por fecha (más nuevos primero)
 			const organizeComments = (comments, parentId = null) => {
 				return comments
 					.filter((comment) => comment.parent_comment_id === parentId)
-					.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+					.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Cambiado para ordenar descendente
 					.map((comment) => ({
 						...comment,
-						username: profilesMap[comment.user_id] || "Usuario desconocido",
 						multimedia: comment.comments_multimedia || [],
 						likes: comment.comments_likes || [],
 						replies: organizeComments(comments, comment.comment_id),
 					}));
 			};
 
-		
 			const combinedPosts = postsData.map((post) => ({
 				...post,
-				username: profilesMap[post.user_id] || "Usuario desconocido",
 				multimedia: post.post_multimedia || [],
 				likes: post.post_likes || [],
 				comments: organizeComments(
