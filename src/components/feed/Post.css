@@ -115,6 +115,15 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+
+  /* Hide scrollbars but keep scrolling functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Hide WebKit scrollbar for comments list */
+.post-comments-list::-webkit-scrollbar {
+  display: none;
 }
 
 .comments-header {
@@ -132,6 +141,12 @@
 .comments-container {
   flex: 1;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.comments-container::-webkit-scrollbar {
+  display: none;
 }
 
 .no-comments-message {
@@ -340,27 +355,19 @@
   max-height: 32px; /* Reduced max-height to match new height */
   white-space: normal; /* Allow text to wrap if needed */
   overflow-x: auto; /* Enable horizontal scrolling */
-  scrollbar-width: thin; /* Make scrollbars thin */
+
+  /* Hide scrollbars but keep scrolling functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 .new-comment-input::-webkit-scrollbar {
-  height: 4px; /* Height for horizontal scrollbar */
-  width: 4px; /* Width for vertical scrollbar */
+  display: none;
 }
 
-.new-comment-input::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 10px;
-}
-
+.new-comment-input::-webkit-scrollbar-thumb,
 .new-comment-input::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.new-comment-input:focus {
-  outline: none;
-  border-bottom: 2px solid #26a34c; /* Thicker bottom border on focus */
-  box-shadow: none; /* Remove the box shadow on focus */
+  display: none;
 }
 
 .new-comment-submit-icon {
