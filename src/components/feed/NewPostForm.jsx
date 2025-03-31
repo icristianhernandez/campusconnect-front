@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { supabase } from "../../utils/supabase";
 import { MyContext } from "../../context/context";
 import actionTypes from "../../reducer/actionTypes";
@@ -9,7 +9,29 @@ function NewPostForm() {
 	const [newPostMediaPreview, setNewPostMediaPreview] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null); // p mostrar errores
+	const [userProfile, setUserProfile] = useState(null); // para almacenar el perfil del usuario autenticado
 	const { dispatch } = useContext(MyContext);
+
+	useEffect(() => {
+		const fetchUserProfile = async () => {
+			try {
+				const { data: { user }, error: userError } = await supabase.auth.getUser();
+				if (userError || !user) throw new Error("Usuario no autenticado.");
+				const { data, error } = await supabase
+					.from("profiles")
+					.select("*")
+					.eq("id", user.id)
+					.single();
+				
+				if (error) throw error;
+				setUserProfile(data);
+			} catch (error) {
+				console.error("Error al obtener el perfil de usuario:", error.message);
+			}
+		};
+		
+		fetchUserProfile();
+	}, []);
 
 	const handlePostSubmit = async (e) => {
 		e.preventDefault();
@@ -77,6 +99,7 @@ function NewPostForm() {
 				payload: {
 					...post,
 					multimedia,
+					user_profile: userProfile
 				},
 			});
 

@@ -10,12 +10,30 @@ function Feed() {
 	const { posts } = appState; //publicaciones almacenadas en estado global
 	const [errorMessage, setErrorMessage] = useState(null); // para mostrar errores
 	const [showNewPostForm, setShowNewPostForm] = useState(false); // Estado para controlar la visibilidad del formulario
+	const [userProfiles, setUserProfiles] = useState({}); // State to store user profiles
 
-	// Add ref to the top of the feed for scrolling
 	const feedTopRef = useRef(null);
 
 	const setPosts = (updatedPosts) => {
 		dispatch({ type: "SET_POSTS", payload: updatedPosts }); //actualiza la lista de posts
+	};
+
+	// Fetch de perfiles desde supabase
+	const fetchUserProfiles = async () => {
+		try {
+			const { data, error } = await supabase.from("profiles").select("*");
+			
+			if (error) throw error;
+			
+			const profilesMap = {};
+			data.forEach(profile => {
+				profilesMap[profile.id] = profile;
+			});
+			
+			setUserProfiles(profilesMap);
+		} catch (error) {
+			console.error("Error fetching user profiles:", error.message);
+		}
 	};
 
 	const fetchPostsWithComments = async () => {
@@ -65,6 +83,8 @@ function Feed() {
 						multimedia: comment.comments_multimedia || [],
 						likes: comment.comments_likes || [],
 						replies: organizeComments(comments, comment.comment_id),
+						// Add user profile information to the comment
+						user_profile: userProfiles[comment.user_id] || null
 					}));
 			};
 
@@ -77,6 +97,8 @@ function Feed() {
 						(comment) => comment.parent_post_id === post.post_id,
 					),
 				),
+				// Add user profile information to the post
+				user_profile: userProfiles[post.user_id] || null
 			}));
 
 			setPosts(combinedPosts);
@@ -88,18 +110,23 @@ function Feed() {
 		}
 	};
 
+	//Primero se hace el fetch de perfiles de usuario y luego de posts y comentarios
+	// para asegurarse de que los perfiles de usuario estén disponibles antes de hacer el fetch de posts y comentarios
 	useEffect(() => {
-		//hook para cargar posts y comentarios desde la db
-		fetchPostsWithComments();
+		fetchUserProfiles();
 	}, []);
+	
+	useEffect(() => {
+		if (Object.keys(userProfiles).length > 0) {
+			fetchPostsWithComments();
+		}
+	}, [userProfiles]);
 
 	const handleCreateButtonClick = () => {
 		setShowNewPostForm(true);
 
-		// Scroll to the top where the form is located
 		window.scrollTo({ top: 0, behavior: "smooth" });
 
-		// Alternative approach using ref if window.scrollTo doesn't work well
 		if (feedTopRef.current) {
 			feedTopRef.current.scrollIntoView({ behavior: "smooth" });
 		}

@@ -54,6 +54,15 @@ function Post({ post, setPosts, posts }) {
 				throw new Error("Usuario no autenticado. Por favor, inicia sesión.");
 			}
 
+			 // Fetch the user's profile to attach to the new comment
+			 const { data: userProfile, error: profileError } = await supabase
+			 .from("profiles")
+			 .select("*")
+			 .eq("id", user.id)
+			 .single();
+			 
+		 if (profileError) throw profileError;
+
 			// se inserta el comentario en la tabla "comments"
 			const { data: newComment, error: commentError } = await supabase
 				.from("comments")
@@ -119,6 +128,8 @@ function Post({ post, setPosts, posts }) {
 								...newComment,
 								comment_text: newCommentContent,
 								multimedia,
+								// Add the user profile to the new comment
+								user_profile: userProfile
 							},
 						],
 					};
@@ -296,11 +307,11 @@ function Post({ post, setPosts, posts }) {
 			<div className="post-top-section">
 				{/* Sección superior izquierda - contenido del post */}
 				<div className="post-content">
-					{/* User profile section for future implementation */}
+					 {/* Updated user profile section with real data */}
 					<div className="post-user-profile">
 						<div className="post-user-avatar-placeholder"></div>
 						<div className="post-user-info-placeholder">
-							<p>Username placeholder</p>
+							<p>{post.user_profile ? `${post.user_profile.first_name} ${post.user_profile.last_name}` : "Usuario desconocido"}</p>
 							<span>{new Date(post.created_at).toLocaleString()}</span>
 						</div>
 					</div>

@@ -43,7 +43,7 @@ function Comment({ comment, post, setPosts, posts }) {
 				if (error) throw error;
 				if (user) setCurrentUserId(user.id);
 			} catch (error) {
-				console.error("Error fetching user:", error.message);
+				console.error("Error al obtener usuario:", error.message);
 			}
 		};
 
@@ -259,6 +259,15 @@ function Comment({ comment, post, setPosts, posts }) {
 			} = await supabase.auth.getUser();
 			if (userError) throw userError;
 
+			 // Fetch the user's profile to attach to the new reply
+			 const { data: userProfile, error: profileError } = await supabase
+			 .from("profiles")
+			 .select("*")
+			 .eq("id", user.id)
+			 .single();
+			 
+		 if (profileError) throw profileError;
+
 			// Create the reply comment
 			const { data: newReply, error: replyError } = await supabase
 				.from("comments")
@@ -322,6 +331,8 @@ function Comment({ comment, post, setPosts, posts }) {
 							...newReply,
 							multimedia,
 							replies: [],
+							// Add the user profile to the new reply
+							user_profile: userProfile
 						}),
 					};
 				}
@@ -399,11 +410,13 @@ function Comment({ comment, post, setPosts, posts }) {
 			className={`comment ${expanded ? "expanded" : ""} ${loading ? "loading" : ""}`}
 			ref={commentRef}
 		>
-			{/* User profile section */}
+			 {/* Updated user profile section with real user data */}
 			<div className="comment-user-profile">
 				<div className="comment-user-avatar-placeholder"></div>
 				<div className="comment-user-info">
-					<p className="comment-username">Username placeholder</p>
+					<p className="comment-username">
+						{comment.user_profile ? `${comment.user_profile.first_name} ${comment.user_profile.last_name}` : "Usuario desconocido"}
+					</p>
 					<span className="comment-timestamp">
 						{new Date(comment.created_at).toLocaleString()}
 					</span>
@@ -552,7 +565,7 @@ function Comment({ comment, post, setPosts, posts }) {
 					/>
 					<div className="reply-actions">
 						<label title="Adjuntar archivo">
-							📎
+							 📎
 							<input
 								type="file"
 								accept="image/*,video/*"
