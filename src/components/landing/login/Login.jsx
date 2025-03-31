@@ -17,7 +17,7 @@ function Login() {
 		<div className="Login">
 			{/*Colocar logos aqui*/}
 			<div className="logos">
-				<img src={`simbolo.png`} alt="simbolo" />
+				<img src={`Símbolo.png`} alt="simbolo" />
 				<img src={`usm.png`} alt="simbolo" />
 			</div>
 

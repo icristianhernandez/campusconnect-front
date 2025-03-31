@@ -403,7 +403,7 @@ function Comment({ comment, post, setPosts, posts }) {
 			<div className="comment-user-profile">
 				<div className="comment-user-avatar-placeholder"></div>
 				<div className="comment-user-info">
-					<p className="comment-username">Username placeholder</p>
+					<p className="comment-username">{comment.username}</p> {/* Mostrar el nombre del usuario */}
 					<span className="comment-timestamp">
 						{new Date(comment.created_at).toLocaleString()}
 					</span>
@@ -552,7 +552,7 @@ function Comment({ comment, post, setPosts, posts }) {
 					/>
 					<div className="reply-actions">
 						<label title="Adjuntar archivo">
-							📎
+							 📎
 							<input
 								type="file"
 								accept="image/*,video/*"

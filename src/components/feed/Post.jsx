@@ -300,9 +300,9 @@ function Post({ post, setPosts, posts }) {
 					<div className="post-user-profile">
 						<div className="post-user-avatar-placeholder"></div>
 						<div className="post-user-info-placeholder">
-							<p>Username placeholder</p>
-							<span>{new Date(post.created_at).toLocaleString()}</span>
-						</div>
+								<p>{post.username}</p> {/* Mostrar el nombre del usuario */}
+								<span>{new Date(post.created_at).toLocaleString()}</span>
+							</div>
 					</div>
 
 					{editing ? (
@@ -450,6 +450,7 @@ function Post({ post, setPosts, posts }) {
 							></textarea>
 							<div className="comment-actions-group">
 								<label className="new-comment-media-label">
+									
 									📎
 									<input
 										type="file"
