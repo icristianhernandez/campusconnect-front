@@ -1,53 +1,90 @@
+/* Estilo base para el header */
 .Header {
-	position: fixed; /* Fija el header en la parte superior */
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 1000; /* Asegura que el header esté por encima de otros elementos */
-	display: flex;
-	align-items: center;
-	justify-content: center; /* Center all content horizontally */
-	padding: 10px 20px;
-	background-color: #f2f4f7;
-	color: white;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	border-bottom: 1px solid #ccc; /* Add bottom border */
-	height: 80px; /* Reduced height from default */
+    position: fixed; /* Fija el header en la parte superior */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Asegura que el header esté por encima de otros elementos */
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ajusta el contenido a los extremos */
+    padding: 10px 20px;
+    background-color: #f2f4f7;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #ccc; /* Add bottom border */
+    height: 80px;
+
 }
 
-.header-search {
-	position: absolute; /* Restore original positioning */
-	left: 20px; /* Restore original left alignment */
-}
-
-.header-search img.search-icon {
-	position: absolute;
-	left: 10px;
-	top: 50%;
-	transform: translateY(-50%);
-	width: 20px;
-	height: 20px;
-}
-
+/* Ajustes para el logo */
 .header-logo {
-	position: relative;
-	left: -24px;
+    position: relative;
+    left: 0; /* Asegura que el logo esté alineado correctamente */
+    margin-right: auto; /* Empuja el logo hacia la izquierda */
 }
 
 .header-logo img {
-	height: 120px; /* Increased logo size */
+    height: 60px; /* Tamaño base del logo */
+    transition: height 0.3s ease; /* Transición suave para cambios de tamaño */
+}
+
+/* Ajustes para la barra de búsqueda */
+.header-search {
+    position: relative; /* Cambia a relativo para evitar conflictos */
+    margin-left: auto; /* Empuja la barra de búsqueda hacia la derecha */
+}
+
+.header-search img.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
 }
 
 .header-search input {
-	width: 300px;
-	padding: 8px 12px 8px 40px; /* Add padding to make space for the icon */
-	border: 1px solid #ccc; /* Add border */
-	border-radius: 20px;
-	font-size: 14px;
-	background-color: #f2f4f7; /* Set background color */
+    width: 300px;
+    padding: 8px 12px 8px 40px; /* Espacio para el ícono */
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+    background-color: #f2f4f7;
 }
 
-.header-search input:focus {
-	outline: none;
-	box-shadow: 0 0 5px rgba(38, 163, 76, 0.5); /* Updated green color */
+/* Ajustes para dispositivos medianos (tablets) */
+@media (max-width: 768px) {
+    .header-logo img {
+        height: 50px; /* Reduce el tamaño del logo */
+    }
+
+    .header-search input {
+        width: 200px; /* Reduce el ancho de la barra de búsqueda */
+    }
+}
+
+/* Ajustes para dispositivos pequeños (móviles) */
+@media (max-width: 480px) {
+    .Header {
+        justify-content: space-between; /* Asegura que los elementos estén bien distribuidos */
+        padding: 10px; /* Reduce el padding para móviles */
+    }
+
+    .header-logo {
+        margin-right: 0; /* Elimina márgenes adicionales */
+    }
+
+    .header-logo img {
+        height: 40px; /* Reduce aún más el tamaño del logo */
+    }
+
+    .header-search {
+        margin-left: 0; /* Centra la barra de búsqueda */
+        width: 100%; /* Ocupa todo el ancho disponible */
+    }
+
+    .header-search input {
+        width: calc(100% - 50px); /* Ajusta el ancho dejando espacio para el ícono */
+    }
 }

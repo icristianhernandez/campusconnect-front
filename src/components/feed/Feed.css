@@ -8,14 +8,24 @@
 	padding: 20px;
 	margin-top: 100px; /* Reduced margin to bring the feed closer to the header */
 	overflow: hidden; /* Prevent scrolling on the entire page */
+	margin: 0; /* Elimina márgenes adicionales */
+    padding: 0; /* Elimina paddings adicionales */
+    box-sizing: border-box; 
+	margin-top: 100px;
 }
 
 .feed-container {
-	display: flex;
 	width: 100%;
 	height: 100%; /* Full height for the feed container */
 	background-color: #f2f4f7; /* Set background color for the entire feed */
 	overflow: hidden; /* Prevent scrolling for the feed container */
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr; /* Tres columnas: izquierda, centro, derecha */
+    gap: 15px;
+    width: 100%;
+    max-width: 1200px;
+	box-sizing: border-box;
+	margin: 0 auto;
 }
 
 .left-column {
@@ -27,7 +37,15 @@
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start; /* Align items to the left */
+	background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	position: relative; /* Posición normal en pantallas grandes */
+    margin: 0;
+    padding: 10px;
 }
+
 
 .right-column {
 	flex: 1;
@@ -35,7 +53,12 @@
 	padding: 20px;
 	height: 100%; /* Ensure columns take full height */
 	overflow: hidden; /* Prevent scrolling in static columns */
+	background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 
 .middle-column {
 	flex: 2;
@@ -50,7 +73,10 @@
 	scrollbar-width: medium; /* For Firefox: make the scrollbar thicker */
 	scrollbar-color: #26a34c transparent; /* For Firefox: set thumb and track colors */
 	align-items: center; /* Center posts horizontally */
-	padding-left: 20px; /* Add padding to balance the layout */
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* For WebKit browsers (Chrome, Edge, Safari) */
@@ -74,7 +100,7 @@
 .new-post-form {
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+
 	background-color: #fff;
 	padding: 20px;
 	border-radius: 10px;
@@ -154,7 +180,7 @@
 .posts-container {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: 15px;
 	margin-top: 55px; /* Increase margin to separate posts from the "Crear" button */
 	align-items: center; /* Center posts within the container */
 }
@@ -290,6 +316,7 @@
 	z-index: 999; /* Asegura que esté por encima de otros elementos */
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
 	text-align: center;
+	
 }
 
 .create-post-button:hover {
@@ -333,4 +360,106 @@
 
 .settings-button:hover {
 	background-color: #f0f0f0; /* Light gray background on hover */
+}
+
+/* Para pantallas medianas (tablets) */
+@media (max-width: 768px) {
+    .feed-container {
+        grid-template-columns: 1fr 2fr; /* Oculta la columna derecha */
+        gap: 15px;
+    }
+
+    .right-column {
+        display: none; /* Oculta la columna derecha */
+    }
+
+    .create-post-button {
+        width: 100%; /* Botón ocupa todo el ancho */
+    }
+	.settings-button span {
+        display: none; /* Oculta el texto del span */
+    }
+}
+
+/* Para pantallas pequeñas (móviles) */
+@media (max-width: 480px) {
+    .feed-container {
+        grid-template-columns: 1fr; /* Una sola columna */
+        gap: 10px;
+		padding: 0;
+		padding-bottom: 80px;
+    }
+
+    .left-column {
+        position: fixed; /* Fija la columna en la parte inferior */
+        bottom: 0; /* La coloca en la parte inferior de la pantalla */
+        left: 0; /* Alinea al lado izquierdo */
+        width: 100%; /* Ocupa todo el ancho de la pantalla */
+        background-color: #f2f4f7; /* Fondo para que parezca un footer */
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* Sombra para dar efecto de elevación */
+        z-index: 1000; /* Asegura que esté por encima de otros elementos */
+        display: flex;
+        justify-content: center; /* Centra el contenido horizontalmente */
+        padding: 10px 30px;
+		height: 60px;
+
+    }
+
+    .feed-container {
+        padding-bottom: 60px; /* Espacio para el footer */
+    }
+
+    .settings-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px; /* Espacio entre el ícono y el texto */
+    }
+
+    .settings-button span {
+        display: none; /* Oculta el texto en móviles si es necesario */
+    }
+
+    .middle-column {
+        padding: 10px;
+		margin: 0; /* Asegúrate de que no haya márgenes */
+        padding: 10px; /* Agrega un pequeño padding interno */
+        box-sizing: border-box; 
+    }
+
+    .create-post-button {
+        width: 100%; /* Botón ocupa todo el ancho */
+        font-size: 14px;
+    }
+
+    .posts-container {
+        gap: 10px;
+    }
+	.post {
+        margin: 0; /* Elimina márgenes adicionales */
+        width: 100%; /* Asegúrate de que ocupe todo el ancho disponible */
+    }
+	.NewPostForm{
+        margin-top: 100px; /* Ajusta este valor según la altura del header */
+        transition: margin-top 0.3s ease; /* Transición suave */
+    }
+
+	.settings-button {
+        width: 50px; /* Botón más pequeño */
+        height: 50px; /* Botón más pequeño */
+        border-radius: 50%; /* Forma circular */
+        padding: 0; /* Elimina el padding interno */
+        color: white; /* Texto blanco */
+        justify-content: center; /* Centra el contenido */
+    }
+
+    .settings-button img {
+        width: 20px; /* Tamaño reducido del ícono */
+        height: 20px;
+    }
+
+    .settings-button span {
+        display: none; /* Oculta el texto en móviles */
+    }
+
 }
