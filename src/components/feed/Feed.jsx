@@ -110,6 +110,10 @@ function Feed() {
 		<div className="Feed">
 			<div className="feed-container">
 				<div className="left-column">
+					<button className="profile-button">
+						<div className="profile-placeholder"></div>
+						<span>Perfil</span>
+					</button>
 					<button className="settings-button">
 						<img src="Configuración.svg" alt="Configuración" />
 						<span>Configuración</span>
