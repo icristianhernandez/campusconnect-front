@@ -14,6 +14,8 @@ function LoginRegister() {
 	const emailRef = useRef(null);
 	const passwordRef = useRef(null);
 	const confirmPasswordRef = useRef(null);
+	const firstNameRef = useRef(null);
+	const lastNameRef = useRef(null);
 
 	const validatePasswords = () => {
 		if (passwordRef.current.value !== confirmPasswordRef.current.value) {
@@ -48,12 +50,19 @@ function LoginRegister() {
 
 		const email = emailRef.current.value;
 		const password = passwordRef.current.value;
+		const firstName = firstNameRef.current.value;
+		const lastName = lastNameRef.current.value;
 
 		try {
-			// Register user with Supabase
 			const { data, error: signUpError } = await supabase.auth.signUp({
-				email,
-				password,
+				email: email,
+				password: password,
+				options: {
+					data: {
+						first_name: firstName,
+						last_name: lastName,
+					},
+				},
 			});
 
 			if (signUpError) {
@@ -75,6 +84,32 @@ function LoginRegister() {
 
 	return (
 		<form className="LoginRegister" onSubmit={handleSubmitRegister}>
+			<div>
+				<input
+					type="text"
+					name="firstName"
+					id="firstName"
+					placeholder="Ingrese su nombre"
+					className="login-form-input"
+					ref={firstNameRef}
+					disabled={loading}
+					required
+					maxLength={24}
+				/>
+			</div>
+			<div>
+				<input
+					type="text"
+					name="lastName"
+					id="lastName"
+					placeholder="Ingrese su apellido"
+					className="login-form-input"
+					ref={lastNameRef}
+					disabled={loading}
+					required
+					maxLength={24}
+				/>
+			</div>
 			<div>
 				<input
 					type="email"
@@ -149,7 +184,7 @@ function LoginRegister() {
 					onChange={() => setTermsAccepted(!termsAccepted)}
 					disabled={loading}
 				/>
-				Acepto los &nbsp;<a href="#"> Términos y condiciones</a>
+				Acepto los &nbsp;<a href="#">Términos y condiciones</a>
 			</div>
 
 			<div>
