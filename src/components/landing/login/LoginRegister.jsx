@@ -7,7 +7,6 @@ function LoginRegister() {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 	const [passwordError, setPasswordError] = useState(null);
-	const [termsAccepted, setTermsAccepted] = useState(false);
 	const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
 	const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State to toggle confirm password visibility
 
@@ -34,12 +33,6 @@ function LoginRegister() {
 
 	const handleSubmitRegister = async (e) => {
 		e.preventDefault();
-
-		// Validate form
-		if (!termsAccepted) {
-			setError("Debe aceptar los términos y condiciones");
-			return;
-		}
 
 		if (!validatePasswords()) {
 			return;
@@ -83,27 +76,25 @@ function LoginRegister() {
 	};
 
 	return (
-		<form className="LoginRegister" onSubmit={handleSubmitRegister}>
-			<div>
+		<form className="LoginRegister compact-form" onSubmit={handleSubmitRegister}>
+			<div className="name-row">
 				<input
 					type="text"
 					name="firstName"
 					id="firstName"
-					placeholder="Ingrese su nombre"
-					className="login-form-input"
+					placeholder="Nombre"
+					className="login-form-input half-width"
 					ref={firstNameRef}
 					disabled={loading}
 					required
 					maxLength={24}
 				/>
-			</div>
-			<div>
 				<input
 					type="text"
 					name="lastName"
 					id="lastName"
-					placeholder="Ingrese su apellido"
-					className="login-form-input"
+					placeholder="Apellido"
+					className="login-form-input half-width"
 					ref={lastNameRef}
 					disabled={loading}
 					required
@@ -115,7 +106,7 @@ function LoginRegister() {
 					type="email"
 					name="regEmail"
 					id="regEmail"
-					placeholder="Ingrese su correo electrónico"
+					placeholder="Correo electrónico"
 					className="login-form-input"
 					ref={emailRef}
 					maxLength={64}
@@ -128,7 +119,7 @@ function LoginRegister() {
 					type={showPassword ? "text" : "password"}
 					name="regPassWord"
 					id="regPassWord"
-					placeholder="Ingrese su contraseña"
+					placeholder="Contraseña"
 					className="login-form-input"
 					ref={passwordRef}
 					maxLength={32}
@@ -148,7 +139,7 @@ function LoginRegister() {
 					type={showConfirmPassword ? "text" : "password"}
 					name="regRepPassWord"
 					id="regRepPassWord"
-					placeholder="Repita su contraseña"
+					placeholder="Repetir contraseña"
 					className="login-form-input"
 					ref={confirmPasswordRef}
 					maxLength={32}
@@ -174,18 +165,6 @@ function LoginRegister() {
 					<p className="login-error">{error}</p>
 				</div>
 			)}
-
-			<div>
-				<input
-					type="checkbox"
-					name="acceptTerms"
-					id="acceptTerms"
-					checked={termsAccepted}
-					onChange={() => setTermsAccepted(!termsAccepted)}
-					disabled={loading}
-				/>
-				Acepto los &nbsp;<a href="#">Términos y condiciones</a>
-			</div>
 
 			<div>
 				<button className="login-form-submit" type="submit" disabled={loading}>

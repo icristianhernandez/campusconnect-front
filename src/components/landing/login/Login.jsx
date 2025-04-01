@@ -1,6 +1,5 @@
 import "./Login.css";
 import LoginForm from "./LoginForm";
-import LoginForget from "./LoginForget";
 import LoginRegister from "./LoginRegister";
 import { useState } from "react";
 
@@ -10,8 +9,7 @@ function Login() {
 	let contenido;
 
 	if (logOperation == 0) contenido = <LoginForm />;
-	if (logOperation == 1) contenido = <LoginForget />;
-	if (logOperation == 2) contenido = <LoginRegister />;
+	if (logOperation == 1) contenido = <LoginRegister />;
 
 	return (
 		<div className="Login">
@@ -30,27 +28,8 @@ function Login() {
 				logOperation == 0 ? (
 					<div className="login-footer">
 						<p>
+							¿No tienes cuenta?{" "}
 							<a href="#" onClick={() => setLogOperation(1)}>
-								¿Haz olvidado tu contraseña?
-							</a>
-						</p>
-						<p>
-							¿No tienes cuenta?{" "}
-							<a href="#" onClick={() => setLogOperation(2)}>
-								Registrate
-							</a>
-						</p>
-					</div>
-				) : logOperation == 1 ? (
-					<div className="login-footer">
-						<p>
-							<a href="#" onClick={() => setLogOperation(0)}>
-								Inicia Sesión
-							</a>
-						</p>
-						<p>
-							¿No tienes cuenta?{" "}
-							<a href="#" onClick={() => setLogOperation(2)}>
 								Registrate
 							</a>
 						</p>
@@ -58,13 +37,8 @@ function Login() {
 				) : (
 					<div className="login-footer">
 						<p>
-							<a href="#" onClick={() => setLogOperation(1)}>
-								¿Haz olvidado tu contraseña?
-							</a>
-						</p>
-						<p>
 							<a href="#" onClick={() => setLogOperation(0)}>
-								Inicia Sesión
+							¿Ya tienes una cuenta? Inicia Sesión
 							</a>
 						</p>
 					</div>
