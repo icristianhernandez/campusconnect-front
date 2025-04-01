@@ -21,12 +21,12 @@ function AppContent() {
 						<>
 							<Header />
 							<Feed />
+							<AiChat />
 						</>
 					}
 				/>
 				<Route path="*" element={<ErrorPage />} />
 			</Routes>
-			<AiChat />
 		</div>
 	);
 }
