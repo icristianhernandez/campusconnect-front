@@ -156,6 +156,7 @@ function AiChat() {
       <div 
         ref={chatContainerRef}
         className={`ai-chat-container ${isOpen ? 'open' : ''} ${isFeedPage ? 'feed-page' : ''} ${isKeyboardOpen ? 'keyboard-open' : ''}`}
+        style={{ zIndex: 9999 }}
       >
         <div className="ai-chat-header">
           <h3>Asistente Virtual</h3>
