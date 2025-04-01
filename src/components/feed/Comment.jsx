@@ -410,9 +410,19 @@ function Comment({ comment, post, setPosts, posts }) {
 			className={`comment ${expanded ? "expanded" : ""} ${loading ? "loading" : ""}`}
 			ref={commentRef}
 		>
-			 {/* Updated user profile section with real user data */}
+			 {/* Updated user profile section with default profile picture */}
 			<div className="comment-user-profile">
-				<div className="comment-user-avatar-placeholder"></div>
+				<div className="comment-user-avatar">
+					<img 
+						src="/default_pfp.png" 
+						alt="Profile" 
+						className="profile-image"
+						onError={(e) => {
+							e.target.onerror = null;
+							e.target.src = "/default_pfp.png";
+						}}
+					/>
+				</div>
 				<div className="comment-user-info">
 					<p className="comment-username">
 						{comment.user_profile ? `${comment.user_profile.first_name} ${comment.user_profile.last_name}` : "Usuario desconocido"}

@@ -138,12 +138,22 @@ function Feed() {
 			<div className="feed-container">
 				<div className="left-column">
 					<button className="profile-button">
-						<div className="profile-placeholder"></div>
+						<div className="profile-image-container">
+							<img 
+								src="/default_pfp.png" 
+								alt="Profile" 
+								className="profile-image"
+								onError={(e) => {
+									e.target.onerror = null;
+									e.target.src = "/default_pfp.png";
+								}}
+							/>
+						</div>
 						<span>Perfil</span>
 					</button>
 					<button className="settings-button">
 						<img src="Configuración.svg" alt="Configuración" />
-						<span>Configuración</span>
+							<span>Cambiar foto de perfil</span>
 					</button>
 					{/* Contenido adicional para la columna izquierda */}
 				</div>

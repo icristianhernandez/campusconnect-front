@@ -307,10 +307,20 @@ function Post({ post, setPosts, posts }) {
 			<div className="post-top-section">
 				{/* Sección superior izquierda - contenido del post */}
 				<div className="post-content">
-					 {/* Updated user profile section with real data */}
+					 {/* Updated user profile section with default profile picture */}
 					<div className="post-user-profile">
-						<div className="post-user-avatar-placeholder"></div>
-						<div className="post-user-info-placeholder">
+						<div className="post-user-avatar">
+							<img 
+								src="/default_pfp.png" 
+								alt="Profile" 
+								className="profile-image"
+								onError={(e) => {
+									e.target.onerror = null;
+									e.target.src = "/default_pfp.png";
+								}}
+							/>
+						</div>
+						<div className="post-user-info">
 							<p>{post.user_profile ? `${post.user_profile.first_name} ${post.user_profile.last_name}` : "Usuario desconocido"}</p>
 							<span>{new Date(post.created_at).toLocaleString()}</span>
 						</div>
@@ -461,7 +471,7 @@ function Post({ post, setPosts, posts }) {
 							></textarea>
 							<div className="comment-actions-group">
 								<label className="new-comment-media-label">
-									📎
+									
 									<input
 										type="file"
 										accept="image/*,video/*"
