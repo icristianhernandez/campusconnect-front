@@ -87,14 +87,11 @@
   font-weight: 500;
 }
 
-.suggestions-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
+/* Updated styles to allow suggestion chip text to wrap */
 .suggestion-chip {
+  white-space: normal; /* Allow text to wrap */
+  word-break: break-word; /* Break long words if necessary */
+  text-align: left; 
   background-color: white;
   border: 1px solid #e0e0e0;
   border-radius: 18px;
@@ -104,7 +101,7 @@
   cursor: pointer;
   transition: background-color 0.2s, transform 0.2s;
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  white-space: nowrap;
+  margin-bottom: 6px; /* Add vertical margin between chips */
 }
 
 .suggestion-chip:hover {
@@ -580,7 +577,7 @@
   }
   
   .message-suggestions {
-    margin-top: 4px;
+    margin-top: 3px; 
   }
   
   .ai-message .suggestion-chip {
