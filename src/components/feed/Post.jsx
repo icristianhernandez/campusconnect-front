@@ -658,7 +658,12 @@ function Post({ post, setPosts, posts, isAdmin }) {
 							></textarea>
 							<div className="comment-actions-group">
 								<label className="new-comment-media-label">
-									
+									<img 
+										src="Inicio-color.png" 
+										alt="Adjuntar archivo"
+										width="30"
+										height="30"
+									/>
 									<input
 										type="file"
 										accept="image/*,video/*"
