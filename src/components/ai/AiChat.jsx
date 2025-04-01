@@ -9,6 +9,8 @@ function AiChat() {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
@@ -16,6 +18,41 @@ function AiChat() {
   
   // Determine if we're on the feed page (with header)
   const isFeedPage = location.pathname === '/feed';
+
+  // Check if device is mobile on mount
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Detect keyboard opening on mobile devices
+  useEffect(() => {
+    if (!isMobile) return;
+    
+    const detectKeyboard = () => {
+      // On most mobile devices, the keyboard reduces the viewport height
+      const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const windowHeight = window.innerHeight;
+      
+      // If viewport height is significantly smaller than window height, keyboard is likely open
+      const keyboardOpen = viewportHeight < windowHeight * 0.8;
+      setIsKeyboardOpen(keyboardOpen);
+    };
+    
+    // Use visualViewport API if available for better accuracy
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', detectKeyboard);
+      return () => window.visualViewport.removeEventListener('resize', detectKeyboard);
+    } else {
+      window.addEventListener('resize', detectKeyboard);
+      return () => window.removeEventListener('resize', detectKeyboard);
+    }
+  }, [isMobile]);
 
   useEffect(() => {
     scrollToBottom();
@@ -101,6 +138,10 @@ function AiChat() {
 
   const toggleChat = () => {
     setIsOpen(!isOpen);
+    // If closing chat on mobile with keyboard open, need to blur input
+    if (isOpen && isMobile && isKeyboardOpen && inputRef.current) {
+      inputRef.current.blur();
+    }
   };
 
   return (
@@ -114,7 +155,7 @@ function AiChat() {
       </button>
       <div 
         ref={chatContainerRef}
-        className={`ai-chat-container ${isOpen ? 'open' : ''} ${isFeedPage ? 'feed-page' : ''}`}
+        className={`ai-chat-container ${isOpen ? 'open' : ''} ${isFeedPage ? 'feed-page' : ''} ${isKeyboardOpen ? 'keyboard-open' : ''}`}
       >
         <div className="ai-chat-header">
           <h3>Asistente Virtual</h3>
@@ -154,6 +195,7 @@ function AiChat() {
             onChange={handleInputChange}
             placeholder="Escribe tu mensaje..."
             className="ai-chat-input"
+            onFocus={() => isMobile && scrollToBottom()}
           />
           <button 
             type="submit" 
