@@ -4,7 +4,7 @@ import "./Post.css";
 import Comment from "./Comment";
 import { supabase } from "../../utils/supabase";
 
-function Post({ post, setPosts, posts }) {
+function Post({ post, setPosts, posts, isAdmin }) {
 	const [newCommentContent, setNewCommentContent] = useState(""); // almacena el texto de un nuevo comentario
 	const [newCommentMedia, setNewCommentMedia] = useState(null); //archivo junto al comentario
 	const [newCommentMediaPreview, setNewCommentMediaPreview] = useState(null); // para la vista previa del mulmedia
@@ -408,6 +408,7 @@ function Post({ post, setPosts, posts }) {
 										post={post}
 										setPosts={setPosts}
 										posts={posts}
+										isAdmin={isAdmin}
 									/>
 									{/* Add divider after each comment except the last one */}
 									{index < post.comments.length - 1 && (

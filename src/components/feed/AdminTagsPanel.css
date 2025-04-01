@@ -1,0 +1,133 @@
+.admin-tags-panel {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.admin-tags-panel h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.create-tag-form {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.new-tag-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.create-tag-button {
+  padding: 10px 20px;
+  background-color: #26a34c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.create-tag-button:hover {
+  background-color: #218c42;
+}
+
+.create-tag-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.tags-error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border-left: 3px solid #d32f2f;
+}
+
+.tags-success-message {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  border-left: 3px solid #2e7d32;
+}
+
+.tags-list {
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.tags-list h3 {
+  margin-top: 0;
+  color: #555;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+
+.tags-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tag-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tag-name {
+  font-weight: 500;
+}
+
+.delete-tag-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s;
+}
+
+.delete-tag-button:hover {
+  background-color: #d32f2f;
+}
+
+.delete-tag-button.disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+.loading-message,
+.no-tags-message {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 10px;
+}

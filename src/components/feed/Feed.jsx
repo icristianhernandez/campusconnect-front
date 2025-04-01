@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from "react"; // Impor
 import "./Feed.css"; // Importa estilos CSS del archivo feed.css
 import Post from "./Post"; //componente para post individual
 import NewPostForm from "./NewPostForm"; //componente para formulario de nuevo post
+import AdminTagsPanel from "./AdminTagsPanel"; // Nuevo componente para administrar tags
 import { MyContext } from "../../context/context"; // Importa el contexto global para manejar el estado de la app
 import { supabase } from "../../utils/supabase"; //supabase para interactuar con la db
 
@@ -12,6 +13,9 @@ function Feed() {
 	const [showNewPostForm, setShowNewPostForm] = useState(false); // Estado para controlar la visibilidad del formulario
 	const [userProfiles, setUserProfiles] = useState({}); // State to store user profiles
 	const [currentUser, setCurrentUser] = useState(null); // State to store the current user
+	const [isAdmin, setIsAdmin] = useState(false); // State to track if current user is admin
+	const [adminLevel, setAdminLevel] = useState(0); // State to store admin level
+	const [showTagsPanel, setShowTagsPanel] = useState(false); // State to control visibility of tags panel
 
 	const feedTopRef = useRef(null);
 
@@ -37,6 +41,18 @@ function Feed() {
 					if (profileError) throw profileError;
 					
 					setCurrentUser(userProfile);
+					
+					// Check if user is an admin
+					const { data: adminData, error: adminError } = await supabase
+						.from("admin_users")
+						.select("*")
+						.eq("user_id", user.id)
+						.single();
+						
+					if (!adminError && adminData) {
+						setIsAdmin(true);
+						setAdminLevel(adminData.admin_level);
+					}
 				}
 			} catch (error) {
 				console.error("Error fetching current user:", error.message);
@@ -160,6 +176,10 @@ function Feed() {
 		}
 	};
 
+	const toggleTagsPanel = () => {
+		setShowTagsPanel(!showTagsPanel);
+	};
+
 	// y esta parte es del renderizado del componente
 	return (
 		<div className="Feed">
@@ -177,25 +197,35 @@ function Feed() {
 								}}
 							/>
 						</div>
-						<span>{currentUser ? `${currentUser.first_name} ${currentUser.last_name}` : "Cargando..."}</span>
+						<div className="profile-info">
+							<span className="profile-name">{currentUser ? `${currentUser.first_name} ${currentUser.last_name}` : "Cargando..."}</span>
+							{isAdmin && <span className="admin-badge">Admin</span>}
+						</div>
 					</button>
 					<button className="settings-button">
 						<img src="Configuración.svg" alt="Configuración" />
 							<span>Cambiar foto de perfil</span>
 					</button>
+					{isAdmin && (
+						<button className="settings-button admin-button" onClick={toggleTagsPanel}>
+							<img src="Configuración.svg" alt="Administrar Tags" />
+							<span>Administrar Tags</span>
+						</button>
+					)}
 					{/* Contenido adicional para la columna izquierda */}
 				</div>
 				<div className="middle-column">
 					{/* Add ref to the top */}
 					<div ref={feedTopRef}></div>
+					{showTagsPanel && isAdmin && <AdminTagsPanel />}
 					<button
 						className="create-post-button"
 						onClick={handleCreateButtonClick}
 					>
 						Crear
 					</button>
-					{showNewPostForm && <NewPostForm />}{" "}
-					{/* Mostrar formulario solo si está habilitado */}
+					{showNewPostForm && <NewPostForm adminStatus={isAdmin} adminLevel={adminLevel} />}{" "}
+					{/* Pasar estado de admin */}
 					{errorMessage && <p className="error-message">{errorMessage}</p>}{" "}
 					{/* Muestra errores */}
 					<div className="posts-container">
@@ -206,6 +236,7 @@ function Feed() {
 									post={post}
 									posts={posts}
 									setPosts={setPosts}
+									isAdmin={isAdmin}
 								/>
 							))}
 					</div>

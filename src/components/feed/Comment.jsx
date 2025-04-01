@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import "./Comment.css";
 import { supabase } from "../../utils/supabase";
 
-function Comment({ comment, post, setPosts, posts }) {
+function Comment({ comment, post, setPosts, posts, isAdmin }) {
 	// Core state management
 	const [expanded, setExpanded] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
@@ -605,6 +605,7 @@ function Comment({ comment, post, setPosts, posts }) {
 							post={post}
 							setPosts={setPosts}
 							posts={posts}
+							isAdmin={isAdmin}
 						/>
 					))}
 				</div>
