@@ -2,10 +2,86 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './AiChat.css';
 
+// Define topics and responses in a structured way
+const aiResponses = {
+  greeting: {
+    patterns: ['hola', 'hi', 'buenos dias', 'saludos', 'qué tal'],
+    response: "¡Hola! ¿En qué puedo ayudarte?",
+    followUpSuggestions: ['¿Cómo publicar?', 'Información de cursos', 'Anuncios importantes']
+  },
+  thanks: {
+    patterns: ['gracias', 'agradecido', 'muchas gracias', 'thank you'],
+    response: "¡De nada! Estoy aquí para ayudarte.",
+    followUpSuggestions: ['Necesito más ayuda', '¿Qué puedes hacer?', 'Información de cursos']
+  },
+  courses: {
+    patterns: ['clase', 'curso', 'información de cursos', 'apuntes', 'materias'],
+    response: "Puedes encontrar información sobre tus cursos en la sección de 'Apuntes'. ¿Necesitas ayuda para acceder?",
+    followUpSuggestions: ['¿Cómo accedo a mis apuntes?', '¿Dónde veo mis cursos?', 'Buscar cursos']
+  },
+  password: {
+    patterns: ['contraseña', 'password', 'olvidé', 'recuperar cuenta', 'no puedo entrar'],
+    response: "Para restablecer tu contraseña, ve a la página de inicio de sesión y haz clic en '¿Has olvidado tu contraseña?'",
+    followUpSuggestions: ['Problemas con el login', '¿Cómo cambiar contraseña?', 'Contactar soporte']
+  },
+  posting: {
+    patterns: ['publicar', 'post', 'cómo publicar', 'crear publicación', 'compartir'],
+    response: "Para crear una nueva publicación, haz clic en el botón 'Crear' que está en la parte superior del feed.",
+    followUpSuggestions: ['¿Qué tipo de contenido puedo publicar?', '¿Cómo añadir imágenes?', 'Política de publicaciones']
+  },
+  commenting: {
+    patterns: ['comentar', 'comentarios', 'comentar en posts', 'responder'],
+    response: "Para comentar una publicación, escribe tu comentario en el cuadro de texto que aparece en la parte inferior de cada post y presiona enter.",
+    followUpSuggestions: ['¿Cómo eliminar un comentario?', 'Notificaciones de comentarios', 'Mencionar usuarios']
+  },
+  university: {
+    patterns: ['usm', 'universidad', 'santa maría', 'utem', 'campus connect'],
+    response: "Campus Connect es la plataforma social oficial de la Universidad Santa María. Aquí puedes interactuar con otros estudiantes y profesores.",
+    followUpSuggestions: ['Historia de la USM', 'Contacto de la universidad', 'Servicios estudiantiles']
+  },
+  announcements: {
+    patterns: ['anuncio', 'qué son los anuncios', 'comunicados', 'noticias'],
+    response: "Los anuncios importantes de la universidad se publican en la sección 'Anuncios'. Puedes acceder haciendo clic en el botón de anuncios en la barra superior.",
+    followUpSuggestions: ['Anuncios recientes', '¿Quién puede crear anuncios?', 'Notificaciones de anuncios']
+  },
+  profile: {
+    patterns: ['perfil', 'mi perfil', 'configuración de cuenta', 'mis datos'],
+    response: "Puedes acceder a tu perfil desde el botón 'Perfil' en la columna izquierda del feed.",
+    followUpSuggestions: ['Editar mi perfil', 'Cambiar foto de perfil', 'Privacidad del perfil']
+  },
+  goodbye: {
+    patterns: ['bye', 'adios', 'chao', 'hasta luego', 'nos vemos'],
+    response: "¡Hasta pronto! Si necesitas más ayuda, no dudes en volver a contactarme.",
+    followUpSuggestions: ['Iniciar nueva conversación', 'Volver al inicio', 'Valorar asistente']
+  },
+  help: {
+    patterns: ['ayuda', 'puedes hacer', 'qué haces', 'funciones', 'capacidades'],
+    response: "Puedo ayudarte con información sobre:\n- Cómo publicar contenido\n- Información sobre anuncios\n- Acceso a cursos y apuntes\n- Cómo acceder a tu perfil\n- Cómo comentar en publicaciones\n- Información general sobre Campus Connect",
+    followUpSuggestions: ['¿Cómo publicar?', 'Información de cursos', 'Mi perfil', 'Anuncios importantes']
+  }
+};
+
+// Default response when no match is found
+const defaultResponse = {
+  response: "No estoy seguro de cómo ayudarte con eso. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre clases, publicaciones, comentarios, perfil y funciones básicas de Campus Connect.",
+  followUpSuggestions: ['¿Qué puedes hacer?', '¿Cómo publicar?', 'Información de cursos', 'Anuncios importantes']
+};
+
+// Generate all available topic suggestions
+const allTopicSuggestions = Object.keys(aiResponses).map(key => {
+  // Take the first follow-up suggestion from each topic as a representative
+  return aiResponses[key].followUpSuggestions[0];
+}).filter(suggestion => suggestion !== undefined);
+
 function AiChat() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { id: 1, text: "¡Hola! Soy el asistente virtual de Campus Connect. ¿En qué puedo ayudarte hoy?", sender: "ai" }
+    { 
+      id: 1, 
+      text: "¡Hola! Soy el asistente virtual de Campus Connect. ¿En qué puedo ayudarte hoy?", 
+      sender: "ai",
+      suggestions: allTopicSuggestions.slice(0, 5) // Show only first 5 suggestions initially
+    }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -17,22 +93,18 @@ function AiChat() {
   const chatContainerRef = useRef(null);
   const location = useLocation();
   
-  // Suggestion chips for common questions
-  const suggestionChips = [
-    { id: 1, text: "¿Cómo publicar?" },
-    { id: 2, text: "¿Qué son los anuncios?" },
-    { id: 3, text: "Información de cursos" },
-    { id: 4, text: "Mi perfil" },
-    { id: 5, text: "Comentar en posts" }
-  ];
-  
   // Determine if we're on the feed page (with header)
   const isFeedPage = location.pathname === '/feed';
 
   // Function to clear chat history
   const clearChatHistory = () => {
     setMessages([
-      { id: 1, text: "Conversación reiniciada. ¡Hola! Soy el asistente virtual de Campus Connect. ¿En qué puedo ayudarte hoy?", sender: "ai" }
+      { 
+        id: 1, 
+        text: "Conversación reiniciada. ¡Hola! Soy el asistente virtual de Campus Connect. ¿En qué puedo ayudarte hoy?", 
+        sender: "ai",
+        suggestions: allTopicSuggestions.slice(0, 5) // Show only first 5 suggestions after reset
+      }
     ]);
   };
 
@@ -125,40 +197,36 @@ function AiChat() {
     generateAIResponse(suggestion);
   };
 
-  const generateAIResponse = (userMessage) => {
-    const lowerMsg = userMessage.toLowerCase();
-    setIsTyping(true);
-    setTimeout(() => {
-      let response;
-      if (lowerMsg.includes('hola') || lowerMsg.includes('hi') || lowerMsg.includes('buenos dias')) {
-        response = "¡Hola! ¿En qué puedo ayudarte?";
-      } else if (lowerMsg.includes('gracias')) {
-        response = "¡De nada! Estoy aquí para ayudarte.";
-      } else if (lowerMsg.includes('clase') || lowerMsg.includes('curso') || lowerMsg.includes('información de cursos')) {
-        response = "Puedes encontrar información sobre tus cursos en la sección de 'Apuntes'. ¿Necesitas ayuda para acceder?";
-      } else if (lowerMsg.includes('contraseña') || lowerMsg.includes('password') || lowerMsg.includes('olvidé')) {
-        response = "Para restablecer tu contraseña, ve a la página de inicio de sesión y haz clic en '¿Has olvidado tu contraseña?'";
-      } else if (lowerMsg.includes('publicar') || lowerMsg.includes('post') || lowerMsg.includes('cómo publicar')) {
-        response = "Para crear una nueva publicación, haz clic en el botón 'Crear' que está en la parte superior del feed.";
-      } else if (lowerMsg.includes('comentar') || lowerMsg.includes('comentarios') || lowerMsg.includes('comentar en posts')) {
-        response = "Para comentar una publicación, escribe tu comentario en el cuadro de texto que aparece en la parte inferior de cada post y presiona enter.";
-      } else if (lowerMsg.includes('usm') || lowerMsg.includes('universidad')) {
-        response = "Campus Connect es la plataforma social oficial de la Universidad Santa María. Aquí puedes interactuar con otros estudiantes y profesores.";
-      } else if (lowerMsg.includes('anuncio') || lowerMsg.includes('qué son los anuncios')) {
-        response = "Los anuncios importantes de la universidad se publican en la sección 'Anuncios'. Puedes acceder haciendo clic en el botón de anuncios en la barra superior.";
-      } else if (lowerMsg.includes('perfil') || lowerMsg.includes('mi perfil')) {
-        response = "Puedes acceder a tu perfil desde el botón 'Perfil' en la columna izquierda del feed.";
-      } else if (lowerMsg.includes('bye') || lowerMsg.includes('adios') || lowerMsg.includes('chao')) {
-        response = "¡Hasta pronto! Si necesitas más ayuda, no dudes en volver a contactarme.";
-      } else if (lowerMsg.includes('ayuda') || lowerMsg.includes('puedes hacer')) {
-        response = "Puedo ayudarte con información sobre:\n- Cómo publicar contenido\n- Información sobre anuncios\n- Acceso a cursos y apuntes\n- Cómo acceder a tu perfil\n- Cómo comentar en publicaciones\n- Información general sobre Campus Connect";
-      } else {
-        response = "No estoy seguro de cómo ayudarte con eso. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre clases, publicaciones, comentarios, perfil y funciones básicas de Campus Connect.";
+  const findMatchingTopic = (userInput) => {
+    const lowerInput = userInput.toLowerCase();
+    
+    // Check each topic's patterns for a match
+    for (const [topic, data] of Object.entries(aiResponses)) {
+      if (data.patterns.some(pattern => lowerInput.includes(pattern))) {
+        return { topic, ...data };
       }
-      setMessages(prev => [
-        ...prev, 
-        { id: prev.length + 2, text: response, sender: "ai" }
-      ]);
+    }
+    
+    // No match found, return default
+    return defaultResponse;
+  };
+
+  const generateAIResponse = (userMessage) => {
+    setIsTyping(true);
+    
+    setTimeout(() => {
+      // Find the matching topic or get default response
+      const matchedResponse = findMatchingTopic(userMessage);
+      
+      // Create the AI message with text and follow-up suggestions
+      const newAiMessage = {
+        id: messages.length + 2,
+        text: matchedResponse.response,
+        sender: "ai",
+        suggestions: matchedResponse.followUpSuggestions || defaultResponse.followUpSuggestions
+      };
+      
+      setMessages(prev => [...prev, newAiMessage]);
       setIsTyping(false);
     }, 1500);
   };
@@ -240,13 +308,13 @@ function AiChat() {
           {messages.length > 0 && messages[messages.length - 1].sender === 'ai' && (
             <div className="message-suggestions">
               <div className="suggestions-container">
-                {suggestionChips.map(chip => (
+                {messages[messages.length - 1].suggestions?.map((suggestion, index) => (
                   <button 
-                    key={chip.id} 
+                    key={index} 
                     className="suggestion-chip"
-                    onClick={() => handleSuggestionClick(chip.text)}
+                    onClick={() => handleSuggestionClick(suggestion)}
                   >
-                    {chip.text}
+                    {suggestion}
                   </button>
                 ))}
               </div>
