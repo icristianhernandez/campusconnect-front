@@ -18,12 +18,58 @@
   height: 450px;
   margin-left: auto; /* Push the logo further to the right */
   margin-right: -150px; /* Add some space from the right edge */
+  transition: all 0.3s ease; /* Add smooth transition for repositioning */
 }
 
 .landing-logo-completo {
   width: 100%;
+  transition: width 0.3s ease; /* Smooth transition for logo size changes */
 }
 
+/* Punto de quiebre para pantallas grandes */
+@media (max-width: 1200px) {
+  .logo-container {
+    width: 400px;
+    margin-right: -100px; /* Reducir el margen negativo */
+  }
+}
+
+/* Punto de quiebre para pantallas medianas-grandes */
+@media (max-width: 1024px) {
+  .logo-container {
+    width: 350px;
+    margin-right: -50px; /* Reducir aún más el margen negativo */
+  }
+
+  .Landing {
+    gap: 15px; /* Reducir el espacio entre logo y formulario */
+  }
+}
+
+/* Punto de quiebre para pantallas medianas */
+@media (max-width: 992px) {
+  .logo-container {
+    width: 300px;
+    margin-right: 0; /* Eliminar el margen negativo */
+    margin-left: 0; /* Centrar el logo */
+  }
+
+  .Landing {
+    gap: 10px;
+    justify-content: space-around; /* Distribuir el espacio disponible */
+  }
+}
+
+/* Punto de quiebre para pantallas medianas-pequeñas */
+@media (max-width: 850px) {
+  .logo-container {
+    width: 250px;
+    transform: translateX(-20px); /* Mover ligeramente a la izquierda */
+    opacity: 0.9; /* Reducir ligeramente la opacidad */
+  }
+}
+
+/* Punto de quiebre para pantallas pequeñas (tablets) */
 @media (max-width: 768px) {
   .Landing {
     flex-direction: column;
