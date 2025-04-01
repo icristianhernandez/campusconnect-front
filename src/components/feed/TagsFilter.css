@@ -103,3 +103,71 @@
   margin: 8px 0;
   width: 100%;
 }
+
+/* Responsive design for TagsFilter */
+@media screen and (max-width: 992px) {
+  .tags-filter {
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: white;
+  }
+
+  .tags-filter h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .tags-list {
+    max-height: 250px;
+  }
+
+  .filter-tag-option {
+    padding: 8px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .tags-filter {
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: none;
+    background-color: transparent;
+  }
+
+  .tags-filter h3 {
+    display: none; /* Hide header as it's already in the drawer header */
+  }
+
+  .tags-list {
+    max-height: calc(100vh - 150px);
+  }
+
+  .filter-tag-option {
+    background-color: white;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .clear-filters-button {
+    margin-top: 15px;
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+  }
+
+  .clear-filters-button:hover {
+    background-color: #d32f2f;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .filter-tag-name {
+    font-size: 14px;
+  }
+
+  .filter-tag-option {
+    padding: 8px;
+  }
+}

@@ -19,6 +19,45 @@ function Post({ post, setPosts, posts, isAdmin }) {
 	const modalRef = useRef(null);
 	const [postTags, setPostTags] = useState(post.tags || []);
 
+	// Add state for mobile view
+	const [showMobileComments, setShowMobileComments] = useState(false);
+	const [isMobile, setIsMobile] = useState(false);
+
+	// Check for mobile view on mount and window resize
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth <= 768);
+		};
+
+		checkMobile();
+		window.addEventListener('resize', checkMobile);
+
+		return () => window.removeEventListener('resize', checkMobile);
+	}, []);
+
+	// Toggle comments visibility on mobile
+	const toggleMobileComments = () => {
+		setShowMobileComments(!showMobileComments);
+	};
+
+	// Close mobile comments
+	const closeMobileComments = () => {
+		setShowMobileComments(false);
+	};
+
+	// Update body class to prevent scrolling when comments are open
+	useEffect(() => {
+		if (isMobile && showMobileComments) {
+			document.body.classList.add('comments-open');
+		} else {
+			document.body.classList.remove('comments-open');
+		}
+
+		return () => {
+			document.body.classList.remove('comments-open');
+		};
+	}, [isMobile, showMobileComments]);
+
 	useEffect(() => {
 		const fetchUser = async () => {
 			const {
@@ -376,7 +415,7 @@ function Post({ post, setPosts, posts, isAdmin }) {
 
 	// a partir de aca se renderiza el componente con la nueva estructura de 4 secciones
 	return (
-		<div className="post">
+		<div className={`post ${showMobileComments ? 'expanded' : ''}`}>
 			<div className="post-top-section">
 				{/* Sección superior izquierda - contenido del post */}
 				<div className="post-content">
@@ -428,6 +467,21 @@ function Post({ post, setPosts, posts, isAdmin }) {
 						{/* Like button moved to bottom section */}
 					</div>
 
+					 {/* Mobile post tags display */}
+					 {isMobile && (
+						<div className="mobile-post-tags">
+							{postTags && postTags.length > 0 ? (
+								postTags.map((tag, index) => (
+									<span key={index} className="post-tag">
+										{tag.tag_name}
+									</span>
+								))
+							) : (
+								<span className="post-tag general-tag">General</span>
+							)}
+						</div>
+					)}
+
 					{/* New post options UI that matches the comment options style */}
 					{userId === post.user_id && (
 						<div className="post-options-container">
@@ -468,9 +522,18 @@ function Post({ post, setPosts, posts, isAdmin }) {
 				</div>
 
 				{/* Sección superior derecha - lista de comentarios */}
-				<div className="post-comments-list">
+				<div className={`post-comments-list ${showMobileComments ? 'visible' : ''}`}>
 					<div className="comments-header">
 						<h3>Comentarios</h3>
+						{isMobile && (
+							<button 
+								className="close-comments-button"
+								onClick={closeMobileComments}
+								aria-label="Cerrar comentarios"
+							>
+								×
+							</button>
+						)}
 					</div>
 					<div className="comments-container">
 						{post.comments && post.comments.length > 0 ? (
@@ -502,45 +565,80 @@ function Post({ post, setPosts, posts, isAdmin }) {
 				{/* Sección inferior izquierda - para funciones futuras */}
 				<div className="post-functions">
 					<div className="function-content">
-						 {/* Rearranged content to place like button and tags in the same row */}
-						 <div className="like-tags-container">
-							<button
-								className={`like-button ${Array.isArray(likes) && likes.some((like) => like.user_id === userId) ? "liked" : ""}`}
-								onClick={handleLike}
-							>
-								<img
-									src={
-										Array.isArray(likes) &&
-										likes.some((like) => like.user_id === userId)
-											? "Corazón con relleno (1).svg"
-											: "Corazón con contorno.svg"
-									}
-									alt="Like Icon"
-									className="like-icon"
-								/>
-								<span className="likes-count">{likes.length}</span>
-							</button>
+						 {/* Desktop view: like button and tags in the same row */}
+						 {!isMobile && (
+							<div className="like-tags-container">
+								<button
+									className={`like-button ${Array.isArray(likes) && likes.some((like) => like.user_id === userId) ? "liked" : ""}`}
+									onClick={handleLike}
+								>
+									<img
+										src={
+											Array.isArray(likes) &&
+											likes.some((like) => like.user_id === userId)
+												? "Corazón con relleno (1).svg"
+												: "Corazón con contorno.svg"
+										}
+										alt="Like Icon"
+										className="like-icon"
+									/>
+									<span className="likes-count">{likes.length}</span>
+								</button>
 
-							{/* Display post tags - now in same row as the like button */}
-							<div className="post-tags-container">
-								{postTags && postTags.length > 0 ? (
-									postTags.map((tag, index) => (
-										<span key={index} className="post-tag">
-											{tag.tag_name}
-										</span>
-									))
-								) : (
-									<span className="post-tag general-tag">General</span>
-								)}
+								{/* Display post tags - now in same row as the like button */}
+								<div className="post-tags-container">
+									{postTags && postTags.length > 0 ? (
+										postTags.map((tag, index) => (
+											<span key={index} className="post-tag">
+												{tag.tag_name}
+											</span>
+										))
+									) : (
+										<span className="post-tag general-tag">General</span>
+									)}
+								</div>
 							</div>
-						</div>
+						 )}
 
-						{/* Removed the placeholder text for additional functionality */}
+						 {/* Mobile view: action buttons */}
+						 {isMobile && (
+							<div className="mobile-post-actions">
+								<button 
+									className={`mobile-action-button ${Array.isArray(likes) && likes.some((like) => like.user_id === userId) ? "liked" : ""}`}
+									onClick={handleLike}
+								>
+									<img
+										src={
+											Array.isArray(likes) &&
+											likes.some((like) => like.user_id === userId)
+												? "Corazón con relleno (1).svg"
+												: "Corazón con contorno.svg"
+										}
+										alt="Like"
+									/>
+									<span>{likes.length}</span>
+								</button>
+								<button 
+									className="mobile-action-button comments"
+									onClick={toggleMobileComments}
+								>
+									<img 
+										src="comment-icon.svg" 
+										alt="Comments"
+										onError={(e) => {
+											e.target.onerror = null;
+											e.target.src = "https://img.icons8.com/material-outlined/24/000000/comments.png";
+										}}
+									/>
+									<span>{post.comments ? post.comments.length : 0}</span>
+								</button>
+							</div>
+						 )}
 					</div>
 				</div>
 
 				{/* Sección inferior derecha - formulario de comentarios */}
-				<div className="post-comment-form">
+				<div className={`post-comment-form ${showMobileComments ? 'visible' : ''}`}>
 					<form onSubmit={handleCommentSubmit} className="new-comment-form">
 						<div className="comment-input-container">
 							<textarea

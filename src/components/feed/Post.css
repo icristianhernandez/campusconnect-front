@@ -731,3 +731,199 @@
   display: flex;
   align-items: center;
 }
+
+/* Update responsive design - Desktop First Approach */
+
+/* 1. First breakpoint: Minor adjustments */
+@media screen and (max-width: 1200px) {
+  .post-options-dropdown {
+    width: 120px;
+  }
+
+  .post-option-item {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+}
+
+/* 2. Second breakpoint: Centered posts */
+@media screen and (max-width: 992px) {
+  .post {
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* 3. Third breakpoint: Mobile layout */
+@media screen and (max-width: 768px) {
+  .post {
+    border-radius: 8px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+  }
+
+  /* New simplified post layout for mobile */
+  .post-top-section {
+    flex-direction: column;
+    min-height: unset;
+    border-bottom: none;
+  }
+
+  .post-content {
+    width: 100%;
+    flex: 1 0 100%;
+    border-right: none;
+    padding: 15px;
+  }
+
+  .post-comments-list {
+    display: none;
+    width: 100%;
+    flex: none;
+    position: fixed;
+    bottom: 60px; /* Position above mobile navbar */
+    left: 0;
+    right: 0;
+    height: 500px; /* Increased from 300px to 450px for more visible comments */
+    max-height: 75vh; /* Increased from 60vh to 75vh to use more of the screen */
+    background-color: white;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    z-index: 100;
+    padding: 15px;
+    transition: transform 0.3s ease;
+    transform: translateY(100%);
+  }
+
+  .post-comments-list.visible {
+    display: flex;
+    transform: translateY(0);
+  }
+
+  .post-bottom-section {
+    min-height: unset;
+    flex-direction: column;
+  }
+
+  .post-functions {
+    width: 100%;
+    flex: none;
+    border-right: none;
+    padding: 0 15px 10px 15px;
+    background-color: transparent;
+  }
+
+  .post-comment-form {
+    display: none;
+    width: 100%;
+    flex: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 15px;
+    background-color: white;
+    border-top: 1px solid #ddd;
+    z-index: 101;
+  }
+
+  .post-comment-form.visible {
+    display: block;
+  }
+
+  /* Mobile post actions bar */
+  .mobile-post-actions {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+  }
+
+  .mobile-action-button {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: #555;
+    cursor: pointer;
+    padding: 5px 10px;
+  }
+
+  .mobile-action-button img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobile-action-button.liked {
+    color: #26a34c;
+  }
+
+  .mobile-action-button.comments span {
+    margin-left: 5px;
+  }
+
+  /* Comments header with close button */
+  .comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+  }
+
+  .close-comments-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+  }
+
+  /* Hide the old post-tags-container temporarily and show a mobile version */
+  .like-tags-container .post-tags-container {
+    display: none;
+  }
+
+  .mobile-post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+  }
+
+  /* Make all posts in collapsed state at first */
+  .post {
+    height: auto;
+    transition: height 0.3s ease;
+  }
+
+  .post.expanded {
+    margin-bottom: 300px;
+  }
+}
+
+/* Extra small devices */
+@media screen and (max-width: 480px) {
+  .post-content {
+    padding: 12px;
+  }
+
+  .post-user-profile {
+    padding: 5px 0 15px 0;
+  }
+
+  .post-text {
+    font-size: 14px;
+  }
+
+  .post-comments-list {
+    height: 400px; /* Also adjusted for very small screens */
+  }
+
+  .mobile-action-button {
+    padding: 5px;
+  }
+}

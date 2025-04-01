@@ -30,187 +30,49 @@
   height: 120px; /* Keep the existing logo size */
 }
 
-/* Updated Apuntes button styling with circular design */
-.apuntes-button {
-  position: absolute;
-  left: calc(50% - 180px); /* Increased distance from 150px to 180px */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 60px;
-  height: 60px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.apuntes-button img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
-}
-
-.apuntes-button .apuntes-tooltip {
-  position: absolute;
-  bottom: -40px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #333;
-  background-color: white;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  pointer-events: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  white-space: nowrap;
-}
-
-/* Add a small triangle/arrow pointing up to the tooltip */
-.apuntes-button .apuntes-tooltip::before {
-  content: "";
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 6px solid white;
-  z-index: 1;
-}
-
-/* Add a border for the triangle */
-.apuntes-button .apuntes-tooltip::after {
-  content: "";
-  position: absolute;
-  top: -7px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 7px solid #ccc;
-  z-index: 0;
-}
-
-.apuntes-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  background-color: #e8e8e8;
-}
-
-.apuntes-button:hover .apuntes-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Anuncios button styling - similar to apuntes button but on the right side */
-.anuncios-button {
-  position: absolute;
-  right: calc(50% - 180px); /* Mirror of the apuntes button position */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #f5f5f5;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 0;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 60px;
-  height: 60px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.anuncios-button img {
-  width: 38px;
-  height: 38px;
-  object-fit: contain;
-}
-
-.anuncios-button .anuncios-tooltip {
-  position: absolute;
-  bottom: -40px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #333;
-  background-color: white;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  pointer-events: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  white-space: nowrap;
-}
-
-/* Add a small triangle/arrow pointing up to the tooltip */
-.anuncios-button .anuncios-tooltip::before {
-  content: "";
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 6px solid white;
-  z-index: 1;
-}
-
-/* Add a border for the triangle */
-.anuncios-button .anuncios-tooltip::after {
-  content: "";
-  position: absolute;
-  top: -7px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 7px solid #ccc;
-  z-index: 0;
-}
-
-.anuncios-button:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  background-color: #e8e8e8;
-}
-
-.anuncios-button:hover .anuncios-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
+/* Se eliminaron los estilos relacionados con el botón de Apuntes */
 
 /* Add responsive adjustments for small screens */
+@media (max-width: 1200px) {
+  .header-logo {
+    position: absolute;
+    left: 20px; /* Posicionado a la izquierda en lugar de centrado */
+    transform: none; /* Eliminar la transformación centrada */
+  }
+
+  .header-logo img {
+    height: 100px; /* Slightly reduce logo size on medium screens */
+  }
+}
+
+@media (max-width: 992px) {
+  .Header {
+    padding: 10px 15px;
+    height: 80px;
+  }
+
+  .header-logo img {
+    height: 80px; /* Further reduce logo size */
+  }
+}
+
 @media (max-width: 768px) {
   .Header {
-    padding: 10px;
+    padding: 5px 10px;
+    height: 70px;
   }
 
-  /* Se eliminaron los estilos responsive relacionados con la barra de búsqueda */
+  .header-logo img {
+    height: 60px; /* Much smaller logo on mobile */
+  }
+}
 
-  .apuntes-button {
-    left: calc(
-      50% - 140px
-    ); /* Adjust position for smaller screens, increased from 120px */
+@media (max-width: 480px) {
+  .Header {
+    height: 60px;
   }
 
-  .anuncios-button {
-    right: calc(50% - 140px); /* Adjust position for smaller screens */
+  .header-logo img {
+    height: 50px; /* Smallest logo size for very small devices */
   }
 }

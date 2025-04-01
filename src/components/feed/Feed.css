@@ -276,37 +276,30 @@
 }
 
 .create-post-button {
-  position: fixed; /* Fija el botón en la parte superior */
-  top: 80px; /* Move the button further down */
+  position: fixed; /* Mantener el botón fijado */
+  top: 80px; /* Distancia desde la parte superior */
   left: 50%;
   transform: translateX(-50%);
-  padding: 8px 150px; /* Further increase horizontal padding */
+  padding: 8px 150px;
   border: none;
-  border-radius: 0 0 50px 50px; /* Bordes redondeados en la parte inferior */
-  background-color: #26a34c; /* Updated green color */
+  border-radius: 0 0 50px 50px;
+  background-color: #26a34c;
   color: white;
-  font-family: "Arial Black", Arial, sans-serif; /* Use a font with thicker weights */
-  font-weight: bold; /* Ensure bold styling */
-  text-transform: uppercase; /* Convert text to uppercase */
-  font-size: 20px; /* Slightly increase font size */
-  font-weight: 900; /* Make the font bolder */
-  text-transform: uppercase; /* Convert text to uppercase */
+  font-family: "Arial Black", Arial, sans-serif;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  z-index: 999; /* Asegura que esté por encima de otros elementos */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
+  z-index: 999;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-align: center;
-}
-
-.create-post-button:hover {
-  background-color: #26a34c; /* Updated green color */
-  transform: translateX(-50%) scale(1.05); /* Aumentar ligeramente al pasar el cursor */
-}
-
-.create-post-button:active {
-  transform: translateX(-50%) scale(0.95); /* Reducir ligeramente al hacer clic */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ajustar sombra al hacer clic */
+  box-sizing: border-box;
+  max-width: 90%;
+  width: auto;
 }
 
 /* Update settings button styles to be consistent */
@@ -323,6 +316,7 @@
   margin-left: -20px;
   width: 200px; /* Increased from 160px to accommodate longer text */
   height: 60px; /* Set fixed height */
+  margin-bottom: 15px; /* Añadir margen inferior para separarlo del botón de logout */
 }
 
 .settings-button img {
@@ -528,8 +522,8 @@
 /* Estilos para el botón de logout */
 .logout-container {
   position: absolute;
-  bottom: 20px;
-  left: 40px; /* Changed from 20px to 50px to move it more to the right */
+  bottom: 40px; /* Aumentado desde 20px para bajar más el botón de logout */
+  left: 30px; /* Changed from 20px to 50px to move it more to the right */
   margin-top: auto;
 }
 
@@ -576,4 +570,336 @@
 .no-filtered-posts p {
   margin-bottom: 15px;
   color: #666;
+}
+
+/* Responsive Design - Desktop First Approach */
+
+/* 1. First breakpoint: Left column becomes a sidebar with only icons */
+@media screen and (max-width: 1200px) {
+  .left-column {
+    width: 80px;
+    min-width: 80px;
+    flex: 0 0 80px;
+    padding: 20px 10px;
+    align-items: center;
+  }
+
+  .settings-button span,
+  .profile-button .profile-info {
+    display: none;
+  }
+
+  .profile-button,
+  .settings-button,
+  .settings-button.admin-button {
+    margin-left: 0;
+    width: auto;
+    height: auto;
+    padding: 8px;
+    justify-content: center;
+  }
+
+  .profile-image-container {
+    margin-right: 0;
+  }
+
+  .logout-container {
+    left: 18px;
+  }
+
+  .middle-column {
+    margin-left: 0;
+    flex: 3;
+  }
+
+  .right-column {
+    flex: 1;
+    margin-left: 0;
+  }
+}
+
+/* 2. Second breakpoint: Right column disappears */
+@media screen and (max-width: 992px) {
+  .right-column {
+    display: none;
+  }
+
+  .middle-column {
+    flex: 1;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .create-post-button {
+    /* Cambiar la posición de fixed a absolute */
+    position: absolute;
+    /* Reposicionar en la columna izquierda */
+    left: 20px; /* Reducido de 40px a 20px para alinear con los demás elementos */
+    transform: none; /* Eliminar la transformación centrada */
+    font-size: 16px;
+    padding: 6px 20px;
+    top: auto; /* Quitar posicionamiento superior fijo */
+    bottom: 100px; /* Posicionarlo más abajo en la columna */
+    width: auto;
+    max-width: 80%;
+    /* Aplicar estilo diferente para la columna izquierda */
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .posts-container {
+    width: 100%;
+    margin-top: 20px; /* Reducir el margen superior ya que el botón ya no está en la parte superior */
+  }
+}
+
+/* 3. Third breakpoint: Mobile layout */
+@media screen and (max-width: 768px) {
+  .Feed {
+    margin-top: 70px;
+    padding: 10px;
+    position: relative;
+    padding-bottom: 60px; /* Space for mobile bottom bar */
+  }
+
+  .left-column {
+    display: none; /* Hide left column completely */
+  }
+
+  /* Nueva regla para mostrar botones específicos en la esquina superior derecha en móvil */
+  .mobile-top-controls {
+    position: fixed;
+    top: 15px; /* Posición en la parte superior */
+    right: 15px; /* Posición en la derecha */
+    z-index: 1010; /* Un nivel más alto que el header (1000) para que aparezca encima */
+    display: flex;
+    flex-direction: row; /* Alineación horizontal */
+    gap: 40px;
+  }
+
+  .mobile-top-controls .profile-button,
+  .mobile-top-controls .settings-button {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    margin: 0;
+  }
+
+  .mobile-top-controls .profile-image-container,
+  .mobile-top-controls img {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+  }
+
+  .mobile-top-controls .logout-container {
+    position: static;
+    margin: 0;
+  }
+
+  .mobile-top-controls .logout-button {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+  }
+
+  .mobile-top-controls .logout-button img {
+    width: 100px;
+    height: 75px;
+  }
+
+  .feed-container {
+    flex-direction: column;
+  }
+
+  .middle-column {
+    padding: 0 10px;
+    gap: 20px;
+  }
+
+  .create-post-button {
+    display: none; /* Hide the top create button on mobile */
+  }
+
+  .posts-container {
+    margin-top: 15px; /* Reduce top margin since we no longer need space for the button */
+  }
+
+  /* Mobile bottom navigation bar */
+  .mobile-nav-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    justify-content: space-around;
+    padding: 10px 0;
+  }
+
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .mobile-nav-item img {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Active class for mobile posts when comments are shown */
+  .post.comments-expanded {
+    margin-bottom: 300px;
+  }
+
+  /* Update mobile navigation to include filter button */
+  .mobile-nav-bar {
+    padding: 8px 0;
+  }
+
+  .mobile-nav-item {
+    padding: 8px 0;
+  }
+
+  .create-post-button {
+    top: 70px; /* Reset to original value for mobile */
+  }
+
+  .posts-container {
+    margin-top: 45px; /* Reset to original value for mobile */
+  }
+}
+
+/* Extra small devices */
+@media screen and (max-width: 480px) {
+  .Feed {
+    margin-top: 60px;
+    padding: 5px;
+  }
+
+  .create-post-button {
+    display: none; /* Ensure button is hidden on smaller screens too */
+    padding: 5px 60px;
+    top: 65px;
+    font-size: 14px;
+  }
+
+  .posts-container {
+    gap: 15px;
+    margin-top: 10px; /* Further reduce margin */
+  }
+}
+
+/* Medium screen filter styles */
+.medium-screen-filter {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto 15px auto;
+}
+
+.filter-toggle-button {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #333;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filter-toggle-button:hover {
+  background-color: #f5f5f5;
+}
+
+.medium-filter-container {
+  margin-top: 10px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile filter drawer */
+.mobile-filter-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 85%;
+  max-width: 350px;
+  background-color: white;
+  z-index: 2000;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.mobile-filter-drawer.visible {
+  transform: translateX(0);
+}
+
+.mobile-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-filter-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.close-filter-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #555;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+.mobile-filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1999;
+  display: none;
+}
+
+.mobile-filter-overlay.visible {
+  display: block;
 }

@@ -20,6 +20,9 @@ function Feed() {
 	const [showTagsPanel, setShowTagsPanel] = useState(false); // State to control visibility of tags panel
 	const [selectedTagFilters, setSelectedTagFilters] = useState([]); // New state for tag filters
 	const [filteredPosts, setFilteredPosts] = useState([]); // New state for filtered posts
+	const [isMobile, setIsMobile] = useState(false); // State to track if view is mobile
+	const [isMediumScreen, setIsMediumScreen] = useState(false);
+	const [showMobileFilter, setShowMobileFilter] = useState(false);
 
 	const feedTopRef = useRef(null);
 	const navigate = useNavigate(); // Añadir esta línea
@@ -215,6 +218,20 @@ function Feed() {
 		}
 	}, [userProfiles]);
 
+	// Check for mobile view on mount and window resize
+	useEffect(() => {
+		const checkScreenSize = () => {
+			const width = window.innerWidth;
+			setIsMobile(width <= 768);
+			setIsMediumScreen(width <= 992 && width > 768);
+		};
+
+		checkScreenSize();
+		window.addEventListener('resize', checkScreenSize);
+
+		return () => window.removeEventListener('resize', checkScreenSize);
+	}, []);
+
 	const handleCreateButtonClick = () => {
 		setShowNewPostForm(true);
 
@@ -227,6 +244,10 @@ function Feed() {
 
 	const toggleTagsPanel = () => {
 		setShowTagsPanel(!showTagsPanel);
+	};
+
+	const toggleMobileFilter = () => {
+		setShowMobileFilter(!showMobileFilter);
 	};
 
 	// Agregar la función de cierre de sesión
@@ -243,7 +264,26 @@ function Feed() {
 	// y esta parte es del renderizado del componente
 	return (
 		<div className="Feed">
+			{/* Nuevo contenedor para controles en vista móvil en la esquina superior derecha */}
+			{isMobile && (
+				<div className="mobile-top-controls">
+					<button className="settings-button">
+						<img src="Configuración.svg" alt="Configuración" />
+					</button>
+					<div className="logout-container">
+						<button 
+							className="logout-button" 
+							onClick={handleLogout}
+							title="Cerrar sesión"
+						>
+							<img src="/log_out.png" alt="Cerrar sesión" />
+						</button>
+					</div>
+				</div>
+			)}
+			
 			<div className="feed-container">
+				{/* Left column - shown on desktop and tablet, hidden on mobile */}
 				<div className="left-column">
 					<button className="profile-button">
 						<div className="profile-image-container">
@@ -268,7 +308,7 @@ function Feed() {
 					</button>
 					{isAdmin && (
 						<button className="settings-button admin-button" onClick={toggleTagsPanel}>
-							<img src="Configuración.svg" alt="Administrar Tags" />
+							<img src="Tres puntos.svg" alt="Administrar Tags" />
 							<span>Administrar Tags</span>
 						</button>
 					)}
@@ -288,6 +328,25 @@ function Feed() {
 					{/* Add ref to the top */}
 					<div ref={feedTopRef}></div>
 					{showTagsPanel && isAdmin && <AdminTagsPanel />}
+					
+					{/* Medium screens: Show filter button and collapsible filter above posts */}
+					{isMediumScreen && (
+						<div className="medium-screen-filter">
+							<button 
+								className="filter-toggle-button"
+								onClick={toggleMobileFilter}
+							>
+								{showMobileFilter ? "Ocultar filtros" : "Filtrar por tags"}
+							</button>
+							
+							{showMobileFilter && (
+								<div className="medium-filter-container">
+									<TagsFilter onFilterChange={handleTagFilterChange} />
+								</div>
+							)}
+						</div>
+					)}
+					
 					<button
 						className="create-post-button"
 						onClick={handleCreateButtonClick}
@@ -317,12 +376,103 @@ function Feed() {
 						)}
 					</div>
 				</div>
-				<div className="right-column">
-					{/* Add the TagsFilter component */}
-					<TagsFilter onFilterChange={handleTagFilterChange} />
-					{/* Contenido adicional para la columna derecha */}
-				</div>
+				{!isMobile && !isMediumScreen && (
+					<div className="right-column">
+						{/* Desktop: TagsFilter in right column */}
+						<TagsFilter onFilterChange={handleTagFilterChange} />
+						{/* Contenido adicional para la columna derecha */}
+					</div>
+				)}
 			</div>
+
+			{/* Mobile Filter Drawer */}
+			{isMobile && (
+				<>
+					<div className={`mobile-filter-drawer ${showMobileFilter ? 'visible' : ''}`}>
+						<div className="mobile-filter-header">
+							<h3>Filtrar por tags</h3>
+							<button 
+								className="close-filter-button"
+								onClick={toggleMobileFilter}
+							>
+								×
+							</button>
+						</div>
+						<TagsFilter onFilterChange={handleTagFilterChange} />
+					</div>
+					
+					{/* Overlay to close drawer when clicking outside */}
+					{showMobileFilter && (
+						<div 
+							className="mobile-filter-overlay visible" 
+							onClick={toggleMobileFilter}
+						></div>
+					)}
+				</>
+			)}
+
+			{/* Mobile Navigation Bar - only shown on mobile */}
+			{isMobile && (
+				<div className="mobile-nav-bar">
+					<button className="mobile-nav-item">
+						<img 
+							src="/default_pfp.png" 
+							alt="Profile"
+							onError={(e) => {
+								e.target.onerror = null;
+								e.target.src = "/default_pfp.png";
+							}}
+							/>
+						<span className="nav-item-label">Perfil</span>
+					</button>
+					<button className="mobile-nav-item" onClick={toggleMobileFilter}>
+						<img 
+							src="/filter-icon.png" 
+							alt="Filter"
+							onError={(e) => {
+								e.target.onerror = null;
+								e.target.src = "https://img.icons8.com/material-outlined/24/000000/filter.png";
+							}}
+						/>
+						<span className="nav-item-label">Filtrar</span>
+					</button>
+					<button className="mobile-nav-item" onClick={handleCreateButtonClick}>
+						<img 
+							src="/create-icon.png" 
+							alt="Create"
+							onError={(e) => {
+								e.target.onerror = null;
+								e.target.src = "https://img.icons8.com/material-outlined/24/000000/plus.png";
+							}}
+						/>
+						<span className="nav-item-label">Crear</span>
+					</button>
+					{isAdmin && (
+						<button className="mobile-nav-item admin-nav-item" onClick={toggleTagsPanel}>
+							<img 
+								src="Tres puntos.svg" 
+								alt="Admin"
+								onError={(e) => {
+									e.target.onerror = null;
+									e.target.src = "https://img.icons8.com/material-outlined/24/000000/more.png";
+								}}
+							/>
+							<span className="nav-item-label">Admin</span>
+						</button>
+					)}
+					<button className="mobile-nav-item" onClick={handleLogout}>
+						<img 
+							src="/log_out.png" 
+							alt="Logout"
+							onError={(e) => {
+								e.target.onerror = null;
+								e.target.src = "https://img.icons8.com/material-outlined/24/000000/exit.png";
+							}}
+						/>
+						<span className="nav-item-label">Salir</span>
+					</button>
+				</div>
+			)}
 		</div>
 	);
 }
