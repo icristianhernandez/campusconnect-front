@@ -3,9 +3,10 @@
   position: fixed;
   bottom: 30px;
   right: 30px;
-  width: 60px;
+  min-width: px;
   height: 60px;
-  border-radius: 50%;
+  border-radius: 30px;
+  padding: 0 20px;
   background-color: #26a34c;
   color: white;
   border: none;
@@ -15,22 +16,103 @@
   justify-content: center;
   cursor: pointer;
   z-index: 10000; /* Increased z-index to be above everything */
-  transition: transform 0.3s, background-color 0.3s;
-  font-size: 14px;
+  transition: transform 0.3s, background-color 0.3s, width 0.3s;
+  font-size: 16px;
   font-weight: 500;
 }
 
+/* Different sizes based on screen size */
+.ai-chat-floating-button.large {
+  min-width: 140px;
+  height: 60px;
+  font-size: 16px;
+}
+
+.ai-chat-floating-button.medium {
+  min-width: 120px;
+  height: 55px;
+  font-size: 15px;
+}
+
+.ai-chat-floating-button.small {
+  min-width: 100px;
+  height: 50px;
+  font-size: 14px;
+}
+
+.ai-chat-floating-button.xsmall {
+  min-width: 50px;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border-radius: 25px;
+  font-size: 14px;
+}
+
 .ai-chat-floating-button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   background-color: #218c42;
 }
 
 .ai-chat-floating-button.open {
   background-color: #d32f2f;
+  border-radius: 50%;
+  width: 60px;
+  min-width: 60px;
+  padding: 0;
+}
+
+.ai-chat-floating-button.open.small,
+.ai-chat-floating-button.open.xsmall {
+  width: 50px;
+  min-width: 50px;
+  height: 50px;
 }
 
 .ai-chat-floating-button.open:hover {
   background-color: #b71c1c;
+}
+
+/* Suggestion Chips Styles */
+.ai-chat-suggestions {
+  padding: 10px 16px;
+  background-color: #f5f7fa;
+  border-top: 1px solid #e0e0e0;
+}
+
+.suggestions-title {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* Updated styles to allow suggestion chip text to wrap */
+.suggestion-chip {
+  white-space: normal; /* Allow text to wrap */
+  word-break: break-word; /* Break long words if necessary */
+  text-align: left; 
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 18px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  margin-bottom: 6px; /* Add vertical margin between chips */
+}
+
+.suggestion-chip:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.suggestion-chip:active {
+  transform: translateY(0);
+  background-color: #e8e8e8;
 }
 
 /* Chat Container Styles */
@@ -77,24 +159,42 @@
   font-weight: 500;
 }
 
-.ai-chat-close {
+.ai-chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ai-chat-close, .ai-chat-clear {
   background: none;
   border: none;
   color: white;
-  font-size: 24px;
   cursor: pointer;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 28px; /* Reduced from 24px */
+  height: 28px; /* Reduced from 24px */
   border-radius: 50%;
   transition: background-color 0.2s;
 }
 
-.ai-chat-close:hover {
+.ai-chat-close {
+  font-size: 18px; /* Reduced from 22px */
+}
+
+.ai-chat-clear {
+  width: 28px; /* Reduced to match close button */
+  height: 28px; /* Reduced to match close button */
+}
+
+.ai-chat-close:hover, .ai-chat-clear:hover {
   background-color: rgba(255, 255, 255, 0.2);
+}
+
+.ai-chat-clear:hover {
+  opacity: 1;
 }
 
 /* Messages Container */
@@ -145,6 +245,40 @@
   border-bottom-right-radius: 4px;
 }
 
+/* Message suggestion chips styling - Modified to appear below the text */
+.message-suggestions {
+  display: flex;
+  margin-top: 8px;
+  margin-left: 40px; /* Give space for avatar alignment */
+  width: calc(100% - 40px);
+}
+
+.ai-message .message-suggestions .suggestions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.ai-message .suggestion-chip {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #26a34c;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.ai-message .suggestion-chip:hover {
+  background-color: rgba(38, 163, 76, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 .ai-avatar {
   width: 32px;
   height: 32px;
@@ -171,7 +305,7 @@
 .ai-chat-input {
   flex: 1;
   border: 1px solid #e0e0e0;
-  border-radius: 20px;
+  border-radius: 24px;
   padding: 10px 16px;
   font-size: 14px;
   outline: none;
@@ -260,6 +394,13 @@
     width: 320px;
     height: 450px;
   }
+  
+  .ai-chat-floating-button.large,
+  .ai-chat-floating-button.medium {
+    min-width: 110px;
+    height: 55px;
+    font-size: 15px;
+  }
 }
 
 /* Medium sized devices */
@@ -275,9 +416,10 @@
   .ai-chat-floating-button {
     bottom: 20px;
     right: 20px;
-    width: 50px;
+    min-width: 50px;
     height: 50px;
-    font-size: 13px;
+    padding: 0 15px;
+    font-size: 14px;
   }
   
   .ai-chat-message {
@@ -286,6 +428,15 @@
   
   .message-content {
     font-size: 13px;
+  }
+  
+  .suggestions-container {
+    gap: 6px;
+  }
+  
+  .suggestion-chip {
+    padding: 5px 10px;
+    font-size: 12px;
   }
 }
 
@@ -304,9 +455,17 @@
   .ai-chat-floating-button {
     bottom: 15px;
     right: 15px;
-    width: 45px;
+    min-width: 45px;
     height: 45px;
-    font-size: 12px;
+    font-size: 13px;
+    padding: 0 12px;
+  }
+  
+  .ai-chat-floating-button.xsmall {
+    width: 45px;
+    min-width: 45px;
+    padding: 0;
+    border-radius: 22.5px;
   }
   
   .ai-chat-message {
@@ -346,9 +505,42 @@
     width: 32px;
     height: 32px;
   }
+  
+  .suggestions-container {
+    gap: 5px;
+    margin-bottom: 6px;
+  }
+  
+  .suggestion-chip {
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 14px;
+  }
+  
+  .suggestions-title {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  
+  /* Mobile device adjustments for message suggestions */
+  .message-suggestions {
+    margin-left: 28px; /* Adjusted for smaller avatar on mobile */
+    width: calc(100% - 28px);
+    margin-top: 6px;
+  }
+  
+  .ai-message .message-suggestions .suggestions-container {
+    gap: 4px;
+  }
+  
+  .ai-message .suggestion-chip {
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 12px;
+  }
 }
 
-/* Smaller phones */
+/* Smaller phones adjustments */
 @media (max-width: 360px) {
   .ai-chat-container {
     width: calc(100% - 20px);
@@ -361,86 +553,36 @@
   
   .ai-chat-floating-button {
     width: 40px;
+    min-width: 40px;
     height: 40px;
-    font-size: 11px;
+    font-size: 12px;
+    padding: 0;
+    border-radius: 20px;
   }
   
   .ai-chat-messages {
     padding: 10px;
     gap: 8px;
   }
-}
-
-/* Add special handling for when users are on the feed page with header */
-.feed-page .ai-chat-container {
-  max-height: calc(100vh - 200px); /* Further limit height to stay below header */
-  top: auto; /* Ensure it's not trying to position from the top */
-  bottom: 120px; /* Ensure it's positioned below the crear button */
-  z-index: 990; /* Make sure it's below the header (which has z-index 1000) */
-}
-
-/* Adjust for smaller screens on feed page */
-@media (max-width: 768px) {
-  .feed-page .ai-chat-container {
-    bottom: 100px; 
-    max-height: calc(100vh - 200px);
-  }
-}
-
-@media (max-width: 480px) {
-  .feed-page .ai-chat-container {
-    bottom: 80px; 
-    max-height: calc(100vh - 220px);
-  }
-}
-
-/* Special styling for when keyboard is open on mobile */
-.ai-chat-container.keyboard-open {
-  bottom: 5px;
-  max-height: 50vh;
-  height: auto;
-}
-
-/* Improve handling for keyboard open on mobile */
-@media (max-height: 500px) {
-  .ai-chat-container {
-    bottom: 15px;
-    height: 80vh;
-    max-height: calc(100vh - 80px);
+  
+  .suggestions-container {
+    flex-wrap: wrap;
+    gap: 4px;
   }
   
-  .ai-chat-floating-button {
-    bottom: 15px;
-  }
-}
-
-/* Improved landscape mode handling */
-@media (max-height: 450px) and (orientation: landscape) {
-  .ai-chat-container {
-    bottom: 15px;
-    height: 85vh;
-    max-height: calc(100vh - 70px);
-    width: 60vw;
-    right: 15px;
-    left: auto;
+  .suggestion-chip {
+    padding: 3px 7px;
+    font-size: 10px;
+    border-radius: 12px;
   }
   
-  .ai-chat-floating-button {
-    width: 40px;
-    height: 40px;
-    font-size: 12px;
-    bottom: 15px;
-    right: 15px;
+  .message-suggestions {
+    margin-top: 3px; 
   }
   
-  .message-content {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-  
-  .ai-chat-input {
-    padding: 6px 10px;
-    font-size: 12px;
+  .ai-message .suggestion-chip {
+    padding: 3px 6px;
+    font-size: 10px;
   }
 }
 
