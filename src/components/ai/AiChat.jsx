@@ -235,6 +235,24 @@ function AiChat() {
               </div>
             </div>
           ))}
+          
+          {/* Add suggestion chips after the most recent AI message */}
+          {messages.length > 0 && messages[messages.length - 1].sender === 'ai' && (
+            <div className="message-suggestions">
+              <div className="suggestions-container">
+                {suggestionChips.map(chip => (
+                  <button 
+                    key={chip.id} 
+                    className="suggestion-chip"
+                    onClick={() => handleSuggestionClick(chip.text)}
+                  >
+                    {chip.text}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          
           {isTyping && (
             <div className="ai-chat-message ai-message">
               <div className="ai-avatar">AI</div>
@@ -247,24 +265,6 @@ function AiChat() {
           )}
           <div ref={messagesEndRef} />
         </div>
-        
-        {/* Suggestion chips section */}
-        {messages.length < 3 && (
-          <div className="ai-chat-suggestions">
-            <p className="suggestions-title">Puedo ayudarte con:</p>
-            <div className="suggestions-container">
-              {suggestionChips.map(chip => (
-                <button 
-                  key={chip.id} 
-                  className="suggestion-chip"
-                  onClick={() => handleSuggestionClick(chip.text)}
-                >
-                  {chip.text}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
         
         <form className="ai-chat-input-container" onSubmit={handleSendMessage}>
           <input

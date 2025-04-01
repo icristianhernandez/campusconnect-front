@@ -248,6 +248,40 @@
   border-bottom-right-radius: 4px;
 }
 
+/* Message suggestion chips styling - Modified to appear below the text */
+.message-suggestions {
+  display: flex;
+  margin-top: 8px;
+  margin-left: 40px; /* Give space for avatar alignment */
+  width: calc(100% - 40px);
+}
+
+.ai-message .message-suggestions .suggestions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 0;
+  width: 100%;
+}
+
+.ai-message .suggestion-chip {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  padding: 5px 10px;
+  font-size: 12px;
+  color: #26a34c;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.ai-message .suggestion-chip:hover {
+  background-color: rgba(38, 163, 76, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 .ai-avatar {
   width: 32px;
   height: 32px;
@@ -490,9 +524,26 @@
     font-size: 12px;
     margin-bottom: 6px;
   }
+  
+  /* Mobile device adjustments for message suggestions */
+  .message-suggestions {
+    margin-left: 28px; /* Adjusted for smaller avatar on mobile */
+    width: calc(100% - 28px);
+    margin-top: 6px;
+  }
+  
+  .ai-message .message-suggestions .suggestions-container {
+    gap: 4px;
+  }
+  
+  .ai-message .suggestion-chip {
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 12px;
+  }
 }
 
-/* Smaller phones */
+/* Smaller phones adjustments */
 @media (max-width: 360px) {
   .ai-chat-container {
     width: calc(100% - 20px);
@@ -526,6 +577,15 @@
     padding: 3px 7px;
     font-size: 10px;
     border-radius: 12px;
+  }
+  
+  .message-suggestions {
+    margin-top: 4px;
+  }
+  
+  .ai-message .suggestion-chip {
+    padding: 3px 6px;
+    font-size: 10px;
   }
 }
 
