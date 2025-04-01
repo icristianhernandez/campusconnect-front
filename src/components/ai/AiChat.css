@@ -197,7 +197,7 @@
   opacity: 1;
 }
 
-/* Messages Container */
+/* Hide vertical scrollbar for chatbot messages */
 .ai-chat-messages {
   flex: 1;
   overflow-y: auto;
@@ -206,6 +206,12 @@
   flex-direction: column;
   gap: 12px;
   background-color: #f5f7fa;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+}
+
+.ai-chat-messages::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
 }
 
 /* Message Bubbles */
