@@ -1,5 +1,5 @@
 .tags-filter {
-  background-color: white;
+  background-color: #f2f4f7;
   border-radius: 10px;
   padding: 20px;
   margin-bottom: 20px;
@@ -31,23 +31,26 @@
 }
 
 .tags-list {
+  /* Keep max-height and overflow-y for scrolling functionality but make scrollbar invisible */
   max-height: 300px;
   overflow-y: auto;
   margin-bottom: 15px;
-  scrollbar-width: thin;
+
+  /* Hide scrollbar for all browsers */
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
 .tags-list::-webkit-scrollbar {
-  width: 6px;
+  display: none;
+  width: 0;
 }
 
-.tags-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+/* Remove all other scrollbar styling since we're hiding it completely */
+.tags-list::-webkit-scrollbar-track,
 .tags-list::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
+  display: none;
 }
 
 .filter-tag-option {

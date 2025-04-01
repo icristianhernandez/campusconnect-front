@@ -312,12 +312,7 @@ function Feed() {
 						{filteredPosts.length === 0 && posts.length > 0 && (
 							<div className="no-filtered-posts">
 								<p>No hay publicaciones que coincidan con los filtros seleccionados.</p>
-								<button 
-									className="clear-filters-button"
-									onClick={() => setSelectedTagFilters([])}
-								>
-									Mostrar todas las publicaciones
-								</button>
+								{/* Removed the "Mostrar todas las publicaciones" button */}
 							</div>
 						)}
 					</div>

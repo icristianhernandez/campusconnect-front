@@ -33,8 +33,11 @@
   flex: 1;
   background-color: #f2f4f7; /* Set background color for static columns */
   padding: 20px;
+  padding-right: 40px; /* Increase right padding */
+  padding-left: 0; /* Decrease left padding to move content to the left */
   height: 100%; /* Ensure columns take full height */
   overflow: hidden; /* Prevent scrolling in static columns */
+  margin-left: -20px; /* Move the entire column a bit to the left */
 }
 
 .middle-column {
