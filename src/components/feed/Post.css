@@ -191,6 +191,7 @@
   align-items: flex-start; /* Align items to the left */
   justify-content: center; /* Center items vertically */
   padding: 3px 5px 3px 0; /* Further reduced padding for more compact layout */
+  width: 100%; /* Ensure it takes full width */
 }
 
 /* Remove function-placeholder and add styling for the new classes */
@@ -219,6 +220,7 @@
   border-radius: 20px;
   transition: background-color 0.2s ease;
   margin-left: 0; /* Ensure no left margin */
+  flex-shrink: 0; /* Prevent button from shrinking */
 }
 
 .like-button:hover {
@@ -612,6 +614,10 @@
   .post-bottom-section {
     min-height: 45px; /* Reduced from 60px to 45px for mobile */
   }
+
+  .like-tags-container {
+    flex-wrap: wrap;
+  }
 }
 
 /* Extra small devices */
@@ -680,4 +686,48 @@
 .post video {
   max-width: 100%;
   height: auto;
+}
+
+/* Hide old modals that might be conflicting */
+.delete-confirmation-overlay,
+.delete-confirmation-modal {
+  display: none !important;
+}
+
+/* Post tags styling */
+.post-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-left: 15px;
+  align-items: center;
+}
+
+.post-tag {
+  font-size: 15px;
+  padding: 3px 8px;
+  border-radius: 15px;
+  background-color: #e6f7ff;
+  border: 2px solid #37b623;
+  color: #26a34c;
+  white-space: nowrap;
+}
+
+.post-tag.general-tag {
+  background-color: #f0f0f0;
+  border: 2px solid #615454;
+  color: #222020;
+}
+
+/* New container for like button and tags */
+.like-tags-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.function-content {
+  display: flex;
+  align-items: center;
 }

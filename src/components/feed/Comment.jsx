@@ -152,12 +152,61 @@ function Comment({ comment, post, setPosts, posts, isAdmin }) {
 		}
 	};
 
-	// Delete operations
+	// Improve the delete function to handle replies and associated data
 	const handleDeleteComment = async () => {
 		setLoading(true);
 		setError(null);
 
 		try {
+			// First check if this comment has replies
+			if (comment.replies && comment.replies.length > 0) {
+				// Get all reply IDs
+				const replyIds = comment.replies.map(reply => reply.comment_id);
+				
+				// Delete replies' multimedia
+				const { error: replyMediaError } = await supabase
+					.from("comments_multimedia")
+					.delete()
+					.in("comment_id", replyIds);
+					
+				if (replyMediaError) throw replyMediaError;
+				
+				// Delete replies' likes
+				const { error: replyLikesError } = await supabase
+					.from("comments_likes")
+					.delete()
+					.in("comment_id", replyIds);
+					
+				if (replyLikesError) throw replyLikesError;
+				
+				// Delete all replies
+				const { error: repliesError } = await supabase
+					.from("comments")
+					.delete()
+					.in("comment_id", replyIds);
+					
+				if (repliesError) throw repliesError;
+			}
+			
+			// Delete comment multimedia if it exists
+			if (comment.multimedia && comment.multimedia.length > 0) {
+				const { error: mediaError } = await supabase
+					.from("comments_multimedia")
+					.delete()
+					.eq("comment_id", comment.comment_id);
+					
+				if (mediaError) throw mediaError;
+			}
+			
+			// Delete comment likes
+			const { error: likesError } = await supabase
+				.from("comments_likes")
+				.delete()
+				.eq("comment_id", comment.comment_id);
+				
+			if (likesError) throw likesError;
+			
+			// Finally delete the comment itself
 			const { error } = await supabase
 				.from("comments")
 				.delete()
@@ -182,9 +231,9 @@ function Comment({ comment, post, setPosts, posts, isAdmin }) {
 			setShowConfirmDelete(false);
 		} catch (err) {
 			setError("Error al eliminar: " + err.message);
-			setShowConfirmDelete(false);
 		} finally {
 			setLoading(false);
+			setShowConfirmDelete(false); // Always close the modal when done
 		}
 	};
 
@@ -198,21 +247,23 @@ function Comment({ comment, post, setPosts, posts, isAdmin }) {
 		}
 	};
 
-	// Create a portal for the delete confirmation modal
+	// Completely revamp the delete confirmation modal
 	const DeleteConfirmationModal = () => {
 		if (!showConfirmDelete) return null;
 
 		return createPortal(
-			<div
-				className="modal-backdrop"
+			<div 
+				className="modal-backdrop" 
 				onClick={(e) => {
-					e.preventDefault();
-					setShowConfirmDelete(false);
+					e.stopPropagation();
+					if (!loading) {
+						setShowConfirmDelete(false);
+					}
 				}}
 			>
-				<div
-					className="modal-content"
-					onClick={(e) => e.stopPropagation()}
+				<div 
+					className="modal-content" 
+					onClick={(e) => e.stopPropagation()} 
 					ref={modalRef}
 				>
 					<h3>Eliminar comentario</h3>
@@ -226,14 +277,20 @@ function Comment({ comment, post, setPosts, posts, isAdmin }) {
 					<div className="confirmation-buttons">
 						<button
 							className="cancel-button"
-							onClick={() => setShowConfirmDelete(false)}
+							onClick={(e) => {
+								e.stopPropagation();
+								setShowConfirmDelete(false);
+							}}
 							disabled={loading}
 						>
 							Cancelar
 						</button>
 						<button
 							className="confirm-button"
-							onClick={handleDeleteComment}
+							onClick={(e) => {
+								e.stopPropagation();
+								handleDeleteComment();
+							}}
 							disabled={loading}
 						>
 							{loading ? "Eliminando..." : "Eliminar"}
@@ -241,7 +298,7 @@ function Comment({ comment, post, setPosts, posts, isAdmin }) {
 					</div>
 				</div>
 			</div>,
-			document.body,
+			document.body
 		);
 	};
 

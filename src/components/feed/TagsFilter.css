@@ -1,0 +1,102 @@
+.tags-filter {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tags-filter h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.tags-loading,
+.tags-error,
+.no-tags {
+  text-align: center;
+  padding: 10px;
+  color: #666;
+  font-style: italic;
+}
+
+.tags-error {
+  color: #d32f2f;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+.tags-list {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 15px;
+  scrollbar-width: thin;
+}
+
+.tags-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tags-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tags-list::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.filter-tag-option {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.filter-tag-option:hover {
+  background-color: #f5f5f5;
+}
+
+.filter-tag-option.selected {
+  background-color: #e6f7ff;
+}
+
+.filter-tag-name {
+  font-size: 14px;
+}
+
+.tag-selected-indicator {
+  color: #1890ff;
+  font-weight: bold;
+}
+
+.clear-filters-button {
+  width: 100%;
+  padding: 8px;
+  background-color: #f0f0f0;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-filters-button:hover {
+  background-color: #e0e0e0;
+}
+
+.tags-divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 8px 0;
+  width: 100%;
+}

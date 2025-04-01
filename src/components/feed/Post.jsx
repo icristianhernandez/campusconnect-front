@@ -17,6 +17,7 @@ function Post({ post, setPosts, posts, isAdmin }) {
 	const [deleteError, setDeleteError] = useState(null);
 	const [deleteLoading, setDeleteLoading] = useState(false);
 	const modalRef = useRef(null);
+	const [postTags, setPostTags] = useState(post.tags || []);
 
 	useEffect(() => {
 		const fetchUser = async () => {
@@ -184,72 +185,144 @@ function Post({ post, setPosts, posts, isAdmin }) {
 		setDeleteError(null);
 
 		try {
-			// elimina el post de la base de datos
-			const { error } = await supabase
-				.from("posts")
-				.delete()
-				.eq("post_id", post.post_id);
-
-			if (error) throw error;
-
-			// se actualiza el estado local eliminando el post
-			const updatedPosts = posts.filter((p) => p.post_id !== post.post_id);
-			setPosts(updatedPosts);
-			setShowConfirmDelete(false);
-		} catch (err) {
-			console.error("Error al eliminar el post:", err.message);
-			setDeleteError("Hubo un error al eliminar el post. Intente nuevamente.");
-		} finally {
-			setDeleteLoading(false);
-		}
-	};
-
-	// Create a portal for the delete confirmation modal
-	const DeleteConfirmationModal = () => {
-		if (!showConfirmDelete) return null;
-
-		return createPortal(
-			<div
-				className="modal-backdrop"
-				onClick={(e) => {
-					e.preventDefault();
-					setShowConfirmDelete(false);
-				}}
-			>
-				<div
-					className="modal-content"
-					onClick={(e) => e.stopPropagation()}
-					ref={modalRef}
-				>
-					<h3>Eliminar publicación</h3>
-					<p>
-						¿Estás seguro de que deseas eliminar esta publicación? Esta acción
-						no se puede deshacer.
-					</p>
-
-					{deleteError && <div className="delete-error">{deleteError}</div>}
-
-					<div className="confirmation-buttons">
-						<button
-							className="cancel-button"
-							onClick={() => setShowConfirmDelete(false)}
-							disabled={deleteLoading}
-						>
-							Cancelar
-						</button>
-						<button
-							className="confirm-button"
-							onClick={handleDeletePost}
-							disabled={deleteLoading}
-						>
-							{deleteLoading ? "Eliminando..." : "Eliminar"}
-						</button>
-					</div>
-				</div>
-			</div>,
-			document.body,
-		);
-	};
+			 // Check if the post has comments
+			 const { data: commentCount, error: countError } = await supabase
+			 .from("comments")
+			 .select("comment_id", { count: "exact" })
+			 .eq("parent_post_id", post.post_id);
+			
+			 if (countError) throw countError;
+			
+			 // First delete associated multimedia
+			 if (post.multimedia && post.multimedia.length > 0) {
+			   const { error: multiError } = await supabase
+				 .from("post_multimedia")
+				 .delete()
+				 .eq("post_id", post.post_id);
+			   
+			   if (multiError) throw multiError;
+			 }
+			
+			 // Delete tags associations
+			 const { error: tagError } = await supabase
+			   .from("post_tags")
+			   .delete()
+			   .eq("post_id", post.post_id);
+			
+			 if (tagError) throw tagError;
+			
+			 // Delete likes
+			 const { error: likesError } = await supabase
+			   .from("post_likes")
+			   .delete()
+			   .eq("post_id", post.post_id);
+			
+			 if (likesError) throw likesError;
+			
+			 // Delete comments and their multimedia/likes
+			 if (post.comments && post.comments.length > 0) {
+			   // First get all comment IDs to handle their multimedia and likes
+			   const commentIds = post.comments.map(c => c.comment_id);
+			   
+			   // Delete comment multimedia
+			   const { error: commMediaError } = await supabase
+				 .from("comments_multimedia")
+				 .delete()
+				 .in("comment_id", commentIds);
+			   
+			   if (commMediaError) throw commMediaError;
+			   
+			   // Delete comment likes
+			   const { error: commLikesError } = await supabase
+				 .from("comments_likes")
+				 .delete()
+				 .in("comment_id", commentIds);
+			   
+			   if (commLikesError) throw commLikesError;
+			   
+			   // Now delete all comments
+			   const { error: commentsError } = await supabase
+				 .from("comments")
+				 .delete()
+				 .eq("parent_post_id", post.post_id);
+			   
+			   if (commentsError) throw commentsError;
+			 }
+			
+			 // Finally delete the post
+			 const { error } = await supabase
+			   .from("posts")
+			   .delete()
+			   .eq("post_id", post.post_id);
+		
+			 if (error) throw error;
+		
+			 // Update local state
+			 const updatedPosts = posts.filter((p) => p.post_id !== post.post_id);
+			 setPosts(updatedPosts);
+			 setShowConfirmDelete(false);
+		   } catch (err) {
+			 console.error("Error al eliminar el post:", err.message);
+			 setDeleteError("Hubo un error al eliminar el post. Intente nuevamente.");
+		   } finally {
+			 setDeleteLoading(false);
+		   }
+		 };
+		
+		 // Completely revamp the delete confirmation modal
+		 const DeleteConfirmationModal = () => {
+		   if (!showConfirmDelete) return null;
+		
+		   return createPortal(
+			 <div 
+			   className="modal-backdrop" 
+			   onClick={(e) => {
+				 e.stopPropagation();
+				 if (!deleteLoading) {
+				   setShowConfirmDelete(false);
+				 }
+			   }}
+			 >
+			   <div 
+				 className="modal-content" 
+				 onClick={(e) => e.stopPropagation()} 
+				 ref={modalRef}
+			   >
+				 <h3>Eliminar publicación</h3>
+				 <p>
+				   ¿Estás seguro de que deseas eliminar esta publicación? Esta acción
+				   no se puede deshacer.
+				 </p>
+				 
+				 {deleteError && <div className="delete-error">{deleteError}</div>}
+				 
+				 <div className="confirmation-buttons">
+				   <button
+					 className="cancel-button"
+					 onClick={(e) => {
+					   e.stopPropagation();
+					   setShowConfirmDelete(false);
+					 }}
+					 disabled={deleteLoading}
+				   >
+					 Cancelar
+				   </button>
+				   <button
+					 className="confirm-button"
+					 onClick={(e) => {
+					   e.stopPropagation();
+					   handleDeletePost();
+					 }}
+					 disabled={deleteLoading}
+				   >
+					 {deleteLoading ? "Eliminando..." : "Eliminar"}
+				   </button>
+				 </div>
+			   </div>
+			 </div>,
+			 document.body
+		   );
+		 };
 
 	const togglePostOptions = (e) => {
 		e.stopPropagation();
@@ -429,23 +502,38 @@ function Post({ post, setPosts, posts, isAdmin }) {
 				{/* Sección inferior izquierda - para funciones futuras */}
 				<div className="post-functions">
 					<div className="function-content">
-						{/* Move like button here */}
-						<button
-							className={`like-button ${Array.isArray(likes) && likes.some((like) => like.user_id === userId) ? "liked" : ""}`}
-							onClick={handleLike}
-						>
-							<img
-								src={
-									Array.isArray(likes) &&
-									likes.some((like) => like.user_id === userId)
-										? "Corazón con relleno (1).svg"
-										: "Corazón con contorno.svg"
-								}
-								alt="Like Icon"
-								className="like-icon"
-							/>
-							<span className="likes-count">{likes.length}</span>
-						</button>
+						 {/* Rearranged content to place like button and tags in the same row */}
+						 <div className="like-tags-container">
+							<button
+								className={`like-button ${Array.isArray(likes) && likes.some((like) => like.user_id === userId) ? "liked" : ""}`}
+								onClick={handleLike}
+							>
+								<img
+									src={
+										Array.isArray(likes) &&
+										likes.some((like) => like.user_id === userId)
+											? "Corazón con relleno (1).svg"
+											: "Corazón con contorno.svg"
+									}
+									alt="Like Icon"
+									className="like-icon"
+								/>
+								<span className="likes-count">{likes.length}</span>
+							</button>
+
+							{/* Display post tags - now in same row as the like button */}
+							<div className="post-tags-container">
+								{postTags && postTags.length > 0 ? (
+									postTags.map((tag, index) => (
+										<span key={index} className="post-tag">
+											{tag.tag_name}
+										</span>
+									))
+								) : (
+									<span className="post-tag general-tag">General</span>
+								)}
+							</div>
+						</div>
 
 						{/* Removed the placeholder text for additional functionality */}
 					</div>

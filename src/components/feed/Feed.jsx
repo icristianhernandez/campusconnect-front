@@ -3,6 +3,7 @@ import "./Feed.css"; // Importa estilos CSS del archivo feed.css
 import Post from "./Post"; //componente para post individual
 import NewPostForm from "./NewPostForm"; //componente para formulario de nuevo post
 import AdminTagsPanel from "./AdminTagsPanel"; // Nuevo componente para administrar tags
+import TagsFilter from "./TagsFilter"; // Nuevo componente para filtrar por tags
 import { MyContext } from "../../context/context"; // Importa el contexto global para manejar el estado de la app
 import { supabase } from "../../utils/supabase"; //supabase para interactuar con la db
 import { useNavigate } from "react-router-dom"; // Añadir esta importación
@@ -17,6 +18,8 @@ function Feed() {
 	const [isAdmin, setIsAdmin] = useState(false); // State to track if current user is admin
 	const [adminLevel, setAdminLevel] = useState(0); // State to store admin level
 	const [showTagsPanel, setShowTagsPanel] = useState(false); // State to control visibility of tags panel
+	const [selectedTagFilters, setSelectedTagFilters] = useState([]); // New state for tag filters
+	const [filteredPosts, setFilteredPosts] = useState([]); // New state for filtered posts
 
 	const feedTopRef = useRef(null);
 	const navigate = useNavigate(); // Añadir esta línea
@@ -82,25 +85,66 @@ function Feed() {
 		}
 	};
 
+	// Add useEffect to filter posts when selectedTagFilters or posts change
+	useEffect(() => {
+		if (posts.length === 0 || selectedTagFilters.length === 0) {
+			setFilteredPosts(posts);
+			return;
+		}
+
+		const filtered = posts.filter(post => {
+			// If post has no tags and General is selected (we'll use tag ID -1 to represent "General")
+			if ((!post.tags || post.tags.length === 0) && selectedTagFilters.includes(-1)) {
+				return true;
+			}
+			
+			// Check if any of the post's tags match the selected filters
+			return post.tags && post.tags.some(tag => selectedTagFilters.includes(tag.id));
+		});
+
+		setFilteredPosts(filtered);
+	}, [selectedTagFilters, posts]);
+
+	const handleTagFilterChange = (selectedTags) => {
+		setSelectedTagFilters(selectedTags);
+	};
+
+	// Modify the fetchPostsWithComments function to also fetch post tags
 	const fetchPostsWithComments = async () => {
 		setErrorMessage(null);
 		try {
 			const { data: postsData, error: postsError } = await supabase
 				.from("posts")
 				.select(`
-                    *,
-                    post_multimedia (
-                        media_type,
-                        multimedia_url
-                    ),
-                    post_likes (
-                        like_id,
-                        user_id
-                    )
-                `)
+					*,
+					post_multimedia (
+						media_type,
+						multimedia_url
+					),
+					post_likes (
+						like_id,
+						user_id
+					),
+					post_tags (
+						tag_id
+					)
+				`)
 				.order("created_at", { ascending: false }); // Posts más nuevos primero
 
 			if (postsError) throw postsError;
+
+			// Fetch all tags to use for mapping
+			const { data: tagsData, error: tagsError } = await supabase
+				.from("tags")
+				.select("*");
+
+			if (tagsError) throw tagsError;
+
+			// Create a map of tag IDs to tag objects for quick lookup
+			const tagsMap = {};
+			tagsData.forEach(tag => {
+				tagsMap[tag.id] = tag;
+			});
 
 			const { data: commentsData, error: commentsError } = await supabase
 				.from("comments")
@@ -144,10 +188,13 @@ function Feed() {
 					),
 				),
 				// Add user profile information to the post
-				user_profile: userProfiles[post.user_id] || null
+				user_profile: userProfiles[post.user_id] || null,
+				// Map tag IDs to actual tag objects
+				tags: post.post_tags ? post.post_tags.map(pt => tagsMap[pt.tag_id]).filter(Boolean) : []
 			}));
 
 			setPosts(combinedPosts);
+			setFilteredPosts(combinedPosts);
 		} catch (error) {
 			console.error("Error al obtener posts y comentarios:", error.message);
 			setErrorMessage(
@@ -252,8 +299,8 @@ function Feed() {
 					{errorMessage && <p className="error-message">{errorMessage}</p>}{" "}
 					{/* Muestra errores */}
 					<div className="posts-container">
-						{posts &&
-							posts.map((post) => (
+						{filteredPosts &&
+							filteredPosts.map((post) => (
 								<Post
 									key={post.post_id}
 									post={post}
@@ -262,9 +309,22 @@ function Feed() {
 									isAdmin={isAdmin}
 								/>
 							))}
+						{filteredPosts.length === 0 && posts.length > 0 && (
+							<div className="no-filtered-posts">
+								<p>No hay publicaciones que coincidan con los filtros seleccionados.</p>
+								<button 
+									className="clear-filters-button"
+									onClick={() => setSelectedTagFilters([])}
+								>
+									Mostrar todas las publicaciones
+								</button>
+							</div>
+						)}
 					</div>
 				</div>
 				<div className="right-column">
+					{/* Add the TagsFilter component */}
+					<TagsFilter onFilterChange={handleTagFilterChange} />
 					{/* Contenido adicional para la columna derecha */}
 				</div>
 			</div>
