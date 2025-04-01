@@ -11,12 +11,40 @@ function Feed() {
 	const [errorMessage, setErrorMessage] = useState(null); // para mostrar errores
 	const [showNewPostForm, setShowNewPostForm] = useState(false); // Estado para controlar la visibilidad del formulario
 	const [userProfiles, setUserProfiles] = useState({}); // State to store user profiles
+	const [currentUser, setCurrentUser] = useState(null); // State to store the current user
 
 	const feedTopRef = useRef(null);
 
 	const setPosts = (updatedPosts) => {
 		dispatch({ type: "SET_POSTS", payload: updatedPosts }); //actualiza la lista de posts
 	};
+
+	// Fetch the current user
+	useEffect(() => {
+		const fetchCurrentUser = async () => {
+			try {
+				const { data: { user }, error } = await supabase.auth.getUser();
+				
+				if (error) throw error;
+				
+				if (user) {
+					const { data: userProfile, error: profileError } = await supabase
+						.from("profiles")
+						.select("*")
+						.eq("id", user.id)
+						.single();
+					
+					if (profileError) throw profileError;
+					
+					setCurrentUser(userProfile);
+				}
+			} catch (error) {
+				console.error("Error fetching current user:", error.message);
+			}
+		};
+		
+		fetchCurrentUser();
+	}, []);
 
 	// Fetch de perfiles desde supabase
 	const fetchUserProfiles = async () => {
@@ -149,7 +177,7 @@ function Feed() {
 								}}
 							/>
 						</div>
-						<span>Perfil</span>
+						<span>{currentUser ? `${currentUser.first_name} ${currentUser.last_name}` : "Cargando..."}</span>
 					</button>
 					<button className="settings-button">
 						<img src="Configuración.svg" alt="Configuración" />
