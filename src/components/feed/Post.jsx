@@ -83,81 +83,83 @@ function Post({ post, setPosts, posts, isAdmin }) {
 
 	const handleCommentSubmit = async (e) => {
 		e.preventDefault();
-
+		
+		if (!newCommentContent.trim() && !newCommentMedia) {
+			return; // No enviar comentarios vacíos
+		}
+		
 		try {
-			// se obtiene el usuario autenticado desde la db de supabase
-			const {
-				data: { user },
-				error: userError,
-			} = await supabase.auth.getUser();
+			// Obtener el usuario autenticado desde Supabase
+			const { data: { user }, error: userError } = await supabase.auth.getUser();
 			if (userError || !user) {
 				throw new Error("Usuario no autenticado. Por favor, inicia sesión.");
 			}
-
-			 // Fetch the user's profile to attach to the new comment
-			 const { data: userProfile, error: profileError } = await supabase
-			 .from("profiles")
-			 .select("*")
-			 .eq("id", user.id)
-			 .single();
-			 
-		 if (profileError) throw profileError;
-
-			// se inserta el comentario en la tabla "comments"
+			
+			// Obtener el perfil del usuario para adjuntar al comentario
+			const { data: userProfile, error: profileError } = await supabase
+				.from("profiles")
+				.select("*")
+				.eq("id", user.id)
+				.single();
+				
+			if (profileError) throw profileError;
+			
+			// Insertar el comentario en la tabla "comments"
 			const { data: newComment, error: commentError } = await supabase
 				.from("comments")
 				.insert({
 					comment_text: newCommentContent,
 					parent_post_id: post.post_id,
-					user_id: user.id, // ID del usuario autenticado
+					user_id: user.id,
 				})
 				.select()
 				.single();
-
+			
 			if (commentError) throw commentError;
-
+			
 			let multimedia = [];
-			// si hay multimedia, se sube y asocia al comentario
+			// Si hay multimedia, subir y asociar al comentario
 			if (newCommentMedia) {
-				const fileName = `${newComment.comment_id}-${newCommentMedia.name}`;
+				// Generar un nombre único para el archivo
+				const timestamp = new Date().getTime();
+				const fileName = `${newComment.comment_id}_${timestamp}_${newCommentMedia.name}`;
+				
+				// Subir al bucket correcto
 				const { error: storageError } = await supabase.storage
-					.from("nose") // FALTA EL BUCKET ACA
+					.from("comment-multimedia-test")
 					.upload(fileName, newCommentMedia);
-
+				
 				if (storageError) throw storageError;
-
-				const {
-					data: { publicUrl },
-					error: urlError,
-				} = supabase.storage
-					.from("nose") // FALTA EL BUCKET ACA TAMBIEN
+				
+				// Obtener la URL pública
+				const { data: publicUrlData } = supabase.storage
+					.from("comment-multimedia-test")
 					.getPublicUrl(fileName);
-
-				if (urlError) throw urlError;
-
+				
+				if (!publicUrlData || !publicUrlData.publicUrl) {
+					throw new Error("Error al obtener la URL pública del archivo");
+				}
+				
+				// Registrar en la tabla de multimedia de comentarios
 				const { error: multimediaError } = await supabase
 					.from("comments_multimedia")
 					.insert({
 						comment_id: newComment.comment_id,
-						media_type: newCommentMedia.type.startsWith("video/")
-							? "video"
-							: "image",
-						multimedia_url: publicUrl,
+						media_type: newCommentMedia.type.startsWith("video/") ? "video" : "image",
+						multimedia_url: publicUrlData.publicUrl,
 					});
-
+				
 				if (multimediaError) throw multimediaError;
-
+				
 				multimedia = [
 					{
-						media_type: newCommentMedia.type.startsWith("video/")
-							? "video"
-							: "image",
-						multimedia_url: publicUrl,
+						media_type: newCommentMedia.type.startsWith("video/") ? "video" : "image",
+						multimedia_url: publicUrlData.publicUrl,
 					},
 				];
 			}
-
-			// se actualiza el estado local con el nuevo comentario
+			
+			// Actualizar el estado local con el nuevo comentario
 			const updatedPosts = posts.map((p) => {
 				if (p.post_id === post.post_id) {
 					return {
@@ -168,7 +170,6 @@ function Post({ post, setPosts, posts, isAdmin }) {
 								...newComment,
 								comment_text: newCommentContent,
 								multimedia,
-								// Add the user profile to the new comment
 								user_profile: userProfile
 							},
 						],
@@ -177,14 +178,14 @@ function Post({ post, setPosts, posts, isAdmin }) {
 				return p;
 			});
 			setPosts(updatedPosts);
-
-			// se limpia el formulario
+			
+			// Limpiar el formulario
 			setNewCommentContent("");
 			setNewCommentMedia(null);
 			setNewCommentMediaPreview(null);
 		} catch (error) {
 			console.error("Error al crear el comentario:", error.message);
-			alert(error.message); // manejor de errores
+			alert(error.message);
 		}
 	};
 

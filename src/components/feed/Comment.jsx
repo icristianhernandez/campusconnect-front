@@ -305,27 +305,24 @@ function Comment({ comment, post, setPosts, posts, isAdmin }) {
 	const handleReplySubmit = async (e) => {
 		e.preventDefault();
 		if (!replyContent.trim() && !replyMedia) return;
-
+		
 		setReplyLoading(true);
 		setError(null);
-
+		
 		try {
-			const {
-				data: { user },
-				error: userError,
-			} = await supabase.auth.getUser();
+			const { data: { user }, error: userError } = await supabase.auth.getUser();
 			if (userError) throw userError;
-
-			 // Fetch the user's profile to attach to the new reply
-			 const { data: userProfile, error: profileError } = await supabase
-			 .from("profiles")
-			 .select("*")
-			 .eq("id", user.id)
-			 .single();
-			 
-		 if (profileError) throw profileError;
-
-			// Create the reply comment
+			
+			// Obtener perfil del usuario para adjuntar a la respuesta
+			const { data: userProfile, error: profileError } = await supabase
+				.from("profiles")
+				.select("*")
+				.eq("id", user.id)
+				.single();
+			
+			if (profileError) throw profileError;
+			
+			// Crear la respuesta
 			const { data: newReply, error: replyError } = await supabase
 				.from("comments")
 				.insert({
@@ -335,51 +332,53 @@ function Comment({ comment, post, setPosts, posts, isAdmin }) {
 					user_id: user.id,
 				})
 				.select()
-				.single();
-
+					.single();
+			
 			if (replyError) throw replyError;
-
+			
 			let multimedia = [];
+			// Si hay multimedia, subir y asociar a la respuesta
 			if (replyMedia) {
-				const fileName = `${newReply.comment_id}-${replyMedia.name}`;
+				// Generar nombre único para el archivo
+				const timestamp = new Date().getTime();
+				const fileName = `${newReply.comment_id}_${timestamp}_${replyMedia.name}`;
+				
+				// Subir al bucket correcto
 				const { error: storageError } = await supabase.storage
-					.from("nose") // Your bucket name
+					.from("comment-multimedia-test")
 					.upload(fileName, replyMedia);
-
+				
 				if (storageError) throw storageError;
-
-				const {
-					data: { publicUrl },
-					error: urlError,
-				} = supabase.storage
-					.from("nose") // Your bucket name
+				
+				// Obtener URL pública
+				const { data: publicUrlData } = supabase.storage
+					.from("comment-multimedia-test")
 					.getPublicUrl(fileName);
-
-				if (urlError) throw urlError;
-
+				
+				if (!publicUrlData || !publicUrlData.publicUrl) {
+					throw new Error("Error al obtener la URL pública del archivo");
+				}
+				
+				// Registrar en la tabla de multimedia
 				const { error: multimediaError } = await supabase
 					.from("comments_multimedia")
 					.insert({
 						comment_id: newReply.comment_id,
-						media_type: replyMedia.type.startsWith("video/")
-							? "video"
-							: "image",
-						multimedia_url: publicUrl,
+						media_type: replyMedia.type.startsWith("video/") ? "video" : "image",
+						multimedia_url: publicUrlData.publicUrl,
 					});
-
+				
 				if (multimediaError) throw multimediaError;
-
+				
 				multimedia = [
 					{
-						media_type: replyMedia.type.startsWith("video/")
-							? "video"
-							: "image",
-						multimedia_url: publicUrl,
+						media_type: replyMedia.type.startsWith("video/") ? "video" : "image",
+						multimedia_url: publicUrlData.publicUrl,
 					},
 				];
 			}
-
-			// Update local state
+			
+			// Actualizar estado local
 			const updatedPosts = posts.map((p) => {
 				if (p.post_id === post.post_id) {
 					return {
@@ -388,14 +387,13 @@ function Comment({ comment, post, setPosts, posts, isAdmin }) {
 							...newReply,
 							multimedia,
 							replies: [],
-							// Add the user profile to the new reply
 							user_profile: userProfile
 						}),
 					};
 				}
 				return p;
 			});
-
+			
 			setPosts(updatedPosts);
 			setReplyContent("");
 			setReplyMedia(null);

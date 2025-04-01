@@ -70,60 +70,74 @@ function NewPostForm({ adminStatus, adminLevel }) {
 
 	const handlePostSubmit = async (e) => {
 		e.preventDefault();
+		
+		if ((!newPostContent || newPostContent.trim() === "") && !newPostMedia) {
+			setErrorMessage("La publicación debe contener texto o multimedia");
+			return;
+		}
+		
+		if (tagError) {
+			return;
+		}
+		
 		setLoading(true);
 		setErrorMessage(null);
-
+		
 		try {
-			// se obtiene el usuario autenticado
-			const { data: user, error: userError } = await supabase.auth.getUser();
-			if (userError || !user) throw new Error("Usuario no autenticado.");
-
-			// se inserta el post en la tabla "posts" de supabase
+			const { data: { user }, error: userError } = await supabase.auth.getUser();
+			if (userError || !user) {
+				throw new Error("Usuario no autenticado. Por favor, inicia sesión.");
+			}
+			
 			const { data: post, error: postError } = await supabase
 				.from("posts")
 				.insert({
 					post_text: newPostContent,
-					user_id: user.id, // ID del usuario autenticado
+					user_id: user.id,
 				})
 				.select()
 				.single();
-
+			
 			if (postError) throw postError;
-
+			
 			let multimedia = [];
-			// si hay multimedia, se sube y asocio al post
+			// Si hay multimedia, se sube y asocia al post
 			if (newPostMedia) {
-				const fileName = `${post.post_id}-${newPostMedia.name}`;
+				// Generar un nombre único para el archivo usando timestamp y nombre original
+				const timestamp = new Date().getTime();
+				const fileName = `${post.post_id}_${timestamp}_${newPostMedia.name}`;
+				
+				// Subir el archivo al bucket correcto
 				const { error: storageError } = await supabase.storage
-					.from("nosepost") // FALTA EL BUCKEEEEET
+					.from("post-multimedia-test")
 					.upload(fileName, newPostMedia);
-
+				
 				if (storageError) throw storageError;
-
-				const { publicURL, error: urlError } = supabase.storage
-					.from("nosepost") //BUCKEEEEEEEEET
+				
+				// Obtener la URL pública del archivo
+				const { data: publicUrlData } = supabase.storage
+					.from("post-multimedia-test")
 					.getPublicUrl(fileName);
-
-				if (urlError) throw urlError;
-
+				
+				if (!publicUrlData || !publicUrlData.publicUrl) {
+					throw new Error("Error al obtener la URL pública del archivo");
+				}
+				
+				// Guardar referencia en la base de datos
 				const { error: multimediaError } = await supabase
 					.from("post_multimedia")
 					.insert({
 						post_id: post.post_id,
-						media_type: newPostMedia.type.startsWith("video/")
-							? "video"
-							: "image",
-						multimedia_url: publicURL,
+						media_type: newPostMedia.type.startsWith("video/") ? "video" : "image",
+						multimedia_url: publicUrlData.publicUrl,
 					});
-
+				
 				if (multimediaError) throw multimediaError;
-
+				
 				multimedia = [
 					{
-						media_type: newPostMedia.type.startsWith("video/")
-							? "video"
-							: "image",
-						multimedia_url: publicURL,
+						media_type: newPostMedia.type.startsWith("video/") ? "video" : "image",
+						multimedia_url: publicUrlData.publicUrl,
 					},
 				];
 			}
