@@ -5,6 +5,7 @@ import NewPostForm from "./NewPostForm"; //componente para formulario de nuevo p
 import AdminTagsPanel from "./AdminTagsPanel"; // Nuevo componente para administrar tags
 import { MyContext } from "../../context/context"; // Importa el contexto global para manejar el estado de la app
 import { supabase } from "../../utils/supabase"; //supabase para interactuar con la db
+import { useNavigate } from "react-router-dom"; // Añadir esta importación
 
 function Feed() {
 	const { appState, dispatch } = useContext(MyContext); // Obtiene el estado global y la funcion para actualizarlo (el dispatch)
@@ -18,6 +19,7 @@ function Feed() {
 	const [showTagsPanel, setShowTagsPanel] = useState(false); // State to control visibility of tags panel
 
 	const feedTopRef = useRef(null);
+	const navigate = useNavigate(); // Añadir esta línea
 
 	const setPosts = (updatedPosts) => {
 		dispatch({ type: "SET_POSTS", payload: updatedPosts }); //actualiza la lista de posts
@@ -180,6 +182,17 @@ function Feed() {
 		setShowTagsPanel(!showTagsPanel);
 	};
 
+	// Agregar la función de cierre de sesión
+	const handleLogout = async () => {
+		try {
+			const { error } = await supabase.auth.signOut();
+			if (error) throw error;
+			navigate("/"); // Redirigir al usuario a la página de inicio/login
+		} catch (error) {
+			console.error("Error al cerrar sesión:", error.message);
+		}
+	};
+
 	// y esta parte es del renderizado del componente
 	return (
 		<div className="Feed">
@@ -213,6 +226,16 @@ function Feed() {
 						</button>
 					)}
 					{/* Contenido adicional para la columna izquierda */}
+					{/* Botón de logout en la esquina inferior izquierda */}
+					<div className="logout-container">
+						<button 
+							className="logout-button" 
+							onClick={handleLogout}
+							title="Cerrar sesión"
+						>
+							<img src="/log_out.png" alt="Cerrar sesión" />
+						</button>
+					</div>
 				</div>
 				<div className="middle-column">
 					{/* Add ref to the top */}
